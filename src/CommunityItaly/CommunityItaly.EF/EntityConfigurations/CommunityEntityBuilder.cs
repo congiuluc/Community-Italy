@@ -12,8 +12,7 @@ namespace CommunityItaly.EF.EntityConfigurations
         public void Configure(EntityTypeBuilder<Community> builder)
         {
             builder.ToContainer(nameof(Community))
-                .HasNoDiscriminator()
-                .HasPartitionKey(o => o.Name);
+                .HasNoDiscriminator();
             builder.HasKey(x => x.Name);
 
 

@@ -16,14 +16,24 @@ namespace CommunityItaly.EF.Entities
 
         public string Id { get; }
         public string Name { get; }
-        public byte[] Logo { get; }
+        public Uri Logo { get; }
         public DateTime StartDate { get; }
         public DateTime EndDate { get; }
         public Uri BuyTicket { get; }
-        public CallForSpeaker CFP { get; }
+        public CallForSpeaker CFP { get; private set; }
         public bool CFPEnable => CFP != null;
-        public Community Community { get; }
-        public bool IsCommunity => Community != null;
+        public Community Community { get; private set; }
+        public bool HasCommunity => Community != null;
+
+        public void AddCallForSpeaker(CallForSpeaker cfp)
+        {
+            CFP = cfp;
+        }
+
+        public void AddCommunity(Community community)
+        {
+            Community = community;
+        }
     }
 
     public class CallForSpeaker

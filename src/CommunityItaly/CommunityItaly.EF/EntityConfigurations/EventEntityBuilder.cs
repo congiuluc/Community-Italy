@@ -16,6 +16,17 @@ namespace CommunityItaly.EF.EntityConfigurations
             builder.Property(x => x.Name);
             builder.Property(x => x.StartDate);
             builder.Property(x => x.EndDate);
+
+            builder.OwnsOne(x => x.CFP,
+                c =>
+                {
+                    c.HasKey("Url");
+                    c.Property(t => t.Url);
+                    c.Property(t => t.StartDate);
+                    c.Property(t => t.EndDate);
+                });
+
+            builder.HasOne(x => x.Community);
         }
     }
 }
