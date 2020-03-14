@@ -16,6 +16,8 @@ namespace CommunityItaly.EF.EntityConfigurations
                .HasPartitionKey(o => o.Id);
             builder.HasKey(x => x.Id);
 
+            builder.Property(x => x.PublishDate);
+            builder.Property(x => x.Url);
             builder.HasMany(x => x.Authors);
         }
     }
