@@ -12,18 +12,10 @@ namespace CommunityItaly.Shared.Validations
 			RuleFor(x => x.EndDate).NotNull().GreaterThanOrEqualTo(x => x.StartDate);
 			When(x => x.CFP != null, () =>
 			{
-				RuleFor(x => x.CFP).Custom(async (x, ctx) => 
-				{ 
-					
-				});
+				RuleFor(x => x.CFP.Url).NotEmpty();
+				RuleFor(x => x.CFP.StartDate).NotNull().LessThanOrEqualTo(x => x.CFP.EndDate);
+				RuleFor(x => x.CFP.EndDate).NotNull().GreaterThanOrEqualTo(x => x.CFP.StartDate);
 			});
-		}
-	}
-
-	public class CallForSpeakerValidator : AbstractValidator<EventViewModel>
-	{
-		public CallForSpeakerValidator()
-		{
 		}
 	}
 }

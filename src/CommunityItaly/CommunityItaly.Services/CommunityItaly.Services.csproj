@@ -8,5 +8,9 @@
     <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="11.1.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CommunityItaly.EF\CommunityItaly.EF.csproj" />
+    <ProjectReference Include="..\CommunityItaly.Shared\CommunityItaly.Shared.csproj" />
+  </ItemGroup>
 
 </Project>

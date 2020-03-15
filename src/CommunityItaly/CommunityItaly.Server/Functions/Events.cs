@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using CommunityItaly.Services;
+using CommunityItaly.Shared.ViewModels;
+using CommunityItaly.Shared.Validations;
 
 namespace CommunityItaly.Server
 {
@@ -24,21 +26,15 @@ namespace CommunityItaly.Server
 
 
         [FunctionName("EventGet")]
-        public static async Task<IActionResult> Get(
+        public async Task<IActionResult> Get(
             [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.GET, Route = "EventRoute")] HttpRequest req)
         {
-            //log.LogInformation("C# HTTP trigger function processed a request.");
-            //string name = req.Query["name"];
+            int take = 10, skip = 0;
+            _ = int.TryParse(req.Query["take"].ToString(), out take);
+            _ = int.TryParse(req.Query["skip"].ToString(), out skip);
 
-            //string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            //dynamic data = JsonConvert.DeserializeObject(requestBody);
-            //name = name ?? data?.name;
 
-            //string responseMessage = string.IsNullOrEmpty(name)
-            //    ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-            //    : $"Hello, {name}. This HTTP triggered function executed successfully.";
-
-            return new OkObjectResult(new { method = req.Method });
+            return new OkResult();
         }
 
         [FunctionName("EventGetById")]
@@ -55,6 +51,13 @@ namespace CommunityItaly.Server
            [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.POST, Route = "EventRoute")] HttpRequest req,
            ILogger log)
         {
+            var eventValidateRequest = await req.GetJsonBody<EventViewModel, EventValidator>();
+            if (!eventValidateRequest.IsValid)
+            {
+                log.LogError($"Invalid form data");
+                return eventValidateRequest.ToBadRequest();
+            }
+
             return new OkObjectResult(new { method = req.Method });
         }
 
