@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunityItaly.EF", "Commun
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunityItaly.EF.Migration", "CommunityItaly.EF.Migration\CommunityItaly.EF.Migration.csproj", "{C9A5E8AB-F93D-4078-84BD-979E505DB20F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityItaly.Services", "CommunityItaly.Services\CommunityItaly.Services.csproj", "{3F5C2EEF-9406-4551-829D-C5CC2FAD38AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunityItaly.Services", "CommunityItaly.Services\CommunityItaly.Services.csproj", "{3F5C2EEF-9406-4551-829D-C5CC2FAD38AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityItaly.Shared", "CommunityItaly.Shared\CommunityItaly.Shared.csproj", "{787E5CA4-5259-4B6C-B008-2BBEAA84E1EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{3F5C2EEF-9406-4551-829D-C5CC2FAD38AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F5C2EEF-9406-4551-829D-C5CC2FAD38AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F5C2EEF-9406-4551-829D-C5CC2FAD38AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{787E5CA4-5259-4B6C-B008-2BBEAA84E1EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{787E5CA4-5259-4B6C-B008-2BBEAA84E1EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{787E5CA4-5259-4B6C-B008-2BBEAA84E1EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{787E5CA4-5259-4B6C-B008-2BBEAA84E1EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

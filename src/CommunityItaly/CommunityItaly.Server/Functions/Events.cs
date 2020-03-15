@@ -7,16 +7,19 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using CommunityItaly.Services;
 
 namespace CommunityItaly.Server
 {
     public class Events
     {
         private readonly ILogger<Events> log;
+        private readonly IImageService imageService;
 
-        public Events(ILogger<Events> log)
+        public Events(ILogger<Events> log, IImageService imageService)
         {
             this.log = log;
+            this.imageService = imageService;
         }
 
 

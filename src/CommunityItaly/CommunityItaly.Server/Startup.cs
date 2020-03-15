@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+﻿using CommunityItaly.Services;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -20,6 +21,14 @@ namespace CommunityItaly.Server
                 {
                     configuration.GetSection("CosmosDbConnections").Bind(settings);
                 });
+
+            builder.Services.AddOptions<BlobStorageConnections>()
+                .Configure<IConfiguration>((settings, configuration) =>
+                {
+                        var section = configuration.GetSection("BlobStorageConnections");
+                        settings.ConnectionString = section.Get<string>();
+                });
+            builder.Services.AddScoped<IImageService>((sp) => new ImageService(sp.GetRequiredService<BlobStorageConnections>().ConnectionString));
         }
     }
 }
