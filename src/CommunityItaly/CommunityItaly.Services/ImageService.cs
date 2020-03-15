@@ -22,19 +22,19 @@ namespace CommunityItaly.Services
 
         public async Task DeleteImageAsync(string blobContainerName, string filename)
         {
-            var blobContainer = await CreateContainerAsync(blobContainerName);
+            var blobContainer = await CreateOrGetContainerAsync(blobContainerName);
             var blockBlob = blobContainer.GetBlockBlobReference(filename);
             await blockBlob.DeleteAsync();
         }
 
         public async Task UploadImageAsync(string blobContainerName, string filename, byte[] fileContent)
         {
-            var blobContainer = await CreateContainerAsync(blobContainerName);
+            var blobContainer = await CreateOrGetContainerAsync(blobContainerName);
             var blockBlob = blobContainer.GetBlockBlobReference(filename);
             await blockBlob.UploadFromByteArrayAsync(fileContent, 0 , fileContent.Length);
         }
 
-        private async Task<CloudBlobContainer> CreateContainerAsync(string containerName)
+        private async Task<CloudBlobContainer> CreateOrGetContainerAsync(string containerName)
         {
             CloudBlobContainer blobContainer = blobClient.GetContainerReference(containerName);
             if(!await blobContainer.ExistsAsync())
