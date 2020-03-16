@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CommunityItaly.Shared.Validations
+namespace CommunityItaly.Services.Validations
 {
 	public class PersonValidator : AbstractValidator<PersonViewModel>
 	{

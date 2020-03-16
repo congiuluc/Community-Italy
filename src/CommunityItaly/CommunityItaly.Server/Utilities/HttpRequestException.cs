@@ -41,6 +41,28 @@ namespace CommunityItaly.Server
             };
         }
 
+        public static async Task<ValidatableRequest<T>> GetJsonBodyWithValidator<T>(this HttpRequest request, AbstractValidator<T> validator)
+        {
+            var requestObject = await request.GetJsonBody<T>();
+            var validationResult = validator.Validate(requestObject);
+
+            if (!validationResult.IsValid)
+            {
+                return new ValidatableRequest<T>
+                {
+                    Value = requestObject,
+                    IsValid = false,
+                    Errors = validationResult.Errors
+                };
+            }
+
+            return new ValidatableRequest<T>
+            {
+                Value = requestObject,
+                IsValid = true
+            };
+        }
+
         /// <summary>
         /// Returns the deserialized request body.
         /// </summary>

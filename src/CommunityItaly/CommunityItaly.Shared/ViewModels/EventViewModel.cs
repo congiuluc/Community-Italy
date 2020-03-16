@@ -7,11 +7,11 @@ namespace CommunityItaly.Shared.ViewModels
 	public class EventViewModel
 	{
         public string Name { get; set; }
-        public byte[] Logo { get; }
-        public DateTime StartDate { get; }
-        public DateTime EndDate { get; }
-        public Uri BuyTicket { get; }
+        public byte[] Logo { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public Uri BuyTicket { get; set; }
         public CallForSpeakerViewModel CFP { get; set; }
-        public CommunityViewModel Community { get; private set; }
+        public string CommunityName { get; set; }
     }
 }

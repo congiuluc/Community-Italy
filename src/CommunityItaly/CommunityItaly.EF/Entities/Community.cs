@@ -7,10 +7,11 @@ namespace CommunityItaly.EF.Entities
 {
     public class Community
     {
-        public Community(string name)
+        public Community(string shortName)
         {
-            this.Name = name;
+            ShortName = shortName;
         }
+        public string ShortName { get; }
         public string Name { get; }
         public Uri Logo { get; private set; }
         public Uri WebSite { get; private set; }

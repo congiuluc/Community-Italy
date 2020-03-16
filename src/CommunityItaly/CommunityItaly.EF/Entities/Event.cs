@@ -38,6 +38,12 @@ namespace CommunityItaly.EF.Entities
 
     public class CallForSpeaker
     {
+        public CallForSpeaker(Uri url, DateTime startDate, DateTime endDate)
+        {
+            Url = url;
+            StartDate = startDate;
+            EndDate = endDate;
+        }
         public Uri Url { get; }
         public DateTime StartDate { get; }
         public DateTime EndDate { get; }

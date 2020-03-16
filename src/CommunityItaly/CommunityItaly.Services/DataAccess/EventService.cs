@@ -16,13 +16,25 @@ namespace CommunityItaly.Services.DataAccess
 			this.db = db;
 		}
 
-		public async Task CreateAsync(EventViewModel eventVM)
+		public async Task<string> CreateAsync(EventViewModel eventVM)
 		{
+			
 			Event currentEvent = new Event(eventVM.Name, eventVM.StartDate, eventVM.EndDate);
-			//currentEvent.AddCallForSpeaker();
-			//currentEvent.AddCommunity();
+			if(eventVM.CFP != null)
+			{
+				currentEvent.AddCallForSpeaker(new CallForSpeaker(eventVM.CFP.Url, eventVM.CFP.StartDate, eventVM.CFP.EndDate));
+			}
+			if(!string.IsNullOrEmpty(eventVM.CommunityName))
+			{
+				Community community = await db.Communities.FindAsync(eventVM.CommunityName);
+				if(community != null)
+				{
+					currentEvent.AddCommunity(community);
+				}
+			}			
 			await db.Events.AddAsync(currentEvent);
 			await db.SaveChangesAsync().ConfigureAwait(false);
+			return currentEvent.Id;
 		}
 
 		public async Task DeleteAsync(int id)
@@ -35,7 +47,7 @@ namespace CommunityItaly.Services.DataAccess
 			throw new NotImplementedException();
 		}
 
-		public async Task<Event> GetById(int id)
+		public async Task<EventViewModel> GetById(string id)
 		{
 			throw new NotImplementedException();
 		}

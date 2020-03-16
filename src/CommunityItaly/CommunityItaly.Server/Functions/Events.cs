@@ -9,7 +9,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using CommunityItaly.Services;
 using CommunityItaly.Shared.ViewModels;
-using CommunityItaly.Shared.Validations;
+using CommunityItaly.Services.Validations;
+using CommunityItaly.Services.DataAccess;
 
 namespace CommunityItaly.Server
 {
@@ -17,11 +18,13 @@ namespace CommunityItaly.Server
     {
         private readonly ILogger<Events> log;
         private readonly IImageService imageService;
+        private readonly ICommunityService communityService;
 
-        public Events(ILogger<Events> log, IImageService imageService)
+        public Events(ILogger<Events> log, IImageService imageService, ICommunityService communityService)
         {
             this.log = log;
             this.imageService = imageService;
+            this.communityService = communityService;
         }
 
 
@@ -38,7 +41,7 @@ namespace CommunityItaly.Server
         }
 
         [FunctionName("EventGetById")]
-        public static async Task<IActionResult> GetById(
+        public async Task<IActionResult> GetById(
            [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.GET, Route = "EventRoute/{id}")] HttpRequest req,
            string id,
            ILogger log)
@@ -47,11 +50,11 @@ namespace CommunityItaly.Server
         }
 
         [FunctionName("EventPost")]
-        public static async Task<IActionResult> Post(
+        public async Task<IActionResult> Post(
            [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.POST, Route = "EventRoute")] HttpRequest req,
            ILogger log)
         {
-            var eventValidateRequest = await req.GetJsonBody<EventViewModel, EventValidator>();
+            var eventValidateRequest = await req.GetJsonBodyWithValidator(new EventValidator(communityService));
             if (!eventValidateRequest.IsValid)
             {
                 log.LogError($"Invalid form data");
@@ -62,7 +65,7 @@ namespace CommunityItaly.Server
         }
 
         [FunctionName("EventPut")]
-        public static async Task<IActionResult> Put(
+        public async Task<IActionResult> Put(
           [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.PUT, Route = "EventRoute")] HttpRequest req,
           ILogger log)
         {
@@ -70,7 +73,7 @@ namespace CommunityItaly.Server
         }
 
         [FunctionName("EventDelete")]
-        public static async Task<IActionResult> Delete(
+        public async Task<IActionResult> Delete(
           [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.DELETE, Route = "EventRoute")] HttpRequest req,
           ILogger log)
         {

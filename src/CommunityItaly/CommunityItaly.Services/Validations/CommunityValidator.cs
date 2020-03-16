@@ -1,7 +1,7 @@
 ﻿using CommunityItaly.Shared.ViewModels;
 using FluentValidation;
 
-namespace CommunityItaly.Shared.Validations
+namespace CommunityItaly.Services.Validations
 {
 	public class CommunityValidator : AbstractValidator<CommunityViewModel>
 	{

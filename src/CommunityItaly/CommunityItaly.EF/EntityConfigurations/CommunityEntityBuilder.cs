@@ -13,10 +13,10 @@ namespace CommunityItaly.EF.EntityConfigurations
         {
             builder.ToContainer(nameof(Community))
                 .HasNoDiscriminator();
-            builder.HasKey(x => x.Name);
+            builder.HasKey(x => x.ShortName);
 
 
-            builder.Property(x => x.Name);
+            builder.Property(x => x.ShortName);
             builder.HasMany(x => x.Managers);
         }
     }
