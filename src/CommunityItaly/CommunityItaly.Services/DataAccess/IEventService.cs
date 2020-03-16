@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace CommunityItaly.Services
 {
-	public interface IEventServices
+	public interface IEventService
 	{
-		Task<IList<EventViewModel>> GetAsync(int? take = 10, int? skip = 0);
-		Task<EventViewModel> GetById(string id);
+		Task<PagedViewModel<EventViewModelReadOnly>> GetAsync(int? take = 10, int? skip = 0);
+		Task<EventViewModelReadOnly> GetById(string id);
 		Task<string> CreateAsync(EventViewModel eventVM);
 		Task UpdateAsync(EventViewModel eventVM);
-		Task DeleteAsync(int id);
+		Task DeleteAsync(string id);
 	}
 }

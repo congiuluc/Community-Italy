@@ -10,7 +10,6 @@ using Newtonsoft.Json;
 using CommunityItaly.Services;
 using CommunityItaly.Shared.ViewModels;
 using CommunityItaly.Services.Validations;
-using CommunityItaly.Services.DataAccess;
 
 namespace CommunityItaly.Server
 {
@@ -19,12 +18,17 @@ namespace CommunityItaly.Server
         private readonly ILogger<Events> log;
         private readonly IImageService imageService;
         private readonly ICommunityService communityService;
+        private readonly IEventService eventServices;
 
-        public Events(ILogger<Events> log, IImageService imageService, ICommunityService communityService)
+        public Events(ILogger<Events> log, 
+            IImageService imageService, 
+            ICommunityService communityService,
+            IEventService eventServices)
         {
             this.log = log;
             this.imageService = imageService;
             this.communityService = communityService;
+            this.eventServices = eventServices;
         }
 
 
@@ -36,8 +40,9 @@ namespace CommunityItaly.Server
             _ = int.TryParse(req.Query["take"].ToString(), out take);
             _ = int.TryParse(req.Query["skip"].ToString(), out skip);
 
+            var result = await eventServices.GetAsync(take, skip);
 
-            return new OkResult();
+            return new OkObjectResult(result);
         }
 
         [FunctionName("EventGetById")]

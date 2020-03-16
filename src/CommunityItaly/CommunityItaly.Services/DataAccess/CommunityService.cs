@@ -1,10 +1,7 @@
 ﻿using CommunityItaly.EF;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace CommunityItaly.Services.DataAccess
+namespace CommunityItaly.Services
 {
 	public class CommunityService : ICommunityService
 	{

@@ -28,6 +28,7 @@ namespace CommunityItaly.Server
                         var section = configuration.GetSection("BlobStorageConnections");
                         settings.ConnectionString = section.Get<string>();
                 });
+            builder.Services.UseService();
             builder.Services.AddScoped<IImageService>((sp) => new ImageService(sp.GetRequiredService<BlobStorageConnections>().ConnectionString));
         }
     }

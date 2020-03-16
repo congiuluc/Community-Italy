@@ -1,5 +1,4 @@
-﻿using CommunityItaly.Services.DataAccess;
-using CommunityItaly.Shared.ViewModels;
+﻿using CommunityItaly.Shared.ViewModels;
 using FluentValidation;
 using FluentValidation.Results;
 

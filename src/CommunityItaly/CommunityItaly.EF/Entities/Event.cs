@@ -16,10 +16,10 @@ namespace CommunityItaly.EF.Entities
 
         public string Id { get; }
         public string Name { get; }
-        public Uri Logo { get; }
+        public Uri Logo { get; private set; }
         public DateTime StartDate { get; }
         public DateTime EndDate { get; }
-        public Uri BuyTicket { get; }
+        public Uri BuyTicket { get; private set; }
         public CallForSpeaker CFP { get; private set; }
         public bool CFPEnable => CFP != null;
         public Community Community { get; private set; }
@@ -33,6 +33,16 @@ namespace CommunityItaly.EF.Entities
         public void AddCommunity(Community community)
         {
             Community = community;
+        }
+
+        public void SetLogo(Uri logoUrl)
+        {
+            Logo = logoUrl;
+        }
+
+        public void SetBuyTicket(Uri ticketUrl)
+        {
+            BuyTicket = ticketUrl;
         }
     }
 
