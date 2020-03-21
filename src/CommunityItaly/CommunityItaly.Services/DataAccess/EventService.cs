@@ -49,14 +49,14 @@ namespace CommunityItaly.Services
 
 		public async Task<PagedViewModel<EventViewModelReadOnly>> GetAsync(int? take = 10, int? skip = 0)
 		{
-			int totalElement = await db.Events.CountAsync();
+			int totalElement = await db.Events.CountAsync().ConfigureAwait(false);
 
 			var resultList = await db.Events
 				.Skip(skip.Value)
 				.Take(take.Value)
-				.Include(x => x.Community)
 				.ToListAsync()
 				.ConfigureAwait(false);
+
 			var result = resultList
 				.Select(currentEvent => new EventViewModelReadOnly
 				{

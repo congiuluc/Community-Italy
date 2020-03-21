@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using CommunityItaly.Services.Settings;
 using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Blob;
+using Microsoft.Extensions.Options;
 
 namespace CommunityItaly.Services
 {
@@ -11,9 +13,9 @@ namespace CommunityItaly.Services
         private readonly CloudStorageAccount storageAccount;
         private readonly CloudBlobClient blobClient;
 
-        public ImageService(string storageConnectionString)
+        public ImageService(IOptions<BlobStorageConnections> options)
         {
-            if (!CloudStorageAccount.TryParse(storageConnectionString, out storageAccount))
+            if (!CloudStorageAccount.TryParse(options.Value.ConnectionString, out storageAccount))
             { 
                 throw new ArgumentException("Azure Blob Connectionstring is wrong");
             }

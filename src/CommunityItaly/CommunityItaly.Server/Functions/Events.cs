@@ -40,7 +40,7 @@ namespace CommunityItaly.Server
             _ = int.TryParse(req.Query["take"].ToString(), out take);
             _ = int.TryParse(req.Query["skip"].ToString(), out skip);
 
-            var result = await eventServices.GetAsync(take, skip);
+            var result = await eventServices.GetAsync(take == 0 ? 10 : take, skip);
 
             return new OkObjectResult(result);
         }

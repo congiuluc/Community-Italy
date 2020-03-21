@@ -1,8 +1,14 @@
-﻿using CommunityItaly.Services;
+﻿using CommunityItaly.EF;
+using CommunityItaly.EF.Settings;
+using CommunityItaly.Services;
+using CommunityItaly.Services.Settings;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using System;
 
 [assembly: FunctionsStartup(typeof(CommunityItaly.Server.Startup))]
 namespace CommunityItaly.Server
@@ -11,25 +17,35 @@ namespace CommunityItaly.Server
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddLogging(loggingBuilder =>
+            ConfigureServices(builder.Services);
+        }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            ReadOptions(services);
+            services.AddLogging(loggingBuilder =>
             {
                 loggingBuilder.AddFilter(level => true);
             });
+            services.UseService();
+            services.UseDatabase();
+            services.AddScoped<IImageService, ImageService>();
+        }
 
-            builder.Services.AddOptions<CosmosDbConnections>()
+        // https://docs.microsoft.com/bs-latn-ba/azure/azure-functions/functions-dotnet-dependency-injection#working-with-options-and-settings
+        public void ReadOptions(IServiceCollection services)
+        {
+            services.AddOptions<CosmosDbConnections>()
                 .Configure<IConfiguration>((settings, configuration) =>
                 {
                     configuration.GetSection("CosmosDbConnections").Bind(settings);
                 });
 
-            builder.Services.AddOptions<BlobStorageConnections>()
+            services.AddOptions<BlobStorageConnections>()
                 .Configure<IConfiguration>((settings, configuration) =>
                 {
-                        var section = configuration.GetSection("BlobStorageConnections");
-                        settings.ConnectionString = section.Get<string>();
+                    configuration.GetSection("BlobStorageConnections").Bind(settings);
                 });
-            builder.Services.UseService();
-            builder.Services.AddScoped<IImageService>((sp) => new ImageService(sp.GetRequiredService<BlobStorageConnections>().ConnectionString));
         }
     }
 }

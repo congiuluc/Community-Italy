@@ -17,15 +17,6 @@ namespace CommunityItaly.EF
         {
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseCosmos(
-                accountEndpoint: "https://localhost:8081",
-                accountKey: "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==",
-                databaseName: "event-db");
-            optionsBuilder.EnableSensitiveDataLogging();
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new EventEntityBuilder());
@@ -34,6 +25,8 @@ namespace CommunityItaly.EF
             modelBuilder.ApplyConfiguration(new PersonEntityBuilder());
         }
     }
+
+    // Non si può eseguire nessuna Migration!
 
     //public class EventContextFactory : IDesignTimeDbContextFactory<EventContext>
     //{
