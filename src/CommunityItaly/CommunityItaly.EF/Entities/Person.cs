@@ -14,11 +14,13 @@ namespace CommunityItaly.EF.Entities
         public string Name { get; }
         public string Surname { get; }
         public Uri Picture { get; private set; }
+        public bool Confirmed { get; private set; }
+
         public string MVP_Code { get; private set; }
         public bool IsMVP => !string.IsNullOrEmpty(MVP_Code);
-
         public void AddMVPCode(string mvp_code) => MVP_Code = mvp_code;
         public void AddPicture(Uri picture) => Picture = picture;
+        public void SetConfirmation(bool confirmation) => Confirmed = confirmation;
 
         public PersonOwned ToOwned()
         {

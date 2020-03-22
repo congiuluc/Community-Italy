@@ -17,6 +17,7 @@ namespace CommunityItaly.EF.Entities
         public string Name { get; set; }
         public Uri Logo { get; private set; }
         public Uri WebSite { get; private set; }
+        public bool Confirmed { get; private set; }
         public HashSet<T> Managers { get; } = new HashSet<T>();
         public void AddManager(T manager)
         {
@@ -34,6 +35,7 @@ namespace CommunityItaly.EF.Entities
         {
             WebSite = website;
         }
+        public void SetConfirmation(bool confirmation) => Confirmed = confirmation;
 
         public CommunityOwned ToOwned()
         {

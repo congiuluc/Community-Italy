@@ -17,5 +17,7 @@ namespace CommunityItaly.EF.Entities
         public Uri Url { get;  }
         public DateTime PublishDate { get; }
         public HashSet<PersonOwned> Authors { get; }
+        public bool Confirmed { get; private set; }
+        public void SetConfirmation(bool confirmation) => Confirmed = confirmation;
     }
 }
