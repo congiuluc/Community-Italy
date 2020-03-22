@@ -32,7 +32,7 @@ namespace CommunityItaly.Services
 				Community community = await db.Communities.FindAsync(eventVM.CommunityName);
 				if (community != null)
 				{
-					currentEvent.AddCommunity(community);
+					currentEvent.AddCommunity(community.ToOwned());
 				}
 			}
 			await db.Events.AddAsync(currentEvent);
@@ -65,17 +65,27 @@ namespace CommunityItaly.Services
 					StartDate = currentEvent.StartDate,
 					EndDate = currentEvent.EndDate,
 					BuyTicket = currentEvent.BuyTicket,
-					CFP = new CallForSpeakerViewModel
+					CFP = currentEvent.CFP == null ? null : new CallForSpeakerViewModel
 					{
 						Url = currentEvent.CFP.Url,
 						StartDate = currentEvent.CFP.StartDate,
 						EndDate = currentEvent.CFP.EndDate
 					},
-					Community = new CommunityViewModel
+					Community = currentEvent.Community == null ? null : new CommunityViewModel
 					{
 						Name = currentEvent.Community.Name,
 						Logo = currentEvent.Community.Logo,
-						WebSite = currentEvent.Community.WebSite
+						WebSite = currentEvent.Community.WebSite,
+						Managers = !currentEvent.Community.Managers.Any() ? 
+							null : 
+							currentEvent.Community.Managers.Select(t => new PersonViewModelReadOnly
+							{
+								Id = t.Id,
+								Name = t.Name,
+								Surname = t.Surname,
+								Picture = t.Picture,
+								MVP_Code = t.MVP_Code
+							})
 					}
 				});
 

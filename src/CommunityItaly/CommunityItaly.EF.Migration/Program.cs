@@ -44,8 +44,11 @@ namespace CommunityItaly.EF.Migration
                 var globalAzure = new Event("Global Azure",
                     new DateTime(2020, 04, 24, 9, 0, 0),
                     new DateTime(2020, 04, 24, 18, 0, 0));
-                globalAzure.AddCommunity(community);
-                db.Add(globalAzure);
+                globalAzure.AddCommunity(community.ToOwned());                
+                await db.Events.AddAsync(globalAzure).ConfigureAwait(false);
+                await db.SaveChangesAsync();
+
+                await db.Communities.AddAsync(community).ConfigureAwait(false);
                 await db.SaveChangesAsync();
             }
 

@@ -16,6 +16,6 @@ namespace CommunityItaly.EF.Entities
         public string Id { get; }
         public Uri Url { get;  }
         public DateTime PublishDate { get; }
-        public HashSet<Person> Authors { get; }
+        public HashSet<PersonOwned> Authors { get; }
     }
 }

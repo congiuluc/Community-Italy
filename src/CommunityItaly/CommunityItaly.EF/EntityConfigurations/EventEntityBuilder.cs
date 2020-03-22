@@ -26,7 +26,23 @@ namespace CommunityItaly.EF.EntityConfigurations
                     c.Property(t => t.EndDate);
                 });
 
-            builder.HasOne(x => x.Community);
+            builder.OwnsOne(x => x.Community,
+             c =>
+             {
+                 c.HasKey("ShortName");
+                 c.Property(t => t.Name);
+                 c.Property(t => t.WebSite);
+                 c.Property(t => t.Logo);
+                 c.OwnsMany(f => f.Managers,
+                     k =>
+                     {
+                         k.HasKey("Id");
+                         k.Property(t => t.Name);
+                         k.Property(t => t.Surname);
+                         k.Property(t => t.Picture);
+                         k.Property(t => t.MVP_Code);
+                     });
+             });
         }
     }
 }

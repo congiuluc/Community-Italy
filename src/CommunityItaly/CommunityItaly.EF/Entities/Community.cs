@@ -1,22 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace CommunityItaly.EF.Entities
 {
-    public class Community
+    public class CommunityBase<T>
+        where T : Person
     {
-        public Community(string shortName)
+        public CommunityBase(string name)
         {
-            ShortName = shortName;
+            Name = name;
+            ShortName = name
+                .Replace(" ","-")
+                .ToLowerInvariant();
         }
         public string ShortName { get; }
-        public string Name { get; }
+        public string Name { get; set; }
         public Uri Logo { get; private set; }
         public Uri WebSite { get; private set; }
-        public HashSet<Person> Managers { get; } = new HashSet<Person>();
-        public void AddManager(Person manager)
+        public HashSet<T> Managers { get; } = new HashSet<T>();
+        public void AddManager(T manager)
         {
             Managers.Add(manager);
         }
@@ -32,5 +34,34 @@ namespace CommunityItaly.EF.Entities
         {
             WebSite = website;
         }
+
+        public CommunityOwned ToOwned()
+        {
+            var c = new CommunityOwned(Name);
+            c.SetLogo(Logo);
+            c.SetWebSite(WebSite);
+            foreach (var m in Managers)
+            {
+                c.AddManager(m.ToOwned());
+            }
+            return c;
+        }
+    }
+
+
+    public class Community : CommunityBase<Person>
+    {
+        public Community(string shortName)
+            : base(shortName)
+        {
+        }
+    }
+
+    public class CommunityOwned : CommunityBase<PersonOwned>
+    {
+        public CommunityOwned(string shortName)
+            : base(shortName)
+        {
+        }       
     }
 }

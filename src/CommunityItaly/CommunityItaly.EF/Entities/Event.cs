@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CommunityItaly.EF.Entities
 {
@@ -22,7 +20,7 @@ namespace CommunityItaly.EF.Entities
         public Uri BuyTicket { get; private set; }
         public CallForSpeaker CFP { get; private set; }
         public bool CFPEnable => CFP != null;
-        public Community Community { get; private set; }
+        public CommunityOwned Community { get; private set; }
         public bool HasCommunity => Community != null;
 
         public void AddCallForSpeaker(CallForSpeaker cfp)
@@ -30,7 +28,7 @@ namespace CommunityItaly.EF.Entities
             CFP = cfp;
         }
 
-        public void AddCommunity(Community community)
+        public void AddCommunity(CommunityOwned community)
         {
             Community = community;
         }

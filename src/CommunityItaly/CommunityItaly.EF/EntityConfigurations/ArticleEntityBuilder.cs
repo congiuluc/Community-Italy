@@ -18,7 +18,7 @@ namespace CommunityItaly.EF.EntityConfigurations
 
             builder.Property(x => x.PublishDate);
             builder.Property(x => x.Url);
-            builder.HasMany(x => x.Authors);
+            //builder.HasMany(x => x.Authors);
         }
     }
 }

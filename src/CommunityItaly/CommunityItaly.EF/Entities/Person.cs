@@ -10,7 +10,7 @@ namespace CommunityItaly.EF.Entities
             Surname = surname;
             Id = Guid.NewGuid().ToString("N");
         }
-        public string Id { get; }
+        public string Id { get; private set; }
         public string Name { get; }
         public string Surname { get; }
         public Uri Picture { get; private set; }
@@ -19,5 +19,20 @@ namespace CommunityItaly.EF.Entities
 
         public void AddMVPCode(string mvp_code) => MVP_Code = mvp_code;
         public void AddPicture(Uri picture) => Picture = picture;
+
+        public PersonOwned ToOwned()
+        {
+            var p = new PersonOwned(Name, Surname) { Id = Id };
+            p.AddPicture(Picture);
+            p.AddMVPCode(MVP_Code);
+            return p;
+        }
+    }
+
+    public class PersonOwned : Person
+    {
+        public PersonOwned(string name, string surname) : base(name, surname)
+        {
+        }
     }
 }
