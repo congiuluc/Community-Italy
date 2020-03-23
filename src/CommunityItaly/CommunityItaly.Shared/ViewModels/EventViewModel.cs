@@ -15,6 +15,12 @@ namespace CommunityItaly.Shared.ViewModels
         public string CommunityName { get; set; }
     }
 
+    public class EventUpdateViewModel : EventViewModel
+    {
+        public string Id { get; set; }
+        public bool Confirmation { get; set; }
+    }
+
     public class EventViewModelReadOnly
     {
         public string Name { get; set; }

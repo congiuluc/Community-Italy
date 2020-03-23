@@ -34,6 +34,8 @@ namespace CommunityItaly.Services
 				{
 					currentEvent.AddCommunity(community.ToOwned());
 				}
+				else
+					throw new ArgumentOutOfRangeException($"No community {eventVM.CommunityName} found");
 			}
 			await db.Events.AddAsync(currentEvent);
 			await db.SaveChangesAsync().ConfigureAwait(false);
@@ -47,11 +49,29 @@ namespace CommunityItaly.Services
 			await db.SaveChangesAsync().ConfigureAwait(false);
 		}
 
+		public async Task<bool> ExistsAsync(string id)
+		{
+			var eventDomain = await db.Events.FindAsync(id);
+			return eventDomain != null;
+		}
+
 		public async Task<PagedViewModel<EventViewModelReadOnly>> GetAsync(int? take = 10, int? skip = 0)
 		{
+			return await GetAsync(false, take, skip).ConfigureAwait(false);
+		}
+
+		public async Task<PagedViewModel<EventViewModelReadOnly>> GetConfirmedAsync(int? take = 10, int? skip = 0)
+		{
+			return await GetAsync(true, take, skip).ConfigureAwait(false);
+		}
+
+		private async Task<PagedViewModel<EventViewModelReadOnly>> GetAsync(bool confirmed, int? take = 10, int? skip = 0)
+		{
+			take = !take.HasValue || take.Value == 0 ? 10 : take.Value;
 			int totalElement = await db.Events.CountAsync().ConfigureAwait(false);
 
 			var resultList = await db.Events
+				.Where(x => x.Confirmed == confirmed)
 				.Skip(skip.Value)
 				.Take(take.Value)
 				.ToListAsync()
@@ -127,9 +147,30 @@ namespace CommunityItaly.Services
 			return eventVM;
 		}
 
-		public async Task UpdateAsync(EventViewModel eventVM)
+		public async Task UpdateAsync(EventUpdateViewModel eventVM)
 		{
-			throw new NotImplementedException();
+			var currentEvent = await db.Events.FindAsync(eventVM.Id);
+			currentEvent.SetLogo(eventVM.Logo);
+			currentEvent.SetBuyTicket(eventVM.BuyTicket);
+			currentEvent.SetConfirmation(eventVM.Confirmation);
+			//TODO: Update date and name
+
+			if (eventVM.CFP != null)
+			{
+				currentEvent.AddCallForSpeaker(new CallForSpeaker(eventVM.CFP.Url, eventVM.CFP.StartDate, eventVM.CFP.EndDate));
+			}
+			if (!string.IsNullOrEmpty(eventVM.CommunityName))
+			{
+				Community community = await db.Communities.FindAsync(eventVM.CommunityName);
+				if (community != null)
+				{
+					currentEvent.AddCommunity(community.ToOwned());
+				}
+				else
+					throw new ArgumentOutOfRangeException($"No community {eventVM.CommunityName} found");
+			}
+			db.Events.Update(currentEvent);
+			await db.SaveChangesAsync().ConfigureAwait(false);
 		}
 	}
 }

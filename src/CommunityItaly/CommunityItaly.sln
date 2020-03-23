@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunityItaly.Services", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunityItaly.Shared", "CommunityItaly.Shared\CommunityItaly.Shared.csproj", "{787E5CA4-5259-4B6C-B008-2BBEAA84E1EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityItaly.Refit", "CommunityItaly.Refit\CommunityItaly.Refit.csproj", "{C83890D6-C71C-4080-B8AE-AB9D5768594B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunityItaly.Refit", "CommunityItaly.Refit\CommunityItaly.Refit.csproj", "{C83890D6-C71C-4080-B8AE-AB9D5768594B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{E4A68592-BB73-4A41-986C-D35CFD59D8AA}"
 EndProject

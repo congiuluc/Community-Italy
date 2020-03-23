@@ -22,6 +22,9 @@ namespace CommunityItaly.EF.Entities
         public bool CFPEnable => CFP != null;
         public CommunityOwned Community { get; private set; }
         public bool HasCommunity => Community != null;
+        public bool Confirmed { get; private set; }
+
+        public void SetConfirmation(bool confirmation) => Confirmed = confirmation;
 
         public void AddCallForSpeaker(CallForSpeaker cfp)
         {
