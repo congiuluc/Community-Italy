@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using CommunityItaly.Server.Utilities;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -10,6 +11,19 @@ namespace CommunityItaly.Server.Functions
 {
     public class Upload
     {
+        [FunctionName("Upload_HttpStart")]
+        public static async Task<HttpResponseMessage> HttpStart(
+          [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestMessage req,
+          [DurableClient] IDurableOrchestrationClient starter,
+          ILogger log)
+        {
+            // Function input comes from the request content.
+            string instanceId = await starter.StartNewAsync("Upload", null);
+
+            log.LogInformation($"Started orchestration with ID = '{instanceId}'.");
+
+            return starter.CreateCheckStatusResponse(req, instanceId);
+        }
 
 
         [FunctionName("Upload")]
@@ -34,23 +48,6 @@ namespace CommunityItaly.Server.Functions
             return $"Hello {name}!";
         }
 
-        [FunctionName("Upload_HttpStart")]
-        public static async Task<HttpResponseMessage> HttpStart(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestMessage req,
-            [DurableClient] IDurableOrchestrationClient starter,
-            ILogger log)
-        {
-            // Function input comes from the request content.
-            string instanceId = await starter.StartNewAsync("Upload", null);
-
-            log.LogInformation($"Started orchestration with ID = '{instanceId}'.");
-
-            return starter.CreateCheckStatusResponse(req, instanceId);
-        }
-    }
-
-    public class UploadTasks
-    {
-        public const string CreateMiniature = nameof(CreateMiniature);
+      
     }
 }

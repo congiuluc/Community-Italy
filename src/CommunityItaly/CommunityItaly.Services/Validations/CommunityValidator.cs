@@ -5,9 +5,15 @@ namespace CommunityItaly.Services.Validations
 {
 	public class CommunityValidator : AbstractValidator<CommunityViewModel>
 	{
-		public CommunityValidator()
+		public CommunityValidator(ICommunityService communityService)
 		{
-			RuleFor(x => x.Name).NotEmpty();
+			RuleFor(x => x.Name).NotEmpty().CustomAsync(async(name, ctx, cancellationToken) => 
+			{ 
+				if(await communityService.CommunityExistsAsync(name))
+				{
+					ctx.AddFailure($"Community {name} already Exists");
+				}
+			});
 		}
 	}
 }
