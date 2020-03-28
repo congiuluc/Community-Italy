@@ -1,53 +1,77 @@
-using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using CommunityItaly.Server.Utilities;
+using CommunityItaly.Services;
+using CommunityItaly.Services.FolderStructures;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
+using System;
+using System.IO;
 
 namespace CommunityItaly.Server.Functions
 {
     public class Upload
     {
-        [FunctionName("Upload_HttpStart")]
-        public static async Task<HttpResponseMessage> HttpStart(
-          [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestMessage req,
-          [DurableClient] IDurableOrchestrationClient starter,
-          ILogger log)
+        private readonly IImageService imageService;
+        private readonly ICommunityService communityService;
+        private readonly IEventService eventService;
+
+        public Upload(IImageService imageService, IEventService eventService, ICommunityService communityService)
         {
-            // Function input comes from the request content.
-            string instanceId = await starter.StartNewAsync("Upload", null);
-
-            log.LogInformation($"Started orchestration with ID = '{instanceId}'.");
-
-            return starter.CreateCheckStatusResponse(req, instanceId);
+            this.imageService = imageService;
+            this.eventService = eventService;
+            this.communityService = communityService;
         }
 
-
-        [FunctionName("Upload")]
-        public static async Task<List<string>> RunOrchestrator(
-            [OrchestrationTrigger] IDurableOrchestrationContext context)
+        [FunctionName("UploadImage")]
+        public async Task<IActionResult> PostImage(
+           [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.POST, Route = "UploadImage")] HttpRequestMessage req,
+           ILogger log)
         {
-            var outputs = new List<string>();
+            var provider = new MultipartMemoryStreamProvider();
+            await req.Content.ReadAsMultipartAsync(provider);
+            var file = provider.Contents.First();
+            var fileExtension = new FileInfo(file.Headers.ContentDisposition.FileName.Replace("\"", "")).Extension.ToLower();
+            var fileData = await file.ReadAsByteArrayAsync();
 
-            // Replace "hello" with the name of your Durable Activity Function.
-            outputs.Add(await context.CallActivityAsync<string>("Upload_Hello", "Tokyo"));
-            outputs.Add(await context.CallActivityAsync<string>("Upload_Hello", "Seattle"));
-            outputs.Add(await context.CallActivityAsync<string>("Upload_Hello", "London"));
-
-            // returns ["Hello Tokyo!", "Hello Seattle!", "Hello London!"]
-            return outputs;
+            var querystring = req.RequestUri.ParseQueryString();
+            string typeUpload = querystring.Get("type");
+            string id = querystring.Get("id");
+            if (string.IsNullOrEmpty(typeUpload) || string.IsNullOrEmpty(id))
+                throw new ArgumentNullException("Id and UploadType must not be empty");
+            Uri imageStorageUri = null;
+            BlobInformation blobInformation;
+            switch (typeUpload.ToUpper())
+            {
+                case "COMMUNITY":
+                    if (await communityService.ExistsAsync(id))
+                    {
+                        blobInformation = ImageStructure.CommunityPictureOriginal(id, fileExtension);
+                        await imageService.UploadImageAsync(blobInformation.BlobContainerName, blobInformation.FileName, fileData).ConfigureAwait(false);
+                        await communityService.UpdateImageAsync(id, imageStorageUri).ConfigureAwait(false);
+                    }
+                    else
+                        throw new ArgumentException($"Community id: {id}, not exist");
+                    break;
+                case "EVENT":
+                    if (await eventService.ExistsAsync(id))
+                    {
+                        blobInformation = ImageStructure.EventPictureOriginal(id, fileExtension);
+                        imageStorageUri = await imageService.UploadImageAsync(blobInformation.BlobContainerName, blobInformation.FileName, fileData).ConfigureAwait(false);
+                        await eventService.UpdateLogoAsync(id, imageStorageUri).ConfigureAwait(false);
+                    }
+                    else
+                        throw new ArgumentException($"Event id: {id}, not exist");
+                    break;
+                case "PERSON":
+                    blobInformation = ImageStructure.PersonPictureOriginal(id, fileExtension);
+                    //imageStorageUri = await imageService.UploadImageAsync(blobInformation.BlobContainerName, blobInformation.FileName, fileData);
+                    //await eventService.UpdateLogoAsync(id, imageStorageUri);
+                    break;
+            }
+            return new OkObjectResult(new { ImageUrl = imageStorageUri });
         }
-
-        [FunctionName(UploadTasks.CreateMiniature)]
-        public static string SayHello([ActivityTrigger] string name, ILogger log)
-        {
-            log.LogInformation($"Saying hello to {name}.");
-            return $"Hello {name}!";
-        }
-
-      
     }
 }

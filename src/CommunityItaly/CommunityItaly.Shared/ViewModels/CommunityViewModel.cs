@@ -11,4 +11,10 @@ namespace CommunityItaly.Shared.ViewModels
 		public Uri WebSite { get; set; }
 		public IEnumerable<PersonViewModelReadOnly> Managers { get; set; } = new List<PersonViewModelReadOnly>();
 	}
+
+	public class CommunityUpdateViewModel : EventViewModel
+	{
+		public string Id { get; set; }
+		public bool Confirmation { get; set; }
+	}
 }

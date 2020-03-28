@@ -29,11 +29,12 @@ namespace CommunityItaly.Services
             await blockBlob.DeleteAsync();
         }
 
-        public async Task UploadImageAsync(string blobContainerName, string filename, byte[] fileContent)
+        public async Task<Uri> UploadImageAsync(string blobContainerName, string filename, byte[] fileContent)
         {
             var blobContainer = await CreateOrGetContainerAsync(blobContainerName);
             var blockBlob = blobContainer.GetBlockBlobReference(filename);
             await blockBlob.UploadFromByteArrayAsync(fileContent, 0 , fileContent.Length);
+            return blockBlob.StorageUri.PrimaryUri;
         }
 
         private async Task<CloudBlobContainer> CreateOrGetContainerAsync(string containerName)

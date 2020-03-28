@@ -2,16 +2,41 @@
 {
 	public static class ImageStructure
 	{
-		public static string PersonPictureOriginal(string Id) => $"people/original/{Id}";
-		public static string PersonPictureIcon(string Id) => $"people/icon/{Id}";
-		public static string PersonPictureMedium(string Id) => $"people/medium/{Id}";
+		public static BlobInformation PersonPictureOriginal(string id, string extension) => BlobInformation.Create($"people/{id}/original{extension}");
+		public static BlobInformation PersonPictureIcon(string id, string extension) => BlobInformation.Create($"people/{id}/icon{extension}");
+		public static BlobInformation PersonPictureMedium(string id, string extension) => BlobInformation.Create($"people/{id}/medium{extension}");
 
-		public static string EventPictureOriginal(string Id) => $"events/original/{Id}";
-		public static string EventPictureIcon(string Id) => $"events/icon/{Id}";
-		public static string EventPictureMedium(string Id) => $"events/medium/{Id}";
+		public static BlobInformation EventPictureOriginal(string id, string extension) => BlobInformation.Create($"events/{id}/original{extension}");
+		public static BlobInformation EventPictureIcon(string id, string extension) => BlobInformation.Create($"events/{id}/icon{extension}");
+		public static BlobInformation EventPictureMedium(string id, string extension) => BlobInformation.Create($"events/{id}/medium{extension}");
 
-		public static string CommunityPictureOriginal(string Id) => $"communities/original/{Id}";
-		public static string CommunityPictureIcon(string Id) => $"communities/icon/{Id}";
-		public static string CommunityPictureMedium(string Id) => $"communities/medium/{Id}";
+		public static BlobInformation CommunityPictureOriginal(string id, string extension) => BlobInformation.Create($"communities/{id}/original{extension}");
+		public static BlobInformation CommunityPictureIcon(string id, string extension) => BlobInformation.Create($"communities/{id}/icon{extension}");
+		public static BlobInformation CommunityPictureMedium(string id, string extension) => BlobInformation.Create($"communities/{id}/medium{extension}");
+	}
+
+	public class BlobInformation
+	{
+		public static BlobInformation Create(string fullPath)
+		{
+			string[] segments = fullPath.Split('/');
+			if(segments.Length == 3)
+			{
+				return new BlobInformation(segments[0], segments[1], segments[2]);
+			}
+			throw new System.ArgumentException("Full Path is not in correct format");
+		}
+		public BlobInformation(string blobContainerName, string path, string imageName)
+		{
+			BlobContainerName = blobContainerName;
+			Path = path;
+			ImageName = imageName;
+		}
+
+		public string BlobContainerName { get; set; }
+		public string ImageName { get; set; }
+		public string Path { get; set; }
+		public string FullPath => $"{BlobContainerName}/{FileName}";
+		public string FileName => $"{Path}/{ImageName}";
 	}
 }

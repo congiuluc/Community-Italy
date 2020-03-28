@@ -51,7 +51,7 @@ namespace CommunityItaly.Services
 
 		public async Task<bool> ExistsAsync(string id)
 		{
-			var eventDomain = await db.Events.FindAsync(id);
+			var eventDomain = await db.Events.FindAsync(id).ConfigureAwait(false);
 			return eventDomain != null;
 		}
 
@@ -149,8 +149,7 @@ namespace CommunityItaly.Services
 
 		public async Task UpdateAsync(EventUpdateViewModel eventVM)
 		{
-			var currentEvent = await db.Events.FindAsync(eventVM.Id);
-			currentEvent.SetLogo(eventVM.Logo);
+			var currentEvent = await db.Events.FindAsync(eventVM.Id).ConfigureAwait(false);
 			currentEvent.SetBuyTicket(eventVM.BuyTicket);
 			currentEvent.SetConfirmation(eventVM.Confirmation);
 			//TODO: Update date and name
@@ -169,6 +168,14 @@ namespace CommunityItaly.Services
 				else
 					throw new ArgumentOutOfRangeException($"No community {eventVM.CommunityName} found");
 			}
+			db.Events.Update(currentEvent);
+			await db.SaveChangesAsync().ConfigureAwait(false);
+		}
+
+		public async Task UpdateLogoAsync(string id, Uri logo)
+		{
+			var currentEvent = await db.Events.FindAsync(id).ConfigureAwait(false);
+			currentEvent.SetLogo(logo);
 			db.Events.Update(currentEvent);
 			await db.SaveChangesAsync().ConfigureAwait(false);
 		}

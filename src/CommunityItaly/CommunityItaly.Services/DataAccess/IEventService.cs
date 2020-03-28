@@ -14,6 +14,7 @@ namespace CommunityItaly.Services
 		Task<EventViewModelReadOnly> GetById(string id);
 		Task<string> CreateAsync(EventViewModel eventVM);
 		Task UpdateAsync(EventUpdateViewModel eventVM);
+		Task UpdateLogoAsync(string id, Uri logo);
 		Task DeleteAsync(string id);
 		Task<bool> ExistsAsync(string id);
 	}

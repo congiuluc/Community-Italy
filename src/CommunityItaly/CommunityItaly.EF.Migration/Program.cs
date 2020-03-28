@@ -20,7 +20,7 @@ namespace CommunityItaly.EF.Migration
             optionsBuilder.EnableSensitiveDataLogging();
 
             string currentPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-
+            string id = string.Empty;
             using (var db = new EventContext(optionsBuilder.Options))
             {
                 await db.Database.EnsureDeletedAsync();
@@ -52,11 +52,18 @@ namespace CommunityItaly.EF.Migration
 
                 await db.Events.AddAsync(globalAzure).ConfigureAwait(false);
                 await db.SaveChangesAsync();
+                id = globalAzure.Id;
 
                 await db.Communities.AddAsync(community).ConfigureAwait(false);
                 await db.SaveChangesAsync();
             }
 
+
+            using (var db = new EventContext(optionsBuilder.Options))
+            {
+                var e = await db.Events.FindAsync(id).ConfigureAwait(false);
+                Console.WriteLine(e.ToString());
+            }
         }
     }
 

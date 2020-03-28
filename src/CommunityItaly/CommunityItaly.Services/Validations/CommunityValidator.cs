@@ -9,7 +9,7 @@ namespace CommunityItaly.Services.Validations
 		{
 			RuleFor(x => x.Name).NotEmpty().CustomAsync(async(name, ctx, cancellationToken) => 
 			{ 
-				if(await communityService.CommunityExistsAsync(name))
+				if(await communityService.ExistsAsync(name))
 				{
 					ctx.AddFailure($"Community {name} already Exists");
 				}

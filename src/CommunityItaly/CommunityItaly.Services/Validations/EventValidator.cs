@@ -21,7 +21,7 @@ namespace CommunityItaly.Services.Validations
 			{
 				RuleFor(x => x.CommunityName).CustomAsync(async (name, ctx, cancellationToken) =>
 				{
-					bool exist = await communityService.CommunityExistsAsync(name);
+					bool exist = await communityService.ExistsAsync(name);
 					if (!exist)
 						ctx.AddFailure(new ValidationFailure("CommunityName", $"Community: '{name}' not exist. Please create first"));
 				});
@@ -52,7 +52,7 @@ namespace CommunityItaly.Services.Validations
 			{
 				RuleFor(x => x.CommunityName).CustomAsync(async (name, ctx, cancellationToken) =>
 				{
-					bool exist = await communityService.CommunityExistsAsync(name);
+					bool exist = await communityService.ExistsAsync(name);
 					if (!exist)
 						ctx.AddFailure(new ValidationFailure("CommunityName", $"Community: '{name}' not exist. Please create first"));
 				});
