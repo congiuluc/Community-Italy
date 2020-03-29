@@ -17,6 +17,19 @@ namespace CommunityItaly.Shared.ViewModels
     {
         public string Id { get; set; }
         public bool Confirmation { get; set; }
+
+        public static EventUpdateViewModel Create(EventViewModel vm)
+        {
+            return new EventUpdateViewModel
+            {
+                Name = vm.Name,
+                StartDate = vm.StartDate,
+                EndDate = vm.EndDate,
+                BuyTicket = vm.BuyTicket,
+                CFP = vm.CFP,
+                CommunityName = vm.CommunityName
+            };
+        }
     }
 
     public class EventViewModelReadOnly
@@ -27,6 +40,6 @@ namespace CommunityItaly.Shared.ViewModels
         public DateTime EndDate { get; set; }
         public Uri BuyTicket { get; set; }
         public CallForSpeakerViewModel CFP { get; set; }
-        public CommunityViewModel Community { get; set; }
+        public CommunityUpdateViewModel Community { get; set; }
     }
 }

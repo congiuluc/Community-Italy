@@ -70,8 +70,13 @@ namespace CommunityItaly.Services
 			take = !take.HasValue || take.Value == 0 ? 10 : take.Value;
 			int totalElement = await db.Events.CountAsync().ConfigureAwait(false);
 
-			var resultList = await db.Events
-				.Where(x => x.Confirmed == confirmed)
+			IQueryable<Event> resultListBase = null;
+			if (confirmed == true)
+				resultListBase = db.Events.Where(x => x.Confirmed == confirmed);
+			else
+				resultListBase = db.Events;
+
+			var resultList = await resultListBase
 				.Skip(skip.Value)
 				.Take(take.Value)
 				.ToListAsync()
@@ -91,7 +96,7 @@ namespace CommunityItaly.Services
 						StartDate = currentEvent.CFP.StartDate,
 						EndDate = currentEvent.CFP.EndDate
 					},
-					Community = currentEvent.Community == null ? null : new CommunityViewModel
+					Community = currentEvent.Community == null ? null : new CommunityUpdateViewModel
 					{
 						Name = currentEvent.Community.Name,
 						Logo = currentEvent.Community.Logo,
@@ -137,7 +142,7 @@ namespace CommunityItaly.Services
 			if (currentEvent?.Community != null)
 			{
 				var community = await db.Communities.FindAsync(currentEvent.Community.Name);
-				eventVM.Community = new CommunityViewModel
+				eventVM.Community = new CommunityUpdateViewModel
 				{
 					Name = community.Name,
 					Logo = community.Logo,

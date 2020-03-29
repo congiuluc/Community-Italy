@@ -46,6 +46,12 @@ namespace CommunityItaly.Server
                 {
                     configuration.GetSection("BlobStorageConnections").Bind(settings);
                 });
+
+            services.AddOptions<SendGridConnections>()
+                .Configure<IConfiguration>((settings, configuration) =>
+                {
+                    configuration.GetSection("SendGridConnections").Bind(settings);
+                });
         }
     }
 }
