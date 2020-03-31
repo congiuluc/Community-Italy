@@ -55,22 +55,22 @@ namespace CommunityItaly.Server
             return new OkObjectResult(result);
         }
 
-        [FunctionName("EventPost")]
-        public async Task<IActionResult> Post(
-           [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.POST, Route = "Event")] HttpRequest req,
-           ILogger log)
-        {
-            var eventValidateRequest = await req.GetJsonBodyWithValidator(new EventValidator(communityService));
-            if (!eventValidateRequest.IsValid)
-            {
-                log.LogError($"Invalid form data");
-                return eventValidateRequest.ToBadRequest();
-            }
+        //[FunctionName("EventPost")]
+        //public async Task<IActionResult> Post(
+        //   [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.POST, Route = "Event")] HttpRequest req,
+        //   ILogger log)
+        //{
+        //    var eventValidateRequest = await req.GetJsonBodyWithValidator(new EventValidator(communityService));
+        //    if (!eventValidateRequest.IsValid)
+        //    {
+        //        log.LogError($"Invalid form data");
+        //        return eventValidateRequest.ToBadRequest();
+        //    }
 
-            var result = await eventServices.CreateAsync(eventValidateRequest.Value);
+        //    var result = await eventServices.CreateAsync(eventValidateRequest.Value);
 
-            return new CreatedResult("EventRoute/{Id}", new { Id = result });
-        }
+        //    return new CreatedResult("EventRoute/{Id}", new { Id = result });
+        //}
 
         [FunctionName("EventPut")]
         public async Task<IActionResult> Put(

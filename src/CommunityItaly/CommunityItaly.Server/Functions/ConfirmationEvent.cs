@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using SendGrid.Helpers.Mail;
 
 namespace CommunityItaly.Server.Functions
@@ -22,12 +24,17 @@ namespace CommunityItaly.Server.Functions
         private readonly IEventService eventService;
         private readonly ICommunityService communityService;
         private readonly SendGridConnections sendGridSettings;
+        private readonly AdminConfiguration adminSettings;
 
-        public ConfirmationEvent(IEventService eventService, ICommunityService communityService, SendGridConnections sendGridSettings)
+        public ConfirmationEvent(IEventService eventService, 
+            ICommunityService communityService,
+            IOptions<SendGridConnections> sendGridSettings,
+            IOptions<AdminConfiguration> adminSettings)
         {
             this.eventService = eventService;
             this.communityService = communityService;
-            this.sendGridSettings = sendGridSettings;
+            this.sendGridSettings = sendGridSettings.Value;
+            this.adminSettings = adminSettings.Value;
         }
 
 		#region [Start]
@@ -59,7 +66,8 @@ namespace CommunityItaly.Server.Functions
 
             var vmUpdate = EventUpdateViewModel.Create(vm);
             vmUpdate.Id = id;
-            await context.CallActivityAsync(ConfirmationTask.SendMailEvent, vmUpdate);
+            var activateSendMail = new ActivateSendMail { Event = vmUpdate, InstanceId = context.InstanceId };
+            await context.CallActivityAsync(ConfirmationTask.SendMailEvent, activateSendMail);
 
             await HumanInteractionEvent(context, vmUpdate);
             return id;
@@ -75,18 +83,49 @@ namespace CommunityItaly.Server.Functions
         }
 
         [FunctionName(ConfirmationTask.SendMailEvent)]
-        public async Task ConfirmEvent([ActivityTrigger] EventUpdateViewModel eventData,
-            [SendGrid(ApiKey = "SendGrid:ApiKey")] SendGridMessage message,
+        public async Task ConfirmEvent([ActivityTrigger] ActivateSendMail activateSendMail,
+            [SendGrid(ApiKey = "SendGridConnections:ApiKey")] IAsyncCollector<SendGridMessage> messageCollector,
             ILogger log)
         {
+            var eventData = activateSendMail.Event;
+            SendGridMessage message = new SendGridMessage();
+            message.SetFrom(new EmailAddress(sendGridSettings.From));
+            message.AddTos(adminSettings.GetMails().Select(x => new EmailAddress(x)).ToList());
+            message.Subject = $"New Event submitted: {eventData.Name}";
             message.SetTemplateId(sendGridSettings.TemplateId);
+            string urlConfirmation = adminSettings.BaseUrl.Replace("{instanceId}", activateSendMail.InstanceId);
+            message.SetTemplateData(new MailTemplateData 
+            {
+                confirmurl = urlConfirmation,
+                eventname = eventData.Name,
+                eventstartdate = eventData.StartDate,
+                eventenddate = eventData.EndDate,
+                eventbuyticket = eventData.BuyTicket.ToString(),
+                eventcfpurl = eventData.CFP.Url.ToString(),
+                eventcfpstartdate = eventData.CFP.StartDate,
+                eventcfpstartend = eventData.CFP.EndDate,
+                eventcommunityname = eventData.CommunityName
+            });
+
+            
+            //message.AddSubstitution("confirmurl", adminSettings.GetConfirmationLink(activateSendMail.InstanceId, eventData.Id));
+            //message.AddSubstitution("eventname", eventData.Name);
+            //message.AddSubstitution("eventstartdate", eventData.StartDate.ToString("G"));
+            //message.AddSubstitution("eventenddate", eventData.EndDate.ToString("G"));
+            //message.AddSubstitution("eventbuyticket", eventData.BuyTicket.ToString());
+            //message.AddSubstitution("eventcfpurl", eventData.CFP.Url.ToString());
+            //message.AddSubstitution("eventcfpstartdate", eventData.CFP.StartDate.ToString("G"));
+            //message.AddSubstitution("eventcfpstartend", eventData.CFP.EndDate.ToString("G"));
+            //message.AddSubstitution("eventcommunityname", eventData.CommunityName);
+
+            await messageCollector.AddAsync(message);
         }
         #endregion
 
         #region [ApproveFromHttp]
         [FunctionName(ConfirmationTask.ApproveEvent)]
         public static async Task<IActionResult> Run(
-             [HttpTrigger(AuthorizationLevel.Anonymous, HttpVerbs.POST, Route = "ApproveEvent")] HttpRequestMessage req,
+             [HttpTrigger(AuthorizationLevel.Anonymous, HttpVerbs.GET, Route = "ApproveEvent")] HttpRequestMessage req,
              [DurableClient] IDurableOrchestrationClient client,
              ILogger logger)
         {
@@ -139,4 +178,39 @@ namespace CommunityItaly.Server.Functions
         }
 		#endregion
 	}
+
+    public class ActivateSendMail
+    {
+        public EventUpdateViewModel Event { get; set; }
+        public string InstanceId { get; set; }
+    }
+
+    public class MailTemplateData
+    {
+        public string confirmurl { get; set; }
+        public string eventname { get; set; }
+        public DateTime eventstartdate { get; set; }
+        public DateTime eventenddate { get; set; }
+        public string eventbuyticket { get; set; }
+        public string eventcfpurl { get; set; }
+        public DateTime eventcfpstartdate { get; set; }
+        public DateTime eventcfpstartend { get; set; }
+        public string eventcommunityname { get; set; }
+    }
 }
+
+/*
+ 
+SendGrid Template
+{
+"confirmurl":"https://cloudgen.it",
+"eventname":"Global Azure",
+"eventstartdate":"2020-04-28",
+"eventenddate":"2020-04-28",
+"eventbuyticket":"https://cloudgen.it",
+"eventcfpurl":"https://cloudgen.it",
+"eventcfpstartdate":"2020-01-02",
+"eventcfpstartend":"2020-02-29",
+"eventcommunityname":"CloudGen Verona"
+}
+ */

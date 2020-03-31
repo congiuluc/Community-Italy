@@ -52,6 +52,12 @@ namespace CommunityItaly.Server
                 {
                     configuration.GetSection("SendGridConnections").Bind(settings);
                 });
+
+            services.AddOptions<AdminConfiguration>()
+               .Configure<IConfiguration>((settings, configuration) =>
+               {
+                   configuration.GetSection("AdminConfiguration").Bind(settings);
+               });
         }
     }
 }
