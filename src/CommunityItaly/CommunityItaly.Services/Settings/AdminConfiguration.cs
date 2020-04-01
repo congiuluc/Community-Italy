@@ -10,11 +10,11 @@
 			return Mails.Split(',', ';');
 		}
 
-		public string GetConfirmationLink(string instanceId, string eventId)
+		public string GetConfirmationLink(string instanceId, bool approveValue)
 		{
 			string urlConfirmation = BaseUrl
 				.Replace("{instanceId}", instanceId)
-				.Replace("{eventId}", eventId);
+				.Replace("{approvevalue}", approveValue.ToString());
 			return urlConfirmation;
 		}
 	}

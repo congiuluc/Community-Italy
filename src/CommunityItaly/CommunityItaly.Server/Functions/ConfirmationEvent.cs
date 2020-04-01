@@ -19,7 +19,7 @@ using SendGrid.Helpers.Mail;
 
 namespace CommunityItaly.Server.Functions
 {
-    public class ConfirmationEvent
+    public class ConfirmationEvent : IDisposable
     {
         private readonly IEventService eventService;
         private readonly ICommunityService communityService;
@@ -91,12 +91,12 @@ namespace CommunityItaly.Server.Functions
             SendGridMessage message = new SendGridMessage();
             message.SetFrom(new EmailAddress(sendGridSettings.From));
             message.AddTos(adminSettings.GetMails().Select(x => new EmailAddress(x)).ToList());
-            message.Subject = $"New Event submitted: {eventData.Name}";
+            message.SetSubject($"New Event submitted: {eventData.Name}");
             message.SetTemplateId(sendGridSettings.TemplateId);
-            string urlConfirmation = adminSettings.BaseUrl.Replace("{instanceId}", activateSendMail.InstanceId);
             message.SetTemplateData(new MailTemplateData 
             {
-                confirmurl = urlConfirmation,
+                confirmurl = adminSettings.GetConfirmationLink(activateSendMail.InstanceId, true),
+                aborturl = adminSettings.GetConfirmationLink(activateSendMail.InstanceId, false),
                 eventname = eventData.Name,
                 eventstartdate = eventData.StartDate,
                 eventenddate = eventData.EndDate,
@@ -106,18 +106,6 @@ namespace CommunityItaly.Server.Functions
                 eventcfpstartend = eventData.CFP.EndDate,
                 eventcommunityname = eventData.CommunityName
             });
-
-            
-            //message.AddSubstitution("confirmurl", adminSettings.GetConfirmationLink(activateSendMail.InstanceId, eventData.Id));
-            //message.AddSubstitution("eventname", eventData.Name);
-            //message.AddSubstitution("eventstartdate", eventData.StartDate.ToString("G"));
-            //message.AddSubstitution("eventenddate", eventData.EndDate.ToString("G"));
-            //message.AddSubstitution("eventbuyticket", eventData.BuyTicket.ToString());
-            //message.AddSubstitution("eventcfpurl", eventData.CFP.Url.ToString());
-            //message.AddSubstitution("eventcfpstartdate", eventData.CFP.StartDate.ToString("G"));
-            //message.AddSubstitution("eventcfpstartend", eventData.CFP.EndDate.ToString("G"));
-            //message.AddSubstitution("eventcommunityname", eventData.CommunityName);
-
             await messageCollector.AddAsync(message);
         }
         #endregion
@@ -129,7 +117,12 @@ namespace CommunityItaly.Server.Functions
              [DurableClient] IDurableOrchestrationClient client,
              ILogger logger)
         {
-            var approveResponse = await req.Content.ReadAsAsync<ApproveElement>();
+            var keys = req.RequestUri.ParseQueryString();
+            var approveResponse = new ApproveElement
+            {
+                InstanceId = keys.Get("InstanceId"),
+                Result = bool.Parse(keys.Get("ApproveValue"))
+            };
             await client.RaiseEventAsync(approveResponse.InstanceId, ConfirmationTask.ConfirmEventHuman, approveResponse.Result);
             return new AcceptedResult();
         }
@@ -140,7 +133,7 @@ namespace CommunityItaly.Server.Functions
         {
             using (var timeoutCts = new CancellationTokenSource())
             {
-                DateTime expiration = context.CurrentUtcDateTime.AddMonths(1);
+                DateTime expiration = context.CurrentUtcDateTime.AddDays(6);
                 Task timeoutTask = context.CreateTimer(expiration, timeoutCts.Token);
 
                 bool authorized = false;
@@ -154,9 +147,9 @@ namespace CommunityItaly.Server.Functions
                         // We got back a response! Compare it to the challenge code.
                         if (challengeResponseTask.Result)
                         {
-                            authorized = true;
                             vm.Confirmation = challengeResponseTask.Result;
-                            await eventService.UpdateAsync(vm);
+
+                            await eventService.UpdateAsync(vm).ConfigureAwait(false);
                             break;
                         }
                     }
@@ -176,8 +169,13 @@ namespace CommunityItaly.Server.Functions
                 return authorized;
             }
         }
-		#endregion
-	}
+
+        public void Dispose()
+        {
+            var a = "passato";
+        }
+        #endregion
+    }
 
     public class ActivateSendMail
     {
@@ -188,6 +186,7 @@ namespace CommunityItaly.Server.Functions
     public class MailTemplateData
     {
         public string confirmurl { get; set; }
+        public string aborturl { get; set; }
         public string eventname { get; set; }
         public DateTime eventstartdate { get; set; }
         public DateTime eventenddate { get; set; }
