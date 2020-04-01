@@ -21,16 +21,19 @@ namespace CommunityItaly.Server.Functions
 {
     public class ConfirmationEvent : IDisposable
     {
+        private readonly IServiceProvider serviceProvider;
         private readonly IEventService eventService;
         private readonly ICommunityService communityService;
         private readonly SendGridConnections sendGridSettings;
         private readonly AdminConfiguration adminSettings;
 
-        public ConfirmationEvent(IEventService eventService, 
+        public ConfirmationEvent(IServiceProvider serviceProvider,
+            IEventService eventService, 
             ICommunityService communityService,
             IOptions<SendGridConnections> sendGridSettings,
             IOptions<AdminConfiguration> adminSettings)
         {
+            this.serviceProvider = serviceProvider;
             this.eventService = eventService;
             this.communityService = communityService;
             this.sendGridSettings = sendGridSettings.Value;
@@ -149,7 +152,10 @@ namespace CommunityItaly.Server.Functions
                         {
                             vm.Confirmation = challengeResponseTask.Result;
 
-                            await eventService.UpdateAsync(vm).ConfigureAwait(false);
+                            var es = (IEventService)serviceProvider.GetService(typeof(IEventService));
+                            await es.UpdateAsync(vm).ConfigureAwait(false);
+
+                            // TODO: redirect
                             break;
                         }
                     }
@@ -168,11 +174,6 @@ namespace CommunityItaly.Server.Functions
 
                 return authorized;
             }
-        }
-
-        public void Dispose()
-        {
-            var a = "passato";
         }
         #endregion
     }
