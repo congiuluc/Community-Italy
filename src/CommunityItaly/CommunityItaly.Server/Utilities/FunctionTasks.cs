@@ -15,6 +15,7 @@
         public const string ConfirmEvent_Http = nameof(ConfirmEvent_Http);
         public const string ConfirmEventHuman = nameof(ConfirmEventHuman);
         public const string ConfirmOrchestrator = nameof(ConfirmOrchestrator);
+        public const string ApproveCancelEventOnCosmos = nameof(ApproveCancelEventOnCosmos);
 
 
         public const string ConfirmCommunity = nameof(ConfirmCommunity);

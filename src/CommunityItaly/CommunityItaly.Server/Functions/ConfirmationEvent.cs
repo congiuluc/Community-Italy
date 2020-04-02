@@ -19,7 +19,7 @@ using SendGrid.Helpers.Mail;
 
 namespace CommunityItaly.Server.Functions
 {
-    public class ConfirmationEvent : IDisposable
+    public class ConfirmationEvent
     {
         private readonly IServiceProvider serviceProvider;
         private readonly IEventService eventService;
@@ -111,6 +111,12 @@ namespace CommunityItaly.Server.Functions
             });
             await messageCollector.AddAsync(message);
         }
+
+        [FunctionName(ConfirmationTask.ApproveCancelEventOnCosmos)]
+        public async Task ApproveCancelEventOnCosmos([ActivityTrigger] EventUpdateViewModel vm, ILogger log)
+        {
+            await eventService.UpdateAsync(vm).ConfigureAwait(false);
+        }
         #endregion
 
         #region [ApproveFromHttp]
@@ -151,11 +157,7 @@ namespace CommunityItaly.Server.Functions
                         if (challengeResponseTask.Result)
                         {
                             vm.Confirmation = challengeResponseTask.Result;
-
-                            var es = (IEventService)serviceProvider.GetService(typeof(IEventService));
-                            await es.UpdateAsync(vm).ConfigureAwait(false);
-
-                            // TODO: redirect
+                            await context.CallActivityAsync(ConfirmationTask.ApproveCancelEventOnCosmos, vm);
                             break;
                         }
                     }
