@@ -1,9 +1,4 @@
-using System;
-using System.Linq;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using CommunityItaly.Server.Utilities;
+﻿using CommunityItaly.Server.Utilities;
 using CommunityItaly.Services;
 using CommunityItaly.Services.Settings;
 using CommunityItaly.Services.Validations;
@@ -16,69 +11,71 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SendGrid.Helpers.Mail;
+using System;
+using System.Linq;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CommunityItaly.Server.Functions
 {
-    public class ConfirmationEvent
+    public class ConfirmationCommunity
     {
-        private readonly IEventService eventService;
         private readonly ICommunityService communityService;
         private readonly SendGridConnections sendGridSettings;
         private readonly AdminConfiguration adminSettings;
 
-        public ConfirmationEvent(IEventService eventService, 
-            ICommunityService communityService,
+        public ConfirmationCommunity(ICommunityService communityService,
             IOptions<SendGridConnections> sendGridSettings,
             IOptions<AdminConfiguration> adminSettings)
         {
-            this.eventService = eventService;
             this.communityService = communityService;
             this.sendGridSettings = sendGridSettings.Value;
             this.adminSettings = adminSettings.Value;
         }
 
-		#region [Start]
-		[FunctionName(ConfirmationTask.ConfirmEvent_Http)]
-        public async Task<IActionResult> ConfirmEventHttpStart(
-           [HttpTrigger(AuthorizationLevel.Anonymous, HttpVerbs.POST, Route = "Event")] HttpRequest req,
+        #region [Start]
+        [FunctionName(ConfirmationTask.ConfirmCommunity_Http)]
+        public async Task<IActionResult> ConfirmCommuntyHttpStart(
+           [HttpTrigger(AuthorizationLevel.Anonymous, HttpVerbs.POST, Route = "Community")] HttpRequest req,
            [DurableClient] IDurableOrchestrationClient starter,
            ILogger log)
         {
-            var eventValidateRequest = await req.GetJsonBodyWithValidator(new EventValidator(communityService));
-            if (!eventValidateRequest.IsValid)
+            var communityValidateRequest = await req.GetJsonBodyWithValidator(new CommunityValidator(communityService));
+            if (!communityValidateRequest.IsValid)
             {
                 log.LogError($"Invalid form data");
-                return eventValidateRequest.ToBadRequest();
+                return communityValidateRequest.ToBadRequest();
             }
 
-            string instanceId = await starter.StartNewAsync(ConfirmationTask.ConfirmOrchestratorEvent, null, eventValidateRequest.Value);
+            string instanceId = await starter.StartNewAsync(ConfirmationTask.ConfirmOrchestratorCommunity, null, communityValidateRequest.Value);
             return starter.CreateCheckStatusResponse(req, instanceId);
         }
         #endregion
 
         #region [Orchestrator]
-        [FunctionName(ConfirmationTask.ConfirmOrchestratorEvent)]
+        [FunctionName(ConfirmationTask.ConfirmOrchestratorCommunity)]
         public async Task<string> RunOrchestrator(
             [OrchestrationTrigger] IDurableOrchestrationContext context)
         {
-            var vm = context.GetInput<EventViewModel>();
-            string id = await context.CallActivityAsync<string>(ConfirmationTask.CreateEvent, vm);
+            var vm = context.GetInput<CommunityViewModel>();
+            string id = await context.CallActivityAsync<string>(ConfirmationTask.CreateCommunity, vm);
 
-            var vmUpdate = EventUpdateViewModel.Create(vm);
+            var vmUpdate = CommunityUpdateViewModel.Create(vm);
             vmUpdate.Id = id;
-            var activateSendMail = new ActivateEventSendMail { Data = vmUpdate, InstanceId = context.InstanceId };
-            await context.CallActivityAsync(ConfirmationTask.SendMailEvent, activateSendMail);
+            var activateSendMail = new ActivateCommunitySendMail { Data = vmUpdate, InstanceId = context.InstanceId };
+            await context.CallActivityAsync(ConfirmationTask.SendMailCommunity, activateSendMail);
 
             await HumanInteractionEvent(context, vmUpdate);
             return id;
         }
-		#endregion
+        #endregion
 
-		#region [EventToOrchestrate]
-		[FunctionName(ConfirmationTask.CreateEvent)]
-        public async Task<string> CreateEvent([ActivityTrigger] EventViewModel eventData, ILogger log)
+        #region [EventToOrchestrate]
+        [FunctionName(ConfirmationTask.CreateCommunity)]
+        public async Task<string> CreateEvent([ActivityTrigger] CommunityViewModel communityData, ILogger log)
         {
-            string result = await eventService.CreateAsync(eventData);
+            string result = await communityService.CreateAsync(communityData);
             return result;
         }
 
@@ -93,7 +90,7 @@ namespace CommunityItaly.Server.Functions
             message.AddTos(adminSettings.GetMails().Select(x => new EmailAddress(x)).ToList());
             message.SetSubject($"New Event submitted: {eventData.Name}");
             message.SetTemplateId(sendGridSettings.TemplateId);
-            message.SetTemplateData(new MailEventTemplateData 
+            message.SetTemplateData(new MailEventTemplateData
             {
                 confirmurl = adminSettings.GetConfirmationEventLink(activateSendMail.InstanceId, true),
                 aborturl = adminSettings.GetConfirmationEventLink(activateSendMail.InstanceId, false),
@@ -109,17 +106,17 @@ namespace CommunityItaly.Server.Functions
             await messageCollector.AddAsync(message);
         }
 
-        [FunctionName(ConfirmationTask.ApproveCancelEventOnCosmos)]
-        public async Task ApproveCancelEventOnCosmos([ActivityTrigger] EventUpdateViewModel vm, ILogger log)
+        [FunctionName(ConfirmationTask.ApproveCancelCommunityOnCosmos)]
+        public async Task ApproveCancelEventOnCosmos([ActivityTrigger] CommunityUpdateViewModel vm, ILogger log)
         {
-            await eventService.UpdateAsync(vm).ConfigureAwait(false);
+            await communityService.UpdateAsync(vm).ConfigureAwait(false);
         }
         #endregion
 
         #region [ApproveFromHttp]
         [FunctionName(ConfirmationTask.ApproveFromHttpEvent)]
         public static async Task<IActionResult> Run(
-             [HttpTrigger(AuthorizationLevel.Anonymous, HttpVerbs.GET, Route = "ApproveEvent")] HttpRequestMessage req,
+             [HttpTrigger(AuthorizationLevel.Anonymous, HttpVerbs.GET, Route = "ApproveCommunity")] HttpRequestMessage req,
              [DurableClient] IDurableOrchestrationClient client,
              ILogger logger)
         {
@@ -135,7 +132,7 @@ namespace CommunityItaly.Server.Functions
         #endregion
 
         #region [WaitHumanInteraction]
-        public async Task<bool> HumanInteractionEvent(IDurableOrchestrationContext context, EventUpdateViewModel vm)
+        public async Task<bool> HumanInteractionEvent(IDurableOrchestrationContext context, CommunityUpdateViewModel vm)
         {
             using (var timeoutCts = new CancellationTokenSource())
             {
@@ -145,7 +142,7 @@ namespace CommunityItaly.Server.Functions
                 bool authorized = false;
                 for (int retryCount = 0; retryCount <= 3; retryCount++)
                 {
-                    Task<bool> challengeResponseTask = context.WaitForExternalEvent<bool>(ConfirmationTask.ConfirmEventHuman);
+                    Task<bool> challengeResponseTask = context.WaitForExternalEvent<bool>(ConfirmationTask.ConfirmCommunityHuman);
 
                     Task winner = await Task.WhenAny(challengeResponseTask, timeoutTask);
                     if (winner == challengeResponseTask)
@@ -154,7 +151,7 @@ namespace CommunityItaly.Server.Functions
                         if (challengeResponseTask.Result)
                         {
                             vm.Confirmation = challengeResponseTask.Result;
-                            await context.CallActivityAsync(ConfirmationTask.ApproveCancelEventOnCosmos, vm);
+                            await context.CallActivityAsync(ConfirmationTask.ApproveCancelCommunityOnCosmos, vm);
                             break;
                         }
                     }
@@ -177,7 +174,7 @@ namespace CommunityItaly.Server.Functions
         #endregion
     }
 
-    public class MailEventTemplateData
+    public class MailCommunityTemplateData
     {
         public string confirmurl { get; set; }
         public string aborturl { get; set; }

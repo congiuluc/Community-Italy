@@ -11,11 +11,20 @@
     {
         public const string SendMailEvent = nameof(SendMailEvent);
         public const string CreateEvent = nameof(CreateEvent);
-        public const string ApproveEvent = nameof(ApproveEvent);
+        public const string ApproveFromHttpEvent = nameof(ApproveFromHttpEvent);
         public const string ConfirmEvent_Http = nameof(ConfirmEvent_Http);
         public const string ConfirmEventHuman = nameof(ConfirmEventHuman);
-        public const string ConfirmOrchestrator = nameof(ConfirmOrchestrator);
+        public const string ConfirmOrchestratorEvent = nameof(ConfirmOrchestratorEvent);
         public const string ApproveCancelEventOnCosmos = nameof(ApproveCancelEventOnCosmos);
+
+
+        public const string SendMailCommunity = nameof(SendMailCommunity);
+        public const string CreateCommunity = nameof(CreateCommunity);
+        public const string ApproveFromHttpCommunity = nameof(ApproveFromHttpCommunity);
+        public const string ConfirmCommunity_Http = nameof(ConfirmCommunity_Http);
+        public const string ConfirmCommunityHuman = nameof(ConfirmCommunityHuman);
+        public const string ConfirmOrchestratorCommunity = nameof(ConfirmOrchestratorCommunity);
+        public const string ApproveCancelCommunityOnCosmos = nameof(ApproveCancelCommunityOnCosmos);
 
 
         public const string ConfirmCommunity = nameof(ConfirmCommunity);

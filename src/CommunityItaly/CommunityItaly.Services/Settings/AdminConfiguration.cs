@@ -3,16 +3,34 @@
 	public class AdminConfiguration
 	{
 		public string Mails { get; set; }
-		public string BaseUrl { get; set; }
+		public string BaseEventUrl { get; set; }
+		public string BaseCommunityUrl { get; set; }
+		public string BasePersonUrl { get; set; }
 
 		public string[] GetMails()
 		{
 			return Mails.Split(',', ';');
 		}
 
-		public string GetConfirmationLink(string instanceId, bool approveValue)
+		public string GetConfirmationEventLink(string instanceId, bool approveValue)
 		{
-			string urlConfirmation = BaseUrl
+			string urlConfirmation = BaseEventUrl
+				.Replace("{instanceId}", instanceId)
+				.Replace("{approvevalue}", approveValue.ToString());
+			return urlConfirmation;
+		}
+
+		public string GetConfirmationCommunityLink(string instanceId, bool approveValue)
+		{
+			string urlConfirmation = BaseCommunityUrl
+				.Replace("{instanceId}", instanceId)
+				.Replace("{approvevalue}", approveValue.ToString());
+			return urlConfirmation;
+		}
+
+		public string GetConfirmationPersonLink(string instanceId, bool approveValue)
+		{
+			string urlConfirmation = BasePersonUrl
 				.Replace("{instanceId}", instanceId)
 				.Replace("{approvevalue}", approveValue.ToString());
 			return urlConfirmation;

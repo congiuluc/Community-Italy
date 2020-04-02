@@ -16,5 +16,15 @@ namespace CommunityItaly.Shared.ViewModels
 		public string Id { get; set; }
 		public bool Confirmation { get; set; }
 		public Uri Logo { get; set; }
+
+		public static CommunityUpdateViewModel Create(CommunityViewModel vm)
+		{
+			return new CommunityUpdateViewModel
+			{
+				Name = vm.Name,
+				WebSite = vm.WebSite,
+				Managers = vm.Managers
+			};
+		}
 	}
 }
