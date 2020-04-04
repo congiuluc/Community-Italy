@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CommunityItaly.Services
 {
-	public class EventService : IEventService
+	public class EventService : IArticleService
 	{
 		private readonly EventContext db;
 
@@ -156,7 +156,7 @@ namespace CommunityItaly.Services
 		{
 			var currentEvent = await db.Events.FindAsync(eventVM.Id).ConfigureAwait(false);
 			currentEvent.SetBuyTicket(eventVM.BuyTicket);
-			currentEvent.SetConfirmation(eventVM.Confirmation);
+			currentEvent.SetConfirmation(eventVM.Confirmed);
 			//TODO: Update date and name
 
 			if (eventVM.CFP != null)

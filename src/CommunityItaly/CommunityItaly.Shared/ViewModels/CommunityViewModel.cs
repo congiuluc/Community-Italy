@@ -14,7 +14,7 @@ namespace CommunityItaly.Shared.ViewModels
 	public class CommunityUpdateViewModel : CommunityViewModel
 	{
 		public string Id { get; set; }
-		public bool Confirmation { get; set; }
+		public bool Confirmed { get; set; }
 		public Uri Logo { get; set; }
 
 		public static CommunityUpdateViewModel Create(CommunityViewModel vm)

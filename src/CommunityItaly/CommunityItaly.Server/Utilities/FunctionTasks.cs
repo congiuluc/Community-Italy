@@ -27,7 +27,21 @@
         public const string ApproveCancelCommunityOnCosmos = nameof(ApproveCancelCommunityOnCosmos);
 
 
-        public const string ConfirmCommunity = nameof(ConfirmCommunity);
-        public const string ConfirmPerson = nameof(ConfirmPerson);
+        public const string SendMailPerson = nameof(SendMailPerson);
+        public const string CreatePerson = nameof(CreatePerson);
+        public const string ApproveFromHttpPerson = nameof(ApproveFromHttpPerson);
+        public const string ConfirmPerson_Http = nameof(ConfirmPerson_Http);
+        public const string ConfirmPersonHuman = nameof(ConfirmPersonHuman);
+        public const string ConfirmOrchestratorPerson = nameof(ConfirmOrchestratorPerson);
+        public const string ApproveCancelPersonOnCosmos = nameof(ApproveCancelPersonOnCosmos);
+
+
+        public const string SendMailArticle = nameof(SendMailArticle);
+        public const string CreateArticle = nameof(CreateArticle);
+        public const string ApproveFromHttpArticle = nameof(ApproveFromHttpArticle);
+        public const string ConfirmArticle_Http = nameof(ConfirmArticle_Http);
+        public const string ConfirmArticleHuman = nameof(ConfirmArticleHuman);
+        public const string ConfirmOrchestratorArticle = nameof(ConfirmOrchestratorArticle);
+        public const string ApproveCancelArticleOnCosmos = nameof(ApproveCancelArticleOnCosmos);
     }
 }

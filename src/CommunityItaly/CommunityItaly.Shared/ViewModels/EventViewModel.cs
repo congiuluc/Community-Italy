@@ -16,7 +16,7 @@ namespace CommunityItaly.Shared.ViewModels
     public class EventUpdateViewModel : EventViewModel
     {
         public string Id { get; set; }
-        public bool Confirmation { get; set; }
+        public bool Confirmed { get; set; }
 
         public static EventUpdateViewModel Create(EventViewModel vm)
         {

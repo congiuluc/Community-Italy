@@ -89,7 +89,7 @@ namespace CommunityItaly.Server.Functions
             message.SetFrom(new EmailAddress(sendGridSettings.From));
             message.AddTos(adminSettings.GetMails().Select(x => new EmailAddress(x)).ToList());
             message.SetSubject($"New Event submitted: {eventData.Name}");
-            message.SetTemplateId(sendGridSettings.TemplateId);
+            message.SetTemplateId(sendGridSettings.TemplateCommunityId);
             message.SetTemplateData(new MailEventTemplateData
             {
                 confirmurl = adminSettings.GetConfirmationEventLink(activateSendMail.InstanceId, true),
@@ -150,7 +150,7 @@ namespace CommunityItaly.Server.Functions
                         // We got back a response! Compare it to the challenge code.
                         if (challengeResponseTask.Result)
                         {
-                            vm.Confirmation = challengeResponseTask.Result;
+                            vm.Confirmed = challengeResponseTask.Result;
                             await context.CallActivityAsync(ConfirmationTask.ApproveCancelCommunityOnCosmos, vm);
                             break;
                         }

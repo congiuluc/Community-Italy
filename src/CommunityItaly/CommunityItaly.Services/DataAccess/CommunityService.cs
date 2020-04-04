@@ -64,7 +64,7 @@ namespace CommunityItaly.Services
 			{
 				Name = currentCommunity.Name,
 				Logo = currentCommunity.Logo,
-				Confirmation = currentCommunity.Confirmed,
+				Confirmed = currentCommunity.Confirmed,
 				Id = currentCommunity.ShortName,
 				WebSite = currentCommunity.WebSite,
 				Managers = currentCommunity.Managers.Select(t => new PersonViewModelReadOnly
@@ -106,7 +106,7 @@ namespace CommunityItaly.Services
 				{
 					Name = currentCommunity.Name,
 					Logo = currentCommunity.Logo,
-					Confirmation = currentCommunity.Confirmed,
+					Confirmed = currentCommunity.Confirmed,
 					Id = currentCommunity.ShortName,
 					WebSite = currentCommunity.WebSite,
 					Managers = !currentCommunity.Managers.Any() ?
@@ -132,7 +132,7 @@ namespace CommunityItaly.Services
 		public async Task UpdateAsync(CommunityUpdateViewModel communityVM)
 		{
 			var currentCommunity = await db.Communities.FindAsync(communityVM.Id).ConfigureAwait(false);
-			currentCommunity.SetConfirmation(communityVM.Confirmation);
+			currentCommunity.SetConfirmation(communityVM.Confirmed);
 			currentCommunity.SetWebSite(communityVM.WebSite);
 			var updateManagers = communityVM.Managers.ToList();
 			// Manager da rimuovere o già presenti

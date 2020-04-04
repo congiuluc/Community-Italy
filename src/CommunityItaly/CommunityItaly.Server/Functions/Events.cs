@@ -18,12 +18,12 @@ namespace CommunityItaly.Server
         private readonly ILogger<Events> log;
         private readonly IImageService imageService;
         private readonly ICommunityService communityService;
-        private readonly IEventService eventServices;
+        private readonly IArticleService eventServices;
 
         public Events(ILogger<Events> log, 
             IImageService imageService, 
             ICommunityService communityService,
-            IEventService eventServices)
+            IArticleService eventServices)
         {
             this.log = log;
             this.imageService = imageService;

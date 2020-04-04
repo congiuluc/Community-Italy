@@ -22,4 +22,14 @@ namespace CommunityItaly.Server.Utilities
        ActivateSendMail<CommunityUpdateViewModel>
     {
     }
+
+    public class ActivatePersonSendMail :
+       ActivateSendMail<PersonViewModelReadOnly>
+    {
+    }
+
+    public class ActivateArticleSendMail :
+      ActivateSendMail<ArticleViewModel>
+    {
+    }
 }

@@ -6,6 +6,8 @@
 		public string BaseEventUrl { get; set; }
 		public string BaseCommunityUrl { get; set; }
 		public string BasePersonUrl { get; set; }
+		public string BaseArticleUrl { get; set; }
+
 
 		public string[] GetMails()
 		{
@@ -31,6 +33,14 @@
 		public string GetConfirmationPersonLink(string instanceId, bool approveValue)
 		{
 			string urlConfirmation = BasePersonUrl
+				.Replace("{instanceId}", instanceId)
+				.Replace("{approvevalue}", approveValue.ToString());
+			return urlConfirmation;
+		}
+
+		public string GetConfirmationArticleLink(string instanceId, bool approveValue)
+		{
+			string urlConfirmation = BaseArticleUrl
 				.Replace("{instanceId}", instanceId)
 				.Replace("{approvevalue}", approveValue.ToString());
 			return urlConfirmation;

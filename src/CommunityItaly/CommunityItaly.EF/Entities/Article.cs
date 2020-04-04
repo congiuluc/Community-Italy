@@ -6,14 +6,16 @@ namespace CommunityItaly.EF.Entities
 {
     public class Article
     {
-        public Article(Uri url, DateTime publishDate)
+        public Article(Uri url, DateTime publishDate, string name)
         {
             Id = Guid.NewGuid().ToString("N");
             Url = url;
+            Name = name;
             PublishDate = publishDate;
         }
 
         public string Id { get; }
+        public string Name { get; }
         public Uri Url { get;  }
         public DateTime PublishDate { get; }
         public HashSet<PersonOwned> Authors { get; }

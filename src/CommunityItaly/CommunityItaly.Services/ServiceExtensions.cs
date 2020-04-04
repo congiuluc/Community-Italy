@@ -10,7 +10,7 @@ namespace CommunityItaly.Services
 	{
 		public static IServiceCollection UseService(this IServiceCollection services)
 		{
-			services.AddScoped<IEventService, EventService>();
+			services.AddScoped<IArticleService, EventService>();
 			services.AddScoped<ICommunityService, CommunityService>();
 			return services;
 		}
