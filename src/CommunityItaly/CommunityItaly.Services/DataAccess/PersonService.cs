@@ -38,7 +38,7 @@ namespace CommunityItaly.Services
 			throw new NotImplementedException();
 		}
 
-		public Task UpdateAsync(PersonViewModel personVM)
+		public Task UpdateAsync(PersonViewModelReadOnly personVM)
 		{
 			throw new NotImplementedException();
 		}

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace CommunityItaly.Services
 {
-	interface IArticleService
+	public interface IArticleService
 	{
 		Task<PagedViewModel<ArticleUpdateViewModel>> GetAsync(int? take = 10, int? skip = 0);
 		Task<PagedViewModel<ArticleUpdateViewModel>> GetConfirmedAsync(int? take = 10, int? skip = 0);

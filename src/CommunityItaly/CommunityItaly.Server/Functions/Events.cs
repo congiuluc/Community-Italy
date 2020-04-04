@@ -16,17 +16,14 @@ namespace CommunityItaly.Server
     public class Events
     {
         private readonly ILogger<Events> log;
-        private readonly IImageService imageService;
         private readonly ICommunityService communityService;
-        private readonly IArticleService eventServices;
+        private readonly IEventService eventServices;
 
-        public Events(ILogger<Events> log, 
-            IImageService imageService, 
+        public Events(ILogger<Events> log,
             ICommunityService communityService,
-            IArticleService eventServices)
+            IEventService eventServices)
         {
             this.log = log;
-            this.imageService = imageService;
             this.communityService = communityService;
             this.eventServices = eventServices;
         }
@@ -54,23 +51,6 @@ namespace CommunityItaly.Server
             var result = await eventServices.GetById(id);
             return new OkObjectResult(result);
         }
-
-        //[FunctionName("EventPost")]
-        //public async Task<IActionResult> Post(
-        //   [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.POST, Route = "Event")] HttpRequest req,
-        //   ILogger log)
-        //{
-        //    var eventValidateRequest = await req.GetJsonBodyWithValidator(new EventValidator(communityService));
-        //    if (!eventValidateRequest.IsValid)
-        //    {
-        //        log.LogError($"Invalid form data");
-        //        return eventValidateRequest.ToBadRequest();
-        //    }
-
-        //    var result = await eventServices.CreateAsync(eventValidateRequest.Value);
-
-        //    return new CreatedResult("EventRoute/{Id}", new { Id = result });
-        //}
 
         [FunctionName("EventPut")]
         public async Task<IActionResult> Put(

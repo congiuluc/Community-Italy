@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SendGrid.Helpers.Mail;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -66,55 +67,50 @@ namespace CommunityItaly.Server.Functions
             var activateSendMail = new ActivateCommunitySendMail { Data = vmUpdate, InstanceId = context.InstanceId };
             await context.CallActivityAsync(ConfirmationTask.SendMailCommunity, activateSendMail);
 
-            await HumanInteractionEvent(context, vmUpdate);
+            await HumanInteractionCommunity(context, vmUpdate);
             return id;
         }
         #endregion
 
-        #region [EventToOrchestrate]
+        #region [CommunityToOrchestrate]
         [FunctionName(ConfirmationTask.CreateCommunity)]
-        public async Task<string> CreateEvent([ActivityTrigger] CommunityViewModel communityData, ILogger log)
+        public async Task<string> CreateCommunity([ActivityTrigger] CommunityViewModel communityData, ILogger log)
         {
             string result = await communityService.CreateAsync(communityData);
             return result;
         }
 
-        [FunctionName(ConfirmationTask.SendMailEvent)]
-        public async Task ConfirmEvent([ActivityTrigger] ActivateEventSendMail activateSendMail,
+        [FunctionName(ConfirmationTask.SendMailCommunity)]
+        public async Task ConfirmCommunity([ActivityTrigger] ActivateCommunitySendMail activateSendMail,
             [SendGrid(ApiKey = "SendGridConnections:ApiKey")] IAsyncCollector<SendGridMessage> messageCollector,
             ILogger log)
         {
-            var eventData = activateSendMail.Data;
+            var communityData = activateSendMail.Data;
             SendGridMessage message = new SendGridMessage();
             message.SetFrom(new EmailAddress(sendGridSettings.From));
             message.AddTos(adminSettings.GetMails().Select(x => new EmailAddress(x)).ToList());
-            message.SetSubject($"New Event submitted: {eventData.Name}");
+            message.SetSubject($"New Community submitted: {communityData.Name}");
             message.SetTemplateId(sendGridSettings.TemplateCommunityId);
-            message.SetTemplateData(new MailEventTemplateData
+            message.SetTemplateData(new MailCommunityTemplateData
             {
-                confirmurl = adminSettings.GetConfirmationEventLink(activateSendMail.InstanceId, true),
-                aborturl = adminSettings.GetConfirmationEventLink(activateSendMail.InstanceId, false),
-                eventname = eventData.Name,
-                eventstartdate = eventData.StartDate,
-                eventenddate = eventData.EndDate,
-                eventbuyticket = eventData.BuyTicket.ToString(),
-                eventcfpurl = eventData.CFP.Url.ToString(),
-                eventcfpstartdate = eventData.CFP.StartDate,
-                eventcfpstartend = eventData.CFP.EndDate,
-                eventcommunityname = eventData.CommunityName
+                confirmurl = adminSettings.GetConfirmationCommunityLink(activateSendMail.InstanceId, true),
+                aborturl = adminSettings.GetConfirmationCommunityLink(activateSendMail.InstanceId, false),
+                communityname = communityData.Name,
+                communitywebsite = communityData.WebSite.ToString(),
+                communitymanagers = communityData.Managers.Select(t => new PersonTemplate { name = t.Name, surname = t.Surname }).ToList()
             });
             await messageCollector.AddAsync(message);
         }
 
         [FunctionName(ConfirmationTask.ApproveCancelCommunityOnCosmos)]
-        public async Task ApproveCancelEventOnCosmos([ActivityTrigger] CommunityUpdateViewModel vm, ILogger log)
+        public async Task ApproveCancelCommunityOnCosmos([ActivityTrigger] CommunityUpdateViewModel vm, ILogger log)
         {
             await communityService.UpdateAsync(vm).ConfigureAwait(false);
         }
         #endregion
 
         #region [ApproveFromHttp]
-        [FunctionName(ConfirmationTask.ApproveFromHttpEvent)]
+        [FunctionName(ConfirmationTask.ApproveFromHttpCommunity)]
         public static async Task<IActionResult> Run(
              [HttpTrigger(AuthorizationLevel.Anonymous, HttpVerbs.GET, Route = "ApproveCommunity")] HttpRequestMessage req,
              [DurableClient] IDurableOrchestrationClient client,
@@ -126,13 +122,13 @@ namespace CommunityItaly.Server.Functions
                 InstanceId = keys.Get("InstanceId"),
                 Result = bool.Parse(keys.Get("ApproveValue"))
             };
-            await client.RaiseEventAsync(approveResponse.InstanceId, ConfirmationTask.ConfirmEventHuman, approveResponse.Result);
+            await client.RaiseEventAsync(approveResponse.InstanceId, ConfirmationTask.ConfirmCommunityHuman, approveResponse.Result);
             return new AcceptedResult();
         }
         #endregion
 
         #region [WaitHumanInteraction]
-        public async Task<bool> HumanInteractionEvent(IDurableOrchestrationContext context, CommunityUpdateViewModel vm)
+        public async Task<bool> HumanInteractionCommunity(IDurableOrchestrationContext context, CommunityUpdateViewModel vm)
         {
             using (var timeoutCts = new CancellationTokenSource())
             {
@@ -172,19 +168,5 @@ namespace CommunityItaly.Server.Functions
             }
         }
         #endregion
-    }
-
-    public class MailCommunityTemplateData
-    {
-        public string confirmurl { get; set; }
-        public string aborturl { get; set; }
-        public string eventname { get; set; }
-        public DateTime eventstartdate { get; set; }
-        public DateTime eventenddate { get; set; }
-        public string eventbuyticket { get; set; }
-        public string eventcfpurl { get; set; }
-        public DateTime eventcfpstartdate { get; set; }
-        public DateTime eventcfpstartend { get; set; }
-        public string eventcommunityname { get; set; }
     }
 }

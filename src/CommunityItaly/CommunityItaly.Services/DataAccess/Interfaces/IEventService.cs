@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CommunityItaly.Services
 {
-	public interface IArticleService
+	public interface IEventService
 	{
 		Task<PagedViewModel<EventViewModelReadOnly>> GetAsync(int? take = 10, int? skip = 0);
 		Task<PagedViewModel<EventViewModelReadOnly>> GetConfirmedAsync(int? take = 10, int? skip = 0);

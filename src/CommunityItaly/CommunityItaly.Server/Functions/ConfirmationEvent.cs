@@ -76,7 +76,7 @@ namespace CommunityItaly.Server.Functions
 
 		#region [EventToOrchestrate]
 		[FunctionName(ConfirmationTask.CreateEvent)]
-        public async Task<string> CreateEvent([ActivityTrigger] EventViewModel eventData, ILogger log)
+        public async Task<string> CreateEvent([ActivityTrigger] ArticleViewModel eventData, ILogger log)
         {
             string result = await eventService.CreateAsync(eventData);
             return result;
@@ -110,7 +110,7 @@ namespace CommunityItaly.Server.Functions
         }
 
         [FunctionName(ConfirmationTask.ApproveCancelEventOnCosmos)]
-        public async Task ApproveCancelEventOnCosmos([ActivityTrigger] EventUpdateViewModel vm, ILogger log)
+        public async Task ApproveCancelEventOnCosmos([ActivityTrigger] ArticleUpdateViewModel vm, ILogger log)
         {
             await eventService.UpdateAsync(vm).ConfigureAwait(false);
         }
@@ -175,19 +175,5 @@ namespace CommunityItaly.Server.Functions
             }
         }
         #endregion
-    }
-
-    public class MailEventTemplateData
-    {
-        public string confirmurl { get; set; }
-        public string aborturl { get; set; }
-        public string eventname { get; set; }
-        public DateTime eventstartdate { get; set; }
-        public DateTime eventenddate { get; set; }
-        public string eventbuyticket { get; set; }
-        public string eventcfpurl { get; set; }
-        public DateTime eventcfpstartdate { get; set; }
-        public DateTime eventcfpstartend { get; set; }
-        public string eventcommunityname { get; set; }
     }
 }

@@ -98,7 +98,7 @@ namespace CommunityItaly.Server.Functions
                 articlename = articleData.Name,
                 articleurl = articleData.Url.ToString(),
                 articlepublishdate = articleData.PublishDate,
-                articleauthors = articleData.Authors.Select(t => new MailArticlePersonTemplateData { name = t.Name, surname = t.Surname}).ToList()
+                articleauthors = articleData.Authors.Select(t => new PersonTemplate { name = t.Name, surname = t.Surname}).ToList()
             });
             await messageCollector.AddAsync(message);
         }
@@ -169,21 +169,5 @@ namespace CommunityItaly.Server.Functions
             }
         }
         #endregion
-    }
-
-    public class MailArticleTemplateData
-    {
-        public string confirmurl { get; set; }
-        public string aborturl { get; set; }
-        public string articlename { get; set; }
-        public string articleurl { get; set; }
-        public DateTime articlepublishdate { get; set; }
-        public List<MailArticlePersonTemplateData> articleauthors { get; set; }
-    }
-
-    public class MailArticlePersonTemplateData
-    {
-        public string name { get; set; }
-        public string surname { get; set; }
     }
 }

@@ -96,13 +96,8 @@ namespace CommunityItaly.Server.Functions
                 confirmurl = adminSettings.GetConfirmationPersonLink(activateSendMail.InstanceId, true),
                 aborturl = adminSettings.GetConfirmationPersonLink(activateSendMail.InstanceId, false),
                 personname = personData.Name,
-                //eventstartdate = personData.StartDate,
-                //eventenddate = personData.EndDate,
-                //eventbuyticket = personData.BuyTicket.ToString(),
-                //eventcfpurl = personData.CFP.Url.ToString(),
-                //eventcfpstartdate = personData.CFP.StartDate,
-                //eventcfpstartend = personData.CFP.EndDate,
-                //eventcommunityname = personData.CommunityName
+                personsurname = personData.Surname,
+                personmvpcode = personData.MVP_Code
             });
             await messageCollector.AddAsync(message);
         }
@@ -173,19 +168,5 @@ namespace CommunityItaly.Server.Functions
             }
         }
         #endregion
-    }
-
-    public class MailPersonTemplateData
-    {
-        public string confirmurl { get; set; }
-        public string aborturl { get; set; }
-        public string personname { get; set; }
-        public DateTime eventstartdate { get; set; }
-        public DateTime eventenddate { get; set; }
-        public string eventbuyticket { get; set; }
-        public string eventcfpurl { get; set; }
-        public DateTime eventcfpstartdate { get; set; }
-        public DateTime eventcfpstartend { get; set; }
-        public string eventcommunityname { get; set; }
     }
 }

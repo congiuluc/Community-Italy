@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CommunityItaly.Services
 {
-	public class EventService : IArticleService
+	public class EventService : IEventService
 	{
 		private readonly EventContext db;
 
