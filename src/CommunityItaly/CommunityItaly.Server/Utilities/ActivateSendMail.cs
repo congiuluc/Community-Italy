@@ -1,12 +1,11 @@
 ﻿using CommunityItaly.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace CommunityItaly.Server.Utilities
 {
 
-    public class ActivateSendMail<T>
+	public class ActivateSendMail<T>
         where T : class
     {
         public T Data { get; set; }
@@ -24,7 +23,7 @@ namespace CommunityItaly.Server.Utilities
     }
 
     public class ActivatePersonSendMail :
-       ActivateSendMail<PersonViewModelReadOnly>
+       ActivateSendMail<PersonUpdateViewModel>
     {
     }
 

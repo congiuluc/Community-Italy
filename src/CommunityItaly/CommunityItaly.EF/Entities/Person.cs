@@ -18,15 +18,20 @@ namespace CommunityItaly.EF.Entities
 
         public string MVP_Code { get; private set; }
         public bool IsMVP => !string.IsNullOrEmpty(MVP_Code);
-        public void AddMVPCode(string mvp_code) => MVP_Code = mvp_code;
-        public void AddPicture(Uri picture) => Picture = picture;
+        public void SetMVPCode(string mvp_code) 
+        {
+            if (!string.IsNullOrEmpty(mvp_code))
+                MVP_Code = mvp_code; 
+        }
+
+        public void SetPicture(Uri picture) => Picture = picture;
         public void SetConfirmation(bool confirmation) => Confirmed = confirmation;
 
         public PersonOwned ToOwned()
         {
             var p = new PersonOwned(Name, Surname) { Id = Id };
-            p.AddPicture(Picture);
-            p.AddMVPCode(MVP_Code);
+            p.SetPicture(Picture);
+            p.SetMVPCode(MVP_Code);
             return p;
         }
     }

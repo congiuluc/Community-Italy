@@ -1,5 +1,4 @@
 ﻿using CommunityItaly.Shared.ViewModels;
-using System;
 using System.Threading.Tasks;
 
 namespace CommunityItaly.Services
@@ -11,7 +10,6 @@ namespace CommunityItaly.Services
 		Task<ArticleUpdateViewModel> GetById(string id);
 		Task<string> CreateAsync(ArticleViewModel eventVM);
 		Task UpdateAsync(ArticleUpdateViewModel eventVM);
-		Task UpdateLogoAsync(string id, Uri logo);
 		Task DeleteAsync(string id);
 		Task<bool> ExistsAsync(string id);
 	}

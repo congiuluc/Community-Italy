@@ -62,7 +62,7 @@ namespace CommunityItaly.Server.Functions
             var vm = context.GetInput<PersonViewModel>();
             string id = await context.CallActivityAsync<string>(ConfirmationTask.CreatePerson, vm);
 
-            var vmUpdate = PersonViewModelReadOnly.Create(vm);
+            var vmUpdate = PersonUpdateViewModel.Create(vm);
             vmUpdate.Id = id;
             var activateSendMail = new ActivatePersonSendMail { Data = vmUpdate, InstanceId = context.InstanceId };
             await context.CallActivityAsync(ConfirmationTask.SendMailPerson, activateSendMail);
@@ -103,7 +103,7 @@ namespace CommunityItaly.Server.Functions
         }
 
         [FunctionName(ConfirmationTask.ApproveCancelPersonOnCosmos)]
-        public async Task ApproveCancelPersonOnCosmos([ActivityTrigger] PersonViewModelReadOnly vm, ILogger log)
+        public async Task ApproveCancelPersonOnCosmos([ActivityTrigger] PersonUpdateViewModel vm, ILogger log)
         {
             await personService.UpdateAsync(vm).ConfigureAwait(false);
         }
@@ -128,7 +128,7 @@ namespace CommunityItaly.Server.Functions
         #endregion
 
         #region [WaitHumanInteraction]
-        public async Task<bool> HumanInteractionPerson(IDurableOrchestrationContext context, PersonViewModelReadOnly vm)
+        public async Task<bool> HumanInteractionPerson(IDurableOrchestrationContext context, PersonUpdateViewModel vm)
         {
             using (var timeoutCts = new CancellationTokenSource())
             {

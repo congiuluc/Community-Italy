@@ -1,8 +1,5 @@
 ﻿using CommunityItaly.Shared.ViewModels;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CommunityItaly.Services.Validations
 {

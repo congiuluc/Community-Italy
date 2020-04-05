@@ -67,7 +67,7 @@ namespace CommunityItaly.Services
 				Confirmed = currentCommunity.Confirmed,
 				Id = currentCommunity.ShortName,
 				WebSite = currentCommunity.WebSite,
-				Managers = currentCommunity.Managers.Select(t => new PersonViewModelReadOnly
+				Managers = currentCommunity.Managers.Select(t => new PersonUpdateViewModel
 				{
 					Id = t.Id,
 					Name = t.Name,
@@ -111,7 +111,7 @@ namespace CommunityItaly.Services
 					WebSite = currentCommunity.WebSite,
 					Managers = !currentCommunity.Managers.Any() ?
 						null :
-						currentCommunity.Managers.Select(t => new PersonViewModelReadOnly
+						currentCommunity.Managers.Select(t => new PersonUpdateViewModel
 						{
 							Id = t.Id,
 							Name = t.Name,

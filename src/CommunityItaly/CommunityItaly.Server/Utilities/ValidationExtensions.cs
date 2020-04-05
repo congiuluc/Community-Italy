@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CommunityItaly.Server
 {
-    public static class ValidationExtensions
+	public static class ValidationExtensions
     {
         /// <summary>
         /// Creates a <see cref="BadRequestObjectResult"/> containing a collection

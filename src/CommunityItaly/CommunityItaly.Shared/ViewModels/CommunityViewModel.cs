@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace CommunityItaly.Shared.ViewModels
 {
@@ -8,7 +7,7 @@ namespace CommunityItaly.Shared.ViewModels
 	{
 		public string Name { get; set; }
 		public Uri WebSite { get; set; }
-		public IEnumerable<PersonViewModelReadOnly> Managers { get; set; } = new List<PersonViewModelReadOnly>();
+		public IEnumerable<PersonUpdateViewModel> Managers { get; set; } = new List<PersonUpdateViewModel>();
 	}
 
 	public class CommunityUpdateViewModel : CommunityViewModel

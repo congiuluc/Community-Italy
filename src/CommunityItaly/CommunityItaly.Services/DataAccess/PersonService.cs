@@ -1,51 +1,122 @@
-﻿using CommunityItaly.Shared.ViewModels;
+﻿using CommunityItaly.EF;
+using CommunityItaly.EF.Entities;
+using CommunityItaly.Shared.ViewModels;
+using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CommunityItaly.Services
 {
 	public class PersonService : IPersonService
 	{
-		public Task<string> CreateAsync(PersonViewModel personVM)
+		private readonly EventContext db;
+
+		public PersonService(EventContext db)
 		{
-			throw new NotImplementedException();
+			this.db = db;
 		}
 
-		public Task DeleteAsync(string id)
+		public async Task<string> CreateAsync(PersonViewModel personVM)
 		{
-			throw new NotImplementedException();
+			Person domain = new Person(personVM.Name, personVM.Surname);
+			domain.SetConfirmation(false);
+			domain.SetMVPCode(personVM.MVP_Code);
+			db.People.Add(domain);
+			await db.SaveChangesAsync().ConfigureAwait(false);
+			return domain.Id;
 		}
 
-		public Task<bool> ExistsAsync(string personId)
+		public async Task DeleteAsync(string id)
 		{
-			throw new NotImplementedException();
+			var currentPerson = await db.People.FindAsync(id).ConfigureAwait(false);
+			db.People.Remove(currentPerson);
+			await db.SaveChangesAsync().ConfigureAwait(false);
 		}
 
-		public Task<PagedViewModel<PersonViewModelReadOnly>> GetAsync(int? take = 10, int? skip = 0)
+		public async Task<bool> ExistsAsync(string personId)
 		{
-			throw new NotImplementedException();
+			var personDomain = await db.People.FindAsync(personId).ConfigureAwait(false);
+			return personDomain != null;
 		}
 
-		public Task<PersonViewModelReadOnly> GetById(string id)
+		public async Task<PagedViewModel<PersonUpdateViewModel>> GetAsync(int? take = 10, int? skip = 0)
 		{
-			throw new NotImplementedException();
+			return await GetAsync(false, take, skip).ConfigureAwait(false);
 		}
 
-		public Task<PagedViewModel<PersonViewModelReadOnly>> GetConfirmedAsync(int? take = 10, int? skip = 0)
+		public async Task<PagedViewModel<PersonUpdateViewModel>> GetConfirmedAsync(int? take = 10, int? skip = 0)
 		{
-			throw new NotImplementedException();
+			return await GetAsync(true, take, skip).ConfigureAwait(false);
 		}
 
-		public Task UpdateAsync(PersonViewModelReadOnly personVM)
+		private async Task<PagedViewModel<PersonUpdateViewModel>> GetAsync(bool confirmed, int? take = 10, int? skip = 0)
 		{
-			throw new NotImplementedException();
+			take = !take.HasValue || take.Value == 0 ? 10 : take.Value;
+			int totalElement = await db.People.CountAsync().ConfigureAwait(false);
+
+			IQueryable<Person> resultListBase = null;
+			if (confirmed == true)
+				resultListBase = db.People.Where(x => x.Confirmed == confirmed);
+			else
+				resultListBase = db.People;
+
+			var resultList = await resultListBase
+				.Skip(skip.Value)
+				.Take(take.Value)
+				.ToListAsync()
+				.ConfigureAwait(false);
+
+			var result = resultList
+				.Select(currentPerson => new PersonUpdateViewModel
+				{
+					Id = currentPerson.Id,
+					Name = currentPerson.Name,
+					Surname = currentPerson.Surname,
+					MVP_Code = currentPerson.MVP_Code,
+					Picture = currentPerson.Picture
+				});
+
+			return new PagedViewModel<PersonUpdateViewModel>
+			{
+				CurrentPage = take.Value * skip.Value,
+				Total = totalElement,
+				Entities = result
+			};
 		}
 
-		public Task UpdateImageAsync(string id, Uri img)
+		public async Task<PersonUpdateViewModel> GetById(string id)
 		{
-			throw new NotImplementedException();
+			var currentPerson = await db.People.FindAsync(id).ConfigureAwait(false);
+			if (currentPerson == null)
+				throw new ArgumentOutOfRangeException($"Person {id} not exists");
+			PersonUpdateViewModel personVM = new PersonUpdateViewModel
+			{
+				Id = currentPerson.Id,
+				Name = currentPerson.Name,
+				Surname = currentPerson.Surname,
+				Picture = currentPerson.Picture,
+				MVP_Code = currentPerson.MVP_Code,
+				Confirmed = currentPerson.Confirmed
+			};
+			return personVM;
+		}
+
+		public async Task UpdateAsync(PersonUpdateViewModel personVM)
+		{
+			var currentPerson = await db.People.FindAsync(personVM.Id).ConfigureAwait(false);
+			currentPerson.SetConfirmation(personVM.Confirmed);
+			currentPerson.SetMVPCode(personVM.MVP_Code);
+			db.People.Update(currentPerson);
+			await db.SaveChangesAsync().ConfigureAwait(false);
+		}
+
+		public async Task UpdateImageAsync(string id, Uri img)
+		{
+			var currentPerson = await db.People.FindAsync(id).ConfigureAwait(false);
+			currentPerson.SetPicture(img);
+			db.People.Update(currentPerson);
+			await db.SaveChangesAsync().ConfigureAwait(false);
 		}
 	}
 }

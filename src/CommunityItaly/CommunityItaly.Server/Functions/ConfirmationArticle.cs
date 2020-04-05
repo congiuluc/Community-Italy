@@ -12,7 +12,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SendGrid.Helpers.Mail;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -20,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace CommunityItaly.Server.Functions
 {
-    public class ConfirmationArticle
+	public class ConfirmationArticle
     {
         private readonly IArticleService articleService;
         private readonly SendGridConnections sendGridSettings;

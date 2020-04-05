@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
 using CommunityItaly.Services.Settings;
 using Microsoft.Azure.Storage;
@@ -8,7 +7,7 @@ using Microsoft.Extensions.Options;
 
 namespace CommunityItaly.Services
 {
-    public class ImageService : IImageService
+	public class ImageService : IImageService
     {
         private readonly CloudStorageAccount storageAccount;
         private readonly CloudBlobClient blobClient;

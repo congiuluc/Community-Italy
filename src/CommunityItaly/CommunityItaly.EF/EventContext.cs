@@ -1,12 +1,11 @@
 ﻿using CommunityItaly.EF.Entities;
 using CommunityItaly.EF.EntityConfigurations;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 
 namespace CommunityItaly.EF
 {
-    // https://docs.microsoft.com/it-it/ef/core/providers/cosmos/?tabs=dotnet-core-cli
-    public class EventContext : DbContext
+	// https://docs.microsoft.com/it-it/ef/core/providers/cosmos/?tabs=dotnet-core-cli
+	public class EventContext : DbContext
     {
         public DbSet<Person> People { get; set; }
         public DbSet<Event> Events { get; set; }

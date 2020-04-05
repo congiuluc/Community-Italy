@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace CommunityItaly.EF.Entities
 {
-    public class Article
+	public class Article
     {
         public Article(Uri url, DateTime publishDate, string name)
         {
@@ -21,5 +20,13 @@ namespace CommunityItaly.EF.Entities
         public HashSet<PersonOwned> Authors { get; }
         public bool Confirmed { get; private set; }
         public void SetConfirmation(bool confirmation) => Confirmed = confirmation;
+        public void AddAuthor(PersonOwned author)
+        {
+            Authors.Add(author);
+        }
+        public void RemoveAuthor(string id)
+        {
+            Authors.RemoveWhere(x => x.Id == id);
+        }
     }
 }

@@ -103,7 +103,7 @@ namespace CommunityItaly.Services
 						WebSite = currentEvent.Community.WebSite,
 						Managers = !currentEvent.Community.Managers.Any() ? 
 							null : 
-							currentEvent.Community.Managers.Select(t => new PersonViewModelReadOnly
+							currentEvent.Community.Managers.Select(t => new PersonUpdateViewModel
 							{
 								Id = t.Id,
 								Name = t.Name,

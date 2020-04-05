@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CommunityItaly.Server.Utilities
+﻿namespace CommunityItaly.Server.Utilities
 {
 	public class ApproveElement
 	{

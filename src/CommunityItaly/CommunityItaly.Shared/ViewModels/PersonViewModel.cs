@@ -14,15 +14,15 @@ namespace CommunityItaly.Shared.ViewModels
         public byte[] Picture { get; set; }
     }
 
-    public class PersonViewModelReadOnly : PersonBaseViewModel
+    public class PersonUpdateViewModel : PersonBaseViewModel
     {
         public string Id { get; set; }
         public bool Confirmed { get; set; }
         public Uri Picture { get; set; }
 
-        public static PersonViewModelReadOnly Create(PersonViewModel vm)
+        public static PersonUpdateViewModel Create(PersonViewModel vm)
         {
-            return new PersonViewModelReadOnly
+            return new PersonUpdateViewModel
             {
                 Name = vm.Name,
                 Surname = vm.Surname,

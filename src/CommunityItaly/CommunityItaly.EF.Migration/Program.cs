@@ -27,12 +27,12 @@ namespace CommunityItaly.EF.Migration
                 await db.Database.EnsureCreatedAsync();
 
                 Person andreaTosato = new Person("Andrea", "Tosato");
-                andreaTosato.AddPicture(new Uri("https://communityitaly.blob.core.windows.net/people/andrea-tosato.jpg"));
-                andreaTosato.AddMVPCode("5003336");
+                andreaTosato.SetPicture(new Uri("https://communityitaly.blob.core.windows.net/people/andrea-tosato.jpg"));
+                andreaTosato.SetMVPCode("5003336");
 
                 Person marcoZamana = new Person("Marco", "Zamana");
-                marcoZamana.AddPicture(new Uri("https://communityitaly.blob.core.windows.net/people/marco-zamana.jpg"));
-                marcoZamana.AddMVPCode("5003347");
+                marcoZamana.SetPicture(new Uri("https://communityitaly.blob.core.windows.net/people/marco-zamana.jpg"));
+                marcoZamana.SetMVPCode("5003347");
 
                 var community = new Community("Cloudgen Verona");
                 community.SetWebSite(new Uri("https://cloudgen.it"));

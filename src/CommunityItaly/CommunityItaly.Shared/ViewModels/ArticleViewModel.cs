@@ -8,7 +8,7 @@ namespace CommunityItaly.Shared.ViewModels
         public string Name { get; set; }
         public Uri Url { get; set; }
         public DateTime PublishDate { get; set; }
-        public IEnumerable<PersonViewModelReadOnly> Authors { get; set; } = new List<PersonViewModelReadOnly>();
+        public IEnumerable<PersonUpdateViewModel> Authors { get; set; } = new List<PersonUpdateViewModel>();
     }
 
 	public class ArticleUpdateViewModel : ArticleViewModel
