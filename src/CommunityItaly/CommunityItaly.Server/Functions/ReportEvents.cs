@@ -13,7 +13,6 @@ using CommunityItaly.Shared.ViewModels;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SendGrid.Helpers.Mail;
@@ -51,22 +50,22 @@ namespace CommunityItaly.Server.Functions
         public async Task RunOrchestrator(
             [OrchestrationTrigger] IDurableOrchestrationContext context)
         {
-            var filter = context.GetInput<ReportFilter>();
+            var filter = context.GetInput<ReportGeneration>();
             // Set Filter FileName
-            filter.FileName = $"Report-{context.CurrentUtcDateTime.ToString("yyyy-MM-ddTHH:mm:ssZ")}";
+            filter.FileName = $"Report-{context.CurrentUtcDateTime.ToString("yyyy-MM-ddTHHmmssZ")}.csv";
             ReportInformation reportInformation = await context.CallActivityAsync<ReportInformation>(ReportEvents_Generate, filter);
-            MemoryStream eventsStream = await fileService.DownloadReport(reportInformation.BlobContainerName, reportInformation.FileName);
             ReportGeneration generation = new ReportGeneration
             {
                 StartDate = filter.StartDate,
                 EndDate = filter.EndDate,
-                EventsReportStream = eventsStream
+                ReportInformation = reportInformation,
+                FileName = filter.FileName
             };
             await context.CallActivityAsync(ReportEvents_SendMail, generation);
         }
 
         [FunctionName(ReportEvents_Generate)]
-        public async Task<ReportInformation> ReportGeneration([ActivityTrigger] ReportFilter filter, ILogger log)
+        public async Task<ReportInformation> ReportGeneration([ActivityTrigger] ReportGeneration filter, ILogger log)
         {
             ReportInformation reportInformation = ReportStructure.Report(filter.FileName);
             ICollection<EventViewModelReadOnly> vm = await eventService.GetConfirmedIntervalledAsync(filter.StartDate, filter.EndDate);
@@ -80,11 +79,15 @@ namespace CommunityItaly.Server.Functions
             [SendGrid(ApiKey = "SendGridConnections:ApiKey")] IAsyncCollector<SendGridMessage> messageCollector,
             ILogger log)
         {
+            MemoryStream eventsStream = await fileService.DownloadReport(eventsData.ReportInformation.BlobContainerName, eventsData.ReportInformation.FileName);
+
             SendGridMessage message = new SendGridMessage();
             message.SetFrom(new EmailAddress(sendGridSettings.From));
             message.AddTos(adminSettings.GetMails().Select(x => new EmailAddress(x)).ToList());
             message.SetSubject($"Send events report from {eventsData.StartDate.ToShortDateString()} to {eventsData.EndDate.ToShortDateString()}");
-            await message.AddAttachmentAsync("EventReport", eventsData.EventsReportStream);          
+            message.Contents = new List<Content>();
+            message.Contents.Add(new Content("text/plain", "In this mail there is Event Report"));
+            await message.AddAttachmentAsync(eventsData.FileName, eventsStream);          
             await messageCollector.AddAsync(message);
         }
 
@@ -95,7 +98,9 @@ namespace CommunityItaly.Server.Functions
             ILogger log)
         {
             ReportFilter filter = await JsonSerializer.DeserializeAsync<ReportFilter>(await req.Content.ReadAsStreamAsync());
-            string instanceId = await starter.StartNewAsync("ReportEvents", null, filter);
+            filter.CheckDate();
+
+            string instanceId = await starter.StartNewAsync(ReportEvents_Orchestrator, null, filter);
             log.LogInformation($"Started orchestration with ID = '{instanceId}'.");
             return starter.CreateCheckStatusResponse(req, instanceId);
         }
@@ -105,11 +110,28 @@ namespace CommunityItaly.Server.Functions
     {
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public string FileName { get; set; }
+        public void CheckDate()
+        {
+            if (StartDate == default || StartDate < DateTime.UtcNow.AddYears(-2))
+            {
+                StartDate = DateTime.UtcNow.AddMonths(-3).StartOfMonth();
+            }
+
+            if(EndDate == default || EndDate < DateTime.UtcNow.AddYears(-2).AddMonths(3))
+            {
+                EndDate = DateTime.UtcNow.EndOfMonth();
+            }
+
+            if(EndDate.CompareTo(StartDate) < 0)
+            {
+                EndDate = StartDate.AddMonths(3).EndOfMonth();
+            }
+        }
     }
 
     public class ReportGeneration : ReportFilter
     {
-        public MemoryStream EventsReportStream { get; set; }
+        public string FileName { get; set; }
+        public ReportInformation ReportInformation { get; set; }
     }
 }

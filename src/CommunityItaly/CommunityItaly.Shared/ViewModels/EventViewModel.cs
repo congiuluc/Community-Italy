@@ -38,7 +38,7 @@ namespace CommunityItaly.Shared.ViewModels
         public Uri Logo { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public Uri BuyTicket { get; set; }
+        public string BuyTicket { get; set; }
         public CallForSpeakerViewModel CFP { get; set; }
         public CommunityUpdateViewModel Community { get; set; }
     }

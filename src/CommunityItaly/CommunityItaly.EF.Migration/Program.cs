@@ -4,6 +4,7 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace CommunityItaly.EF.Migration
@@ -62,7 +63,7 @@ namespace CommunityItaly.EF.Migration
             using (var db = new EventContext(optionsBuilder.Options))
             {
                 var e = await db.Events.FindAsync(id).ConfigureAwait(false);
-                Console.WriteLine(e.ToString());
+                Console.WriteLine(JsonSerializer.Serialize(e).ToString());
             }
         }
     }

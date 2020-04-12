@@ -90,7 +90,7 @@ namespace CommunityItaly.Services
 					Logo = currentEvent.Logo,
 					StartDate = currentEvent.StartDate,
 					EndDate = currentEvent.EndDate,
-					BuyTicket = currentEvent.BuyTicket,
+					BuyTicket = currentEvent.BuyTicket.ToString(),
 					CFP = currentEvent.CFP == null ? null : new CallForSpeakerViewModel
 					{
 						Url = currentEvent.CFP.Url,
@@ -136,7 +136,7 @@ namespace CommunityItaly.Services
 					Logo = currentEvent.Logo,
 					StartDate = currentEvent.StartDate,
 					EndDate = currentEvent.EndDate,
-					BuyTicket = currentEvent.BuyTicket,
+					BuyTicket = currentEvent.BuyTicket.ToString(),
 					CFP = currentEvent.CFP == null ? null : new CallForSpeakerViewModel
 					{
 						Url = currentEvent.CFP.Url,
@@ -172,7 +172,7 @@ namespace CommunityItaly.Services
 				Logo = currentEvent.Logo,
 				StartDate = currentEvent.StartDate,
 				EndDate = currentEvent.EndDate,
-				BuyTicket = currentEvent.BuyTicket,
+				BuyTicket = currentEvent.BuyTicket.ToString(),
 				CFP = new CallForSpeakerViewModel
 				{
 					Url = currentEvent.CFP.Url,

@@ -26,7 +26,6 @@ namespace CommunityItaly.Server
             });
             services.UseService();
             services.UseDatabase();
-            services.AddScoped<IFileService, FileService>();
         }
 
         // https://docs.microsoft.com/bs-latn-ba/azure/azure-functions/functions-dotnet-dependency-injection#working-with-options-and-settings
