@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FlatFile.Delimited" Version="0.2.51" />
     <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="11.1.3" />
   </ItemGroup>
 

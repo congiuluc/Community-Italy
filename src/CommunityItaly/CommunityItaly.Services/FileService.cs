@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using CommunityItaly.Services.Settings;
 using Microsoft.Azure.Storage;
@@ -7,12 +8,12 @@ using Microsoft.Extensions.Options;
 
 namespace CommunityItaly.Services
 {
-	public class ImageService : IImageService
+	public class FileService : IFileService
     {
         private readonly CloudStorageAccount storageAccount;
         private readonly CloudBlobClient blobClient;
 
-        public ImageService(IOptions<BlobStorageConnections> options)
+        public FileService(IOptions<BlobStorageConnections> options)
         {
             if (!CloudStorageAccount.TryParse(options.Value.ConnectionString, out storageAccount))
             { 
@@ -34,6 +35,22 @@ namespace CommunityItaly.Services
             var blockBlob = blobContainer.GetBlockBlobReference(filename);
             await blockBlob.UploadFromByteArrayAsync(fileContent, 0 , fileContent.Length);
             return blockBlob.StorageUri.PrimaryUri;
+        }
+
+        public async Task UploadReport(string blobContainerName, string filename, byte[] fileContent)
+        {
+            var blobContainer = await CreateOrGetContainerAsync(blobContainerName);
+            var blockBlob = blobContainer.GetBlockBlobReference(filename);
+            await blockBlob.UploadFromByteArrayAsync(fileContent, 0, fileContent.Length);
+        }
+        public async Task<MemoryStream> DownloadReport(string blobContainerName, string filename)
+        {
+            MemoryStream reportDownloaded = new MemoryStream();
+            var blobContainer = await CreateOrGetContainerAsync(blobContainerName);
+            var blockBlob = blobContainer.GetBlockBlobReference(filename);
+            await blockBlob.DownloadToStreamAsync(reportDownloaded);
+            reportDownloaded.Position = 0;
+            return reportDownloaded;
         }
 
         private async Task<CloudBlobContainer> CreateOrGetContainerAsync(string containerName)

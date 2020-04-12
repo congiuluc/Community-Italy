@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{E4A685
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{8C80E8D3-8A06-4EA7-80CA-5C6F095963B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityItaly.Web", "CommunityItaly.Web\CommunityItaly.Web.csproj", "{16D72E0B-B3FC-4A6C-835A-DA80040F1769}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunityItaly.Web", "CommunityItaly.Web\CommunityItaly.Web.csproj", "{16D72E0B-B3FC-4A6C-835A-DA80040F1769}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

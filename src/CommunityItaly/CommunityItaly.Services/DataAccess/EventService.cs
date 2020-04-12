@@ -3,6 +3,7 @@ using CommunityItaly.EF.Entities;
 using CommunityItaly.Shared.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -120,6 +121,46 @@ namespace CommunityItaly.Services
 				Total = totalElement,
 				Entities = result
 			};
+		}
+
+		public async Task<ICollection<EventViewModelReadOnly>> GetConfirmedIntervalledAsync(DateTimeOffset start, DateTimeOffset end)
+		{
+			var resultList = await db.Events.Where(x => x.Confirmed == true)
+				.ToListAsync()
+				.ConfigureAwait(false);
+
+			var result = resultList
+				.Select(currentEvent => new EventViewModelReadOnly
+				{
+					Name = currentEvent.Name,
+					Logo = currentEvent.Logo,
+					StartDate = currentEvent.StartDate,
+					EndDate = currentEvent.EndDate,
+					BuyTicket = currentEvent.BuyTicket,
+					CFP = currentEvent.CFP == null ? null : new CallForSpeakerViewModel
+					{
+						Url = currentEvent.CFP.Url,
+						StartDate = currentEvent.CFP.StartDate,
+						EndDate = currentEvent.CFP.EndDate
+					},
+					Community = currentEvent.Community == null ? null : new CommunityUpdateViewModel
+					{
+						Name = currentEvent.Community.Name,
+						Logo = currentEvent.Community.Logo,
+						WebSite = currentEvent.Community.WebSite,
+						Managers = !currentEvent.Community.Managers.Any() ?
+							null :
+							currentEvent.Community.Managers.Select(t => new PersonUpdateViewModel
+							{
+								Id = t.Id,
+								Name = t.Name,
+								Surname = t.Surname,
+								Picture = t.Picture,
+								MVP_Code = t.MVP_Code
+							})
+					}
+				});
+			return result.ToList();
 		}
 
 		public async Task<EventViewModelReadOnly> GetById(string id)
