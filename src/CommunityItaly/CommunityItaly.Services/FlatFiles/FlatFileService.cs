@@ -30,7 +30,7 @@ namespace CommunityItaly.Services.FlatFiles
     {
         public LayoutFactory()
         {
-            this.WithDelimiter(";")
+            this.WithDelimiter(",")
                .WithQuote("\"")
                .WithHeader()
                .WithMember(o => o.Name, s => s.WithName("EventName"))

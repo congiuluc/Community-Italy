@@ -1,15 +1,89 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager navigationManager
 
-<div class="sidebar">
-    <NavMenu />
-</div>
+<MatDrawerContainer Style="width: 100vw; height: 100vh;" Class="@bbDrawerClass">
+    <MatDrawer Opened="@_navMenuOpened">
+        <NavMenu />
+        <footer class="drawer-footer">
+            <MatTooltip Tooltip="Help">
+                <MatButton Icon="help" RefBack="@context" Link="https://github.com/enkodellc/blazorboilerplate">
+					<span class="miniHover">Help & Support</span>
+				</MatButton>
+            </MatTooltip>
+        </footer>
+    </MatDrawer>
 
-<div class="main">
-    <div class="top-row px-4">
-        <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
-    </div>
+    <MatDrawerContent>
+		<MatAppBarContainer>
+			<MatAppBar Fixed="true">
+				<MatAppBarRow>
+					<MatAppBarSection>
+						<div class="hidden-mdc-down">
+							<MatTooltip Tooltip="Toggle Menu">
+								<MatIconButton Class="navToggle" Icon="menu" ToggleIcon="menu" OnClick="@((e) => NavToggle())" RefBack="@context"></MatIconButton>
+							</MatTooltip>
+						</div>
+						<MatAppBarTitle>
+							Community Italy
+						</MatAppBarTitle>
+					</MatAppBarSection>
+					<MatAppBarSection Align="@MatAppBarSectionAlign.End">
+						<MatTooltip Tooltip="Github Repository">
+							<MatIconButton Link="https://github.com/enkodellc/blazorboilerplate" RefBack="@context"><i class="fa fa-github" aria-hidden="true"></i></MatIconButton>
+						</MatTooltip>
+					</MatAppBarSection>
+				</MatAppBarRow>
+			</MatAppBar>
+			<MatAppBarContent>
+				<section class="container-fluid">
+					@Body
+				</section>				
+			</MatAppBarContent>
+		</MatAppBarContainer>
+    </MatDrawerContent>
+</MatDrawerContainer>
 
-    <div class="content px-4">
-        @Body
-    </div>
-</div>
+@code {
+	bool _navMenuOpened = false;
+	bool _navMinified = false;
+
+	public string bbDrawerClass = "";
+
+	void NavToggle()
+	{
+		_navMenuOpened = !_navMenuOpened;
+		if (_navMenuOpened)
+		{
+			bbDrawerClass = "full";
+		}
+		else
+		{
+			bbDrawerClass = "closed";
+		}
+
+		this.StateHasChanged();
+	}
+
+	void NavMinify()
+	{
+		_navMinified = !_navMinified;
+
+		if (!_navMenuOpened)
+		{
+			_navMinified = true;
+		}
+
+		if (_navMinified)
+		{
+			bbDrawerClass = "mini";
+			_navMenuOpened = true;
+		}
+		else if (_navMenuOpened)
+		{
+			bbDrawerClass = "full";
+		}
+
+		_navMenuOpened = true;
+		this.StateHasChanged();
+	}
+}
