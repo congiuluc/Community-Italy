@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Text;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using CommunityItaly.Web.Services;
 
 namespace CommunityItaly.Web
 {
@@ -15,6 +16,7 @@ namespace CommunityItaly.Web
 			builder.RootComponents.Add<App>("app");
 
 			builder.Services.AddBaseAddressHttpClient();
+			builder.Services.AddTransient<IHttpServices, HttpServices>();
 
 			await builder.Build().RunAsync();
 		}

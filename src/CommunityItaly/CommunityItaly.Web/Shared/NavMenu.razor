@@ -2,24 +2,35 @@
 @inject NavigationManager navigationManager
 
     <MatNavMenu Multi="true" Class="app-sidebar">
+       <div>
+           <span>Community Italy</span>
+       </div>
+
         <MatNavItem Href="@navigationManager.ToAbsoluteUri(" ").AbsoluteUri" NavLinkMatch="NavLinkMatch.All">
             <MatIcon>home</MatIcon> <span class="miniHover">Home</span>
         </MatNavItem>
 
         <MatNavItem Href="events">
-            <MatIcon>event</MatIcon> <span class="miniHover">Events</span>
+            <MatIcon>@MatIconNames.Event</MatIcon> <span class="miniHover">Events</span>
         </MatNavItem>
 
+        <MatDivider></MatDivider>
+
         <MatNavItem Href="communities">
-            <MatIcon>group</MatIcon> <span class="miniHover">Communities</span>
+            <MatIcon>@MatIconNames.Group</MatIcon> <span class="miniHover">Communities</span>
         </MatNavItem>
 
         <MatNavItem Href="articles">
-            <MatIcon>create</MatIcon> <span class="miniHover">Articles</span>
+            <MatIcon>@MatIconNames.Create</MatIcon> <span class="miniHover">Articles</span>
         </MatNavItem>
 
-        <MatNavItem Href="person">
-            <MatIcon>face</MatIcon> <span class="miniHover">People</span>
+        <MatNavItem Href="people">
+            <MatIcon>@MatIconNames.Face</MatIcon> <span class="miniHover">People</span>
         </MatNavItem>
 
+        <MatDivider></MatDivider>
+
+        <MatNavItem Href="reports">
+            <MatIcon>@MatIconNames.Report</MatIcon> <span class="miniHover">Report</span>
+        </MatNavItem>
     </MatNavMenu>
