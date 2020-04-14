@@ -18,7 +18,8 @@ namespace CommunityItaly.Web.Pages
 		protected override async Task OnInitializedAsync()
 		{
 			await base.OnInitializedAsync();
-			EventViewModels = await Http.GetEvents(PageSize, PageSize * PageIndex);			
+			//EventViewModels = await Http.GetEvents(PageSize, PageSize * PageIndex);
+			EventViewModels = await Http.GetEvents(10, 0);
 		}
 
 		async Task OnPage(MatPaginatorPageEvent e)

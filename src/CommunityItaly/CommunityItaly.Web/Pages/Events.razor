@@ -1,29 +1,29 @@
 ﻿@page "/events"
 <h3>Events</h3>
 
-<MatTable Items="@EventViewModels.Entities" Striped="true" class="mat-elevation-z5">
-	<MatTableHeader>
-		<th>Name</th>
-		<th>Start Date</th>
-		<th>End Date</th>
-		<th>Community</th>
-		<th>Tickets</th>
-	</MatTableHeader>
-	<MatTableRow>
-		<td>@context.Name</td>
-		<td>@context.StartDate</td>
-		<td>@context.EndDate</td>
-		<td>@context.Community.Name</td>
-		<td>
-			@if (!string.IsNullOrEmpty(context.BuyTicket))
-			{
-				<MatIconButton Link="@context.BuyTicket">
-					<MatIcon>@MatIconNames.Link</MatIcon>
-				</MatIconButton>
-			}
-		</td>
-	</MatTableRow>
-</MatTable>
-<div>
-	<MatPaginator Length="@EventViewModels.Total" PageSize="@PageSize" Page="@OnPage"></MatPaginator>
-</div>
+@*<MatTable Items="@EventViewModels.Entities" Striped="true" class="mat-elevation-z5">
+		<MatTableHeader>
+			<th>Name</th>
+			<th>Start Date</th>
+			<th>End Date</th>
+			<th>Community</th>
+			<th>Tickets</th>
+		</MatTableHeader>
+		<MatTableRow>
+			<td>@context.Name</td>
+			<td>@context.StartDate</td>
+			<td>@context.EndDate</td>
+			<td>@context.Community.Name</td>
+			<td>
+				@if (!string.IsNullOrEmpty(context.BuyTicket))
+				{
+					<MatIconButton Link="@context.BuyTicket">
+						<MatIcon>@MatIconNames.Link</MatIcon>
+					</MatIconButton>
+				}
+			</td>
+		</MatTableRow>
+	</MatTable>
+	<div>
+		<MatPaginator Length="@EventViewModels.Total" PageSize="@PageSize" Page="@OnPage"></MatPaginator>
+	</div>*@

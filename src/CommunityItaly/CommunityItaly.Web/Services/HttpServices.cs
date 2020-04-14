@@ -13,7 +13,11 @@ namespace CommunityItaly.Web.Services
 		public HttpServices(HttpClient Http, IConfiguration configuration)
 		{
 			this.Http = Http;
-			this.Http.BaseAddress = new Uri(configuration["BaseUrl"]);
+			var baseUri = new Uri(configuration["BaseUrl"]);
+			if (this.Http.BaseAddress != baseUri)
+			{
+				this.Http.BaseAddress = baseUri;
+			}
 		}
 
 		public async Task<PagedViewModel<EventViewModelReadOnly>> GetEvents(int take, int skip)
