@@ -65,7 +65,7 @@ namespace CommunityItaly.Services
 				Name = currentCommunity.Name,
 				Logo = currentCommunity.Logo,
 				Confirmed = currentCommunity.Confirmed,
-				Id = currentCommunity.ShortName,
+				ShortName = currentCommunity.ShortName,
 				WebSite = currentCommunity.WebSite,
 				Managers = currentCommunity.Managers.Select(t => new PersonUpdateViewModel
 				{
@@ -107,7 +107,7 @@ namespace CommunityItaly.Services
 					Name = currentCommunity.Name,
 					Logo = currentCommunity.Logo,
 					Confirmed = currentCommunity.Confirmed,
-					Id = currentCommunity.ShortName,
+					ShortName = currentCommunity.ShortName,
 					WebSite = currentCommunity.WebSite,
 					Managers = !currentCommunity.Managers.Any() ?
 						null :
@@ -131,7 +131,7 @@ namespace CommunityItaly.Services
 
 		public async Task UpdateAsync(CommunityUpdateViewModel communityVM)
 		{
-			var currentCommunity = await db.Communities.FindAsync(communityVM.Id).ConfigureAwait(false);
+			var currentCommunity = await db.Communities.FindAsync(communityVM.ShortName).ConfigureAwait(false);
 			currentCommunity.SetConfirmation(communityVM.Confirmed);
 			currentCommunity.SetWebSite(communityVM.WebSite);
 			var updateManagers = communityVM.Managers.ToList();

@@ -34,6 +34,7 @@ namespace CommunityItaly.Shared.ViewModels
 
     public class EventViewModelReadOnly
     {
+        public string Id { get; set; }
         public string Name { get; set; }
         public Uri Logo { get; set; }
         public DateTime StartDate { get; set; }

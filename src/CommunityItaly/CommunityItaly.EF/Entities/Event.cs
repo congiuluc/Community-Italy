@@ -26,7 +26,7 @@ namespace CommunityItaly.EF.Entities
 
         public void SetConfirmation(bool confirmation) => Confirmed = confirmation;
 
-        public void AddCallForSpeaker(CallForSpeaker cfp)
+        public void SetCallForSpeaker(CallForSpeaker cfp)
         {
             CFP = cfp;
         }

@@ -26,7 +26,7 @@ namespace CommunityItaly.Services
 
 			if(eventVM.CFP != null)
 			{
-				currentEvent.AddCallForSpeaker(new CallForSpeaker(eventVM.CFP.Url, eventVM.CFP.StartDate, eventVM.CFP.EndDate));
+				currentEvent.SetCallForSpeaker(new CallForSpeaker(eventVM.CFP.Url, eventVM.CFP.StartDate, eventVM.CFP.EndDate));
 			}
 			if (!string.IsNullOrEmpty(eventVM.CommunityName))
 			{
@@ -86,6 +86,7 @@ namespace CommunityItaly.Services
 			var result = resultList
 				.Select(currentEvent => new EventViewModelReadOnly
 				{
+					Id = currentEvent.Id,
 					Name = currentEvent.Name,
 					Logo = currentEvent.Logo,
 					StartDate = currentEvent.StartDate,
@@ -202,7 +203,7 @@ namespace CommunityItaly.Services
 
 			if (eventVM.CFP != null)
 			{
-				currentEvent.AddCallForSpeaker(new CallForSpeaker(eventVM.CFP.Url, eventVM.CFP.StartDate, eventVM.CFP.EndDate));
+				currentEvent.SetCallForSpeaker(new CallForSpeaker(eventVM.CFP.Url, eventVM.CFP.StartDate, eventVM.CFP.EndDate));
 			}
 			if (!string.IsNullOrEmpty(eventVM.CommunityName))
 			{

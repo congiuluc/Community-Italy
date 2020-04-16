@@ -72,7 +72,10 @@ namespace CommunityItaly.Server
         public static async Task<T> GetJsonBody<T>(this HttpRequest request)
         {
             var requestBody = await request.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<T>(requestBody);
+            return JsonSerializer.Deserialize<T>(requestBody, new JsonSerializerOptions { 
+                PropertyNameCaseInsensitive = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase 
+            });
         }
     }
 }

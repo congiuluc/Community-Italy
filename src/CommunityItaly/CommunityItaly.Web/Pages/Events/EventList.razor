@@ -1,0 +1,39 @@
+﻿@page "/events"
+<h3>Events</h3>
+
+<MatTable Items="@EventViewModels" Striped="true" ShowPaging="false" SortBy="StartDate" class="mat-elevation-z5">
+	<MatTableHeader>
+		<th width="20%">Name</th>
+		<th width="15%">Start Date</th>
+		<th width="15%">End Date</th>
+		<th width="40%">Community</th>
+		<th width="10%">Tickets</th>
+		<th width="10%"></th>
+	</MatTableHeader>
+	<MatTableRow>
+		<td width="10%">@context.Name</td>
+		<td width="20%">@context.StartDate.ToString("d")</td>
+		<td width="20%">@context.EndDate.ToString("d")</td>
+		<td width="40%">@context.Community.Name</td>
+		<td width="10%">
+			@if (!string.IsNullOrEmpty(context.BuyTicket))
+			{
+				<MatIconButton Link="@context.BuyTicket" Target="_blank">
+					<MatIcon>@MatIconNames.Link</MatIcon>
+				</MatIconButton>
+			}
+		</td>
+		<td>
+			<MatIconButton OnClick="@(() => Edit(context))">
+				<MatIcon>@MatIconNames.Edit</MatIcon>
+			</MatIconButton>
+
+			<MatIconButton OnClick="@(() => Delete(context.Id))">
+				<MatIcon>@MatIconNames.Delete</MatIcon>
+			</MatIconButton>
+		</td>
+	</MatTableRow>
+</MatTable>
+<div>
+	<MatPaginator Length="@Total" PageSize="@PageSize" Page="@OnPage"></MatPaginator>
+</div>

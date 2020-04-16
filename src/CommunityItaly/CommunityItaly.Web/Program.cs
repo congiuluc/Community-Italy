@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using CommunityItaly.Web.Services;
+using CommunityItaly.Web.Stores;
 
 namespace CommunityItaly.Web
 {
@@ -17,6 +18,7 @@ namespace CommunityItaly.Web
 
 			builder.Services.AddBaseAddressHttpClient();
 			builder.Services.AddTransient<IHttpServices, HttpServices>();
+			builder.Services.AddSingleton<ICommunityItalyStore, CommunityItalyStore>();
 
 			await builder.Build().RunAsync();
 		}

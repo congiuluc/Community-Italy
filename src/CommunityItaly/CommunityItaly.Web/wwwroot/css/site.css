@@ -1,6 +1,7 @@
 ﻿html, body {
     font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
-    margin: 0px;
+    margin: 0px !important;
+    padding: 0px !important;
 }
 
 app {
@@ -8,6 +9,7 @@ app {
     display: flex;
     /*flex-direction: column;*/
 }
+
 /** scroll bar */
 /*::-webkit-scrollbar {
     width: 9px;
@@ -23,12 +25,8 @@ app {
     border-radius: 2px;
     background-image: linear-gradient(to bottom, rgba(17,17,17,1) 0%,rgba(76,76,76,1) 23%,rgba(76,76,76,1) 23%,rgba(71,71,71,1) 72%,rgba(17,17,17,1) 99%);
 }*/
-
 /* material theme */
-
 /* app bar */
-
-
 /* page */
 .container-fluid {
     min-height: 350px;

@@ -31,7 +31,7 @@ namespace CommunityItaly.Services.Validations
 
 	public class EventUpdateValidator : AbstractValidator<EventUpdateViewModel>
 	{
-		public EventUpdateValidator(ICommunityService communityService, IArticleService eventService)
+		public EventUpdateValidator(ICommunityService communityService, IEventService eventService)
 		{
 			RuleFor(x => x.Id).NotEmpty().CustomAsync(async (id, ctx, cancellationToken) => 
 			{

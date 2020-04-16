@@ -12,7 +12,7 @@ namespace CommunityItaly.Shared.ViewModels
 
 	public class CommunityUpdateViewModel : CommunityViewModel
 	{
-		public string Id { get; set; }
+		public string ShortName { get; set; }
 		public bool Confirmed { get; set; }
 		public Uri Logo { get; set; }
 

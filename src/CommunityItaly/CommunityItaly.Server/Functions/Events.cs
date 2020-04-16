@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using CommunityItaly.Services;
 using CommunityItaly.Services.Validations;
+using CommunityItaly.EF.Entities;
 
 namespace CommunityItaly.Server
 {
@@ -53,16 +54,16 @@ namespace CommunityItaly.Server
           [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.PUT, Route = "Event")] HttpRequest req,
           ILogger log)
         {
-            var eventValidateRequest = await req.GetJsonBodyWithValidator(new EventValidator(communityService));
+            var eventValidateRequest = await req.GetJsonBodyWithValidator(new EventUpdateValidator(communityService, eventServices));
             if (!eventValidateRequest.IsValid)
             {
                 log.LogError($"Invalid form data");
                 return eventValidateRequest.ToBadRequest();
             }
 
-            var result = await eventServices.CreateAsync(eventValidateRequest.Value);
+            await eventServices.UpdateAsync(eventValidateRequest.Value);
 
-            return new OkObjectResult(new { Id = result });
+            return new OkObjectResult(new { Id = eventValidateRequest.Value.Id });
         }
 
         [FunctionName("EventDelete")]

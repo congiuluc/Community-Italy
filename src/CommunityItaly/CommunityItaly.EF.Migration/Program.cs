@@ -49,7 +49,7 @@ namespace CommunityItaly.EF.Migration
                 globalAzure.SetBuyTicket(new Uri("https://www.eventbrite.it/e/biglietti-global-azure-2020-88158844477"));
                 globalAzure.SetLogo(new Uri("https://communityitaly.blob.core.windows.net/events/globalAzureVerona.jpg"));
                 var cfp = new CallForSpeaker(new Uri("https://sessionize.com/global-azure-2020/"), new DateTime(2020, 01, 31), new DateTime(2020, 02, 28));
-                globalAzure.AddCallForSpeaker(cfp);
+                globalAzure.SetCallForSpeaker(cfp);
 
                 await db.Events.AddAsync(globalAzure).ConfigureAwait(false);
                 await db.SaveChangesAsync();

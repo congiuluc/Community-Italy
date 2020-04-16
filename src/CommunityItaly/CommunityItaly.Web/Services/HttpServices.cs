@@ -3,12 +3,17 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace CommunityItaly.Web.Services
 {
 	public class HttpServices : IHttpServices
 	{
+		private readonly JsonSerializerOptions JsonOption = new JsonSerializerOptions
+		{
+			PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+		};
 		private readonly HttpClient Http;
 		public HttpServices(HttpClient Http, IConfiguration configuration)
 		{
@@ -23,6 +28,16 @@ namespace CommunityItaly.Web.Services
 		public async Task<PagedViewModel<EventViewModelReadOnly>> GetEvents(int take, int skip)
 		{
 			return await Http.GetFromJsonAsync<PagedViewModel<EventViewModelReadOnly>>($"Event?take={take}&skip={skip}");
+		}
+
+		public async Task<HttpResponseMessage> UpdateEvent(EventUpdateViewModel vm)
+		{
+			return await Http.PutAsJsonAsync($"Event", vm, JsonOption);
+		}
+
+		public async Task DeleteEvents(string id)
+		{
+			await Http.DeleteAsync(new Uri($"/Event?Id={id}"));
 		}
 	}
 }

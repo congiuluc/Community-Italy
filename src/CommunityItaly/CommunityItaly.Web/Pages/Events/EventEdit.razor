@@ -1,0 +1,33 @@
+﻿@page "/EditEvent/{id}"
+<h3>EventEdit</h3>
+
+<EditForm Model="EventViewModel" OnValidSubmit="Success">
+	<DataAnnotationsValidator />
+	<ValidationSummary />
+	<div class="mat-layout-grid">
+		<div class="mat-layout-grid-inner">
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+				<MatTextField Label="Name" @bind-Value="EventViewModel.Name" />
+				<ValidationMessage For="@(() => EventViewModel.Name)" />
+			</div>
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+				<MatDatePicker Label="Start Date" @bind-Value="EventViewModel.StartDate" />
+				<ValidationMessage For="@(() => EventViewModel.StartDate)" />
+			</div>
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+				<MatDatePicker Label="End Date" @bind-Value="EventViewModel.EndDate" />
+				<ValidationMessage For="@(() => EventViewModel.EndDate)" />
+			</div>
+
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+				<MatFileUpload OnChange="@FilesReady"></MatFileUpload>
+			</div>
+
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+				<MatIconButton Type="submit" Raised="true">
+					<MatIcon>@MatIconNames.Update</MatIcon>
+				</MatIconButton>
+			</div>
+		</div>
+	</div>
+</EditForm>

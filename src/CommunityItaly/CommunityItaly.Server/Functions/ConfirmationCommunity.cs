@@ -62,7 +62,7 @@ namespace CommunityItaly.Server.Functions
             string id = await context.CallActivityAsync<string>(ConfirmationTask.CreateCommunity, vm);
 
             var vmUpdate = CommunityUpdateViewModel.Create(vm);
-            vmUpdate.Id = id;
+            vmUpdate.ShortName = id;
             var activateSendMail = new ActivateCommunitySendMail { Data = vmUpdate, InstanceId = context.InstanceId };
             await context.CallActivityAsync(ConfirmationTask.SendMailCommunity, activateSendMail);
 
