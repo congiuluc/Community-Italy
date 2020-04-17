@@ -3,6 +3,7 @@ using CommunityItaly.EF.Entities;
 using CommunityItaly.Shared.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -82,6 +83,34 @@ namespace CommunityItaly.Services
 		public async Task<PagedViewModel<CommunityUpdateViewModel>> GetConfirmedAsync(int? take = 10, int? skip = 0)
 		{
 			return await GetAsync(confirmed: true, take, skip);
+		}
+
+		public async Task<IEnumerable<CommunityUpdateViewModel>> GetSelectAsync()
+		{
+			var resultList = await db.Communities.Where(x => x.Confirmed == true)
+				.ToListAsync()
+				.ConfigureAwait(false);
+
+			var result = resultList
+				.Select(currentCommunity => new CommunityUpdateViewModel
+				{
+					Name = currentCommunity.Name,
+					Logo = currentCommunity.Logo,
+					Confirmed = currentCommunity.Confirmed,
+					ShortName = currentCommunity.ShortName,
+					WebSite = currentCommunity.WebSite,
+					Managers = !currentCommunity.Managers.Any() ?
+						null :
+						currentCommunity.Managers.Select(t => new PersonUpdateViewModel
+						{
+							Id = t.Id,
+							Name = t.Name,
+							Surname = t.Surname,
+							Picture = t.Picture,
+							MVP_Code = t.MVP_Code
+						})
+				});
+			return result;
 		}
 
 		private async Task<PagedViewModel<CommunityUpdateViewModel>> GetAsync(bool confirmed = false, int? take = 10, int? skip = 0)

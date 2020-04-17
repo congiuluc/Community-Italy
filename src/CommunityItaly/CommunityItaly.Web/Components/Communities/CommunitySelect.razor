@@ -1,0 +1,12 @@
+﻿
+<h3>Select Community</h3>
+
+<MatAutocompleteList Items="@CommunitiesToSelect" FullWidth="true" TItem="CommunityUpdateViewModel" 
+					 Label="Seleziona la community" CustomStringSelector="@(i => i.Name)" @bind-Value="@CommunitySelected">
+	<ItemTemplate>
+		<div style="display: flex; flex-direction: row; width: 100%;">
+			<div style="flex: 1;">@context.Name</div>
+			<div style="width: 150px;"><img src="@LinkViewModel.GetImageIcon(context.Logo)"/></div>
+		</div>
+	</ItemTemplate>
+</MatAutocompleteList>

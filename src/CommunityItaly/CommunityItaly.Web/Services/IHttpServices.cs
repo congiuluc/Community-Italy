@@ -14,5 +14,8 @@ namespace CommunityItaly.Web.Services
 		Task<HttpResponseMessage> UpdateEvent(EventUpdateViewModel vm);
 		Task DeleteEvents(string id);
 		#endregion
+		#region [Community]
+		Task<IEnumerable<CommunityUpdateViewModel>> GetCommunitySelect();
+		#endregion
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using CommunityItaly.Shared.ViewModels;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -25,19 +26,28 @@ namespace CommunityItaly.Web.Services
 			}
 		}
 
+		#region [Event]
 		public async Task<PagedViewModel<EventViewModelReadOnly>> GetEvents(int take, int skip)
 		{
-			return await Http.GetFromJsonAsync<PagedViewModel<EventViewModelReadOnly>>($"Event?take={take}&skip={skip}");
+			return await Http.GetFromJsonAsync<PagedViewModel<EventViewModelReadOnly>>($"Event?take={take}&skip={skip}").ConfigureAwait(false);
 		}
 
 		public async Task<HttpResponseMessage> UpdateEvent(EventUpdateViewModel vm)
 		{
-			return await Http.PutAsJsonAsync($"Event", vm, JsonOption);
+			return await Http.PutAsJsonAsync($"Event", vm, JsonOption).ConfigureAwait(false);
 		}
 
 		public async Task DeleteEvents(string id)
 		{
-			await Http.DeleteAsync(new Uri($"/Event?Id={id}"));
+			await Http.DeleteAsync(new Uri($"/Event?Id={id}")).ConfigureAwait(false);
 		}
+		#endregion
+
+		#region [Community]
+		public async Task<IEnumerable<CommunityUpdateViewModel>> GetCommunitySelect()
+		{
+			return await Http.GetFromJsonAsync<IEnumerable<CommunityUpdateViewModel>>($"CommunitySelect").ConfigureAwait(false);
+		}
+		#endregion
 	}
 }
