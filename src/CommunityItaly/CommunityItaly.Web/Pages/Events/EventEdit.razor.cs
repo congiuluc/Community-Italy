@@ -46,7 +46,7 @@ namespace CommunityItaly.Web.Pages.Events
 			// TODO: Upload Image
 			if(Store.EventImage != null)
 			{
-				await Http.UploadEventImage(e.Id, Store.EventImage.StreamData).ConfigureAwait(false);
+				await Http.UploadEventImage(e.Id, Store.EventImage).ConfigureAwait(false);
 			}
 		}
 

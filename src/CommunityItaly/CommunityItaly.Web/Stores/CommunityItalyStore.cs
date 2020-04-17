@@ -25,6 +25,7 @@ namespace CommunityItaly.Web.Stores
 		{
 			MemoryStream memory = new MemoryStream();
 			await entry.WriteToStreamAsync(memory);
+			memory.Position = 0;
 			return new FileUploadEntry
 			{
 				LastModified = entry.LastModified,

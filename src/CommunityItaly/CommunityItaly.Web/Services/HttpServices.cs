@@ -1,9 +1,11 @@
 ﻿using CommunityItaly.Shared.ViewModels;
+using CommunityItaly.Web.Stores;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -38,7 +40,7 @@ namespace CommunityItaly.Web.Services
 			return await Http.PutAsJsonAsync($"Event", vm, JsonOption).ConfigureAwait(false);
 		}
 
-		public async Task<HttpResponseMessage> UploadEventImage(string id, Stream fileToUpload)
+		public async Task<HttpResponseMessage> UploadEventImage(string id, FileUploadEntry fileToUpload)
 		{
 			return await UploadImage(id, "EVENT", fileToUpload);
 		}
@@ -55,22 +57,30 @@ namespace CommunityItaly.Web.Services
 			return await Http.GetFromJsonAsync<IEnumerable<CommunityUpdateViewModel>>("CommunitySelect").ConfigureAwait(false);
 		}
 
-		public async Task<HttpResponseMessage> UploadCommunityImage(string id, Stream fileToUpload)
+		public async Task<HttpResponseMessage> UploadCommunityImage(string id, FileUploadEntry fileToUpload)
 		{
 			return await UploadImage(id, "COMMUNITY", fileToUpload);
 		}
 		#endregion
 
-		public async Task<HttpResponseMessage> UploadPersonImage(string id, Stream fileToUpload)
+		public async Task<HttpResponseMessage> UploadPersonImage(string id, FileUploadEntry fileToUpload)
 		{
 			return await UploadImage(id, "PERSON", fileToUpload);
 		}
 
 
-		private async Task<HttpResponseMessage> UploadImage(string id, string type, Stream fileToUpload)
+		private async Task<HttpResponseMessage> UploadImage(string id, string type, FileUploadEntry fileToUpload)
 		{
-			MultipartContent content = new MultipartContent();
-			await content.CopyToAsync(fileToUpload);
+			MultipartFormDataContent content = new MultipartFormDataContent();
+			
+			var fileContent = new StreamContent(fileToUpload.StreamData);
+			fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+			{
+				Name = "\"files\"",
+				FileName = "\"" + fileToUpload.Name + "\""
+			};
+			fileContent.Headers.ContentType = new MediaTypeHeaderValue(fileToUpload.Type);
+			content.Add(fileContent);
 			return await Http.PostAsync($"UploadImage?id={id}&type={type}", content).ConfigureAwait(false);
 		}
 	}
