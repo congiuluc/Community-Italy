@@ -24,7 +24,7 @@
 			</div>
 
 			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
-				<CommunitySelect ShortName="@EventViewModel.Community?.Name"></CommunitySelect>
+				<CommunitySelect @bind-CommunitySelected=EventViewModel.Community></CommunitySelect>
 			</div>
 
 				<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12" style="text-align: center">

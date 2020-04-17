@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -37,6 +38,11 @@ namespace CommunityItaly.Web.Services
 			return await Http.PutAsJsonAsync($"Event", vm, JsonOption).ConfigureAwait(false);
 		}
 
+		public async Task<HttpResponseMessage> UploadEventImage(string id, Stream fileToUpload)
+		{
+			return await UploadImage(id, "EVENT", fileToUpload);
+		}
+
 		public async Task DeleteEvents(string id)
 		{
 			await Http.DeleteAsync(new Uri($"/Event?Id={id}")).ConfigureAwait(false);
@@ -48,6 +54,24 @@ namespace CommunityItaly.Web.Services
 		{
 			return await Http.GetFromJsonAsync<IEnumerable<CommunityUpdateViewModel>>("CommunitySelect").ConfigureAwait(false);
 		}
+
+		public async Task<HttpResponseMessage> UploadCommunityImage(string id, Stream fileToUpload)
+		{
+			return await UploadImage(id, "COMMUNITY", fileToUpload);
+		}
 		#endregion
+
+		public async Task<HttpResponseMessage> UploadPersonImage(string id, Stream fileToUpload)
+		{
+			return await UploadImage(id, "PERSON", fileToUpload);
+		}
+
+
+		private async Task<HttpResponseMessage> UploadImage(string id, string type, Stream fileToUpload)
+		{
+			MultipartContent content = new MultipartContent();
+			await content.CopyToAsync(fileToUpload);
+			return await Http.PostAsync($"UploadImage?id={id}&type={type}", content).ConfigureAwait(false);
+		}
 	}
 }

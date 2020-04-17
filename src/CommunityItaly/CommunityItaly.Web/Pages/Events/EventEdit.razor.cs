@@ -5,6 +5,8 @@ using MatBlazor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CommunityItaly.Web.Pages.Events
@@ -21,14 +23,12 @@ namespace CommunityItaly.Web.Pages.Events
 		public string Id { get; set; }
 
 		public EventViewModelReadOnly EventViewModel { get; set; }
-		List<IMatFileUploadEntry> FileUploadEntries { get; set; } = new List<IMatFileUploadEntry>();
-		public CommunityUpdateViewModel CommunitySelected { get; set; }
-		//public EventHandler<CommunityUpdateViewModel> OnCommunityChanged;
-
+		
 		protected override async Task OnInitializedAsync()
 		{
 			await base.OnInitializedAsync();
 			EventViewModel = Store.EventEdit;
+			Store.EventImage = null;
 		}
 
 		async Task Success()
@@ -41,14 +41,19 @@ namespace CommunityItaly.Web.Pages.Events
 				CommunityName = EventViewModel.Community.ShortName,
 				Name = EventViewModel.Name
 			};
-			await Http.UpdateEvent(e);
+			await Http.UpdateEvent(e).ConfigureAwait(false);
 
 			// TODO: Upload Image
+			if(Store.EventImage != null)
+			{
+				await Http.UploadEventImage(e.Id, Store.EventImage.StreamData).ConfigureAwait(false);
+			}
 		}
 
-		void FilesReady(IMatFileUploadEntry[] files)
+		async Task FilesReady(IMatFileUploadEntry[] files)
 		{
-			FileUploadEntries.AddRange(files);
+			var image = files.FirstOrDefault();
+			Store.EventImage = await new FileUploadEntry().FromMat(image).ConfigureAwait(false);
 		}
 	}
 }

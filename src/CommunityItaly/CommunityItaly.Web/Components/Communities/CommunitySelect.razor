@@ -1,10 +1,10 @@
 ﻿<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
 	<MatSelectValue @bind-Value="@CommunitySelected" Items="@CommunitiesToSelect" ValueSelector="@(i=>i)"
-					TValue="CommunityUpdateViewModel" TItem="CommunityUpdateViewModel" 
+					TValue="CommunityUpdateViewModel" TItem="CommunityUpdateViewModel"
 					HelperText="Select Community" >
 		<ItemTemplate>
 			<span>@context.Name</span>
 		</ItemTemplate>
 	</MatSelectValue>
-	@*<ValidationMessage For="@(() => CommunitySelected)" />*@
+	<ValidationMessage For="@(() => CommunitySelected)" />
 </div>

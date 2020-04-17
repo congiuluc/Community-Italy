@@ -91,7 +91,7 @@ namespace CommunityItaly.Services
 					Logo = currentEvent.Logo,
 					StartDate = currentEvent.StartDate,
 					EndDate = currentEvent.EndDate,
-					BuyTicket = currentEvent.BuyTicket.ToString(),
+					BuyTicket = currentEvent.BuyTicket?.ToString(),
 					CFP = currentEvent.CFP == null ? null : new CallForSpeakerViewModel
 					{
 						Url = currentEvent.CFP.Url,
@@ -100,6 +100,8 @@ namespace CommunityItaly.Services
 					},
 					Community = currentEvent.Community == null ? null : new CommunityUpdateViewModel
 					{
+						ShortName = currentEvent.Community.ShortName,
+						Confirmed = currentEvent.Community.Confirmed,
 						Name = currentEvent.Community.Name,
 						Logo = currentEvent.Community.Logo,
 						WebSite = currentEvent.Community.WebSite,
