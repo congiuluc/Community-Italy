@@ -46,7 +46,7 @@ namespace CommunityItaly.Web.Services
 		#region [Community]
 		public async Task<IEnumerable<CommunityUpdateViewModel>> GetCommunitySelect()
 		{
-			return await Http.GetFromJsonAsync<IEnumerable<CommunityUpdateViewModel>>($"CommunitySelect").ConfigureAwait(false);
+			return await Http.GetFromJsonAsync<IEnumerable<CommunityUpdateViewModel>>("CommunitySelect").ConfigureAwait(false);
 		}
 		#endregion
 	}

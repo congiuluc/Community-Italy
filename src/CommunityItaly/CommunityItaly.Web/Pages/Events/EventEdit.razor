@@ -24,14 +24,12 @@
 			</div>
 
 			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
-				<CommunitySelect ShortName="@EventViewModel.Community.Name"></CommunitySelect>
+				<CommunitySelect ShortName="@EventViewModel.Community?.Name"></CommunitySelect>
 			</div>
 
-			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
-				<MatIconButton Type="submit" Raised="true">
-					<MatIcon>@MatIconNames.Update</MatIcon>
-				</MatIconButton>
+				<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12" style="text-align: center">
+					<MatButton Icon="@MatIconNames.Save" Raised="true" Type="submit">Save</MatButton>
+				</div>
 			</div>
-		</div>
 	</div>
 </EditForm>
