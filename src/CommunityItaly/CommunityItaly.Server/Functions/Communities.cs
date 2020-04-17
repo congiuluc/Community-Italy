@@ -89,7 +89,7 @@ namespace CommunityItaly.Server.Functions
         public async Task<IActionResult> GetSelect(
           [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.GET, Route = "CommunitySelect")] HttpRequest req)
         {
-            var result = await communityService.GetConfirmedAsync();
+            var result = await communityService.GetSelectAsync();
 
             return new OkObjectResult(result);
         }

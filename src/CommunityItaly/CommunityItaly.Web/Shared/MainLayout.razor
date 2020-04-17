@@ -1,49 +1,51 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager navigationManager
 
-<MatDrawerContainer Style="width: 100vw; height: 100vh;" Class="@bbDrawerClass">
-    <MatDrawer Opened="@_navMenuOpened">
-        <NavMenu />
-        <footer class="drawer-footer">
-            <MatTooltip Tooltip="Help">
-                <MatButton Icon="help" RefBack="@context" Link="https://github.com/andreatosato/Community-Italy">
-					<span class="miniHover">Help & Support</span>
-				</MatButton>
-            </MatTooltip>
-        </footer>
-    </MatDrawer>
 
-    <MatDrawerContent>
-		<MatAppBarContainer>
-			<MatAppBar Fixed="true">
-				<MatAppBarRow>
-					<MatAppBarSection>
-						<div class="hidden-mdc-down">
-							<MatTooltip Tooltip="Toggle Menu">
-								<MatIconButton Class="navToggle" Icon="menu" ToggleIcon="menu" OnClick="@((e) => NavToggle())" RefBack="@context"></MatIconButton>
-							</MatTooltip>
-						</div>
-						<MatAppBarTitle>
-							Community Italy
-						</MatAppBarTitle>
-					</MatAppBarSection>
-					<MatAppBarSection Align="@MatAppBarSectionAlign.End">
-						<MatTooltip Tooltip="Github Repository">
-							<MatIconButton Link="https://github.com/andreatosato/Community-Italy" Target="_blank" RefBack="@context">
-								<i class="fab fa-github" aria-hidden="true"></i>
-							</MatIconButton>
-						</MatTooltip>
-					</MatAppBarSection>
-				</MatAppBarRow>
-			</MatAppBar>
-			<MatAppBarContent>
+<MatAppBarContainer>
+	<MatAppBar Fixed="true">
+		<MatAppBarRow>
+			<MatAppBarSection>
+				<div class="hidden-mdc-down">
+					<MatTooltip Tooltip="Toggle Menu">
+						<MatIconButton Class="navToggle" Icon="menu" ToggleIcon="menu" OnClick="@((e) => NavToggle())" RefBack="@context"></MatIconButton>
+					</MatTooltip>
+				</div>
+				<MatAppBarTitle>
+					Community Italy
+				</MatAppBarTitle>
+			</MatAppBarSection>
+			<MatAppBarSection Align="@MatAppBarSectionAlign.End">
+				<MatTooltip Tooltip="Github Repository">
+					<MatIconButton Link="https://github.com/andreatosato/Community-Italy" Target="_blank" RefBack="@context">
+						<i class="fab fa-github" aria-hidden="true"></i>
+					</MatIconButton>
+				</MatTooltip>
+			</MatAppBarSection>
+		</MatAppBarRow>
+	</MatAppBar>
+	<MatAppBarContent>
+		<MatDrawerContainer Style="width: 100vw; height: 100vh;" Class="@bbDrawerClass">
+			<MatDrawer Opened="@_navMenuOpened">
+				<NavMenu />
+				<footer class="drawer-footer">
+					<MatTooltip Tooltip="Help">
+						<MatButton Icon="help" RefBack="@context" Link="https://github.com/andreatosato/Community-Italy">
+							<span class="miniHover">Help & Support</span>
+						</MatButton>
+					</MatTooltip>
+				</footer>
+			</MatDrawer>
+
+			<MatDrawerContent>
 				<section class="container-fluid">
 					@Body
-				</section>				
-			</MatAppBarContent>
-		</MatAppBarContainer>
-    </MatDrawerContent>
-</MatDrawerContainer>
+				</section>
+			</MatDrawerContent>
+		</MatDrawerContainer>
+	</MatAppBarContent>
+</MatAppBarContainer>
+
 
 @code {
 	bool _navMenuOpened = false;
