@@ -46,8 +46,6 @@ namespace CommunityItaly.Web.Pages.Events
 				e.BuyTicket = new Uri(EventViewModel.BuyTicket);
 			}
 			await Http.UpdateEvent(e).ConfigureAwait(false);
-
-			// TODO: Upload Image
 			if(Store.EventImage != null)
 			{
 				await Http.UploadEventImage(e.Id, Store.EventImage).ConfigureAwait(false);

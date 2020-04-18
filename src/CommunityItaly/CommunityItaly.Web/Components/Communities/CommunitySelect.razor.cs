@@ -14,7 +14,6 @@ namespace CommunityItaly.Web.Components.Communities
 
 		[Parameter]
 		public CommunityUpdateViewModel CommunitySelected { get; set; }
-
 		[Parameter]
 		public EventCallback<CommunityUpdateViewModel> CommunitySelectedChanged { get; set; }
 
@@ -23,7 +22,7 @@ namespace CommunityItaly.Web.Components.Communities
 
 		protected override async Task OnInitializedAsync()
 		{
-			CommunitiesToSelect = (IReadOnlyList<CommunityUpdateViewModel>)await Http.GetCommunitySelect().ConfigureAwait(false);			
+			CommunitiesToSelect = (IReadOnlyList<CommunityUpdateViewModel>)await Http.GetCommunitySelect().ConfigureAwait(false);
 		}
 	}
 }

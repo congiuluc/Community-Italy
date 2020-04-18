@@ -1,4 +1,4 @@
-﻿@page "/EditEvent/{id}"
+﻿@page "/EventEdit/{id}"
 <h3>EventEdit</h3>
 
 <EditForm Model="EventViewModel" OnValidSubmit="Success">
@@ -11,7 +11,7 @@
 				<ValidationMessage For="@(() => EventViewModel.Name)" />
 			</div>
 			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
-				<MatTextField Label="Acquista biglietto" Icon="@MatIconNames.Event_seat" @bind-Value="EventViewModel.BuyTicket" FullWidth="true" />
+				<MatTextField Label="Acquista biglietto" Icon="@MatIconNames.Event_seat" IconTrailing="true" @bind-Value="EventViewModel.BuyTicket" FullWidth="true" />
 				<ValidationMessage For="@(() => EventViewModel.BuyTicket)" />
 			</div>
 			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
@@ -22,28 +22,27 @@
 				<MatDatePicker Label="End Date" @bind-Value="EventViewModel.EndDate" FullWidth="true" />
 				<ValidationMessage For="@(() => EventViewModel.EndDate)" />
 			</div>
-			
+
 			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
 				<MatFileUpload OnChange="@FilesReady" Label="Carica l'immagine dell'evento"></MatFileUpload>
 			</div>
 
-			@*<div class="mat-elevation-z2">
-				<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
-					<span>Call for speakers</span>
-				</div>				
-				<MatDivider></MatDivider>
-				<div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
-					<MatTextField Label="Name" @bind-Value="EventViewModel.CFP.Url" />
+			@*@if (EventViewModel.CFP != null)
+			{
+				<div class="mat-elevation-z2">
+					<div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+						<MatTextField Label="Call for speaker url" @bind-Value="EventViewModel.CFP.Url" />
+					</div>
+					<div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+						<MatDatePicker Label="Start Date" @bind-Value="EventViewModel.CFP.StartDate" />
+						<ValidationMessage For="@(() => EventViewModel.CFP.StartDate)" />
+					</div>
+					<div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+						<MatDatePicker Label="End Date" @bind-Value="EventViewModel.CFP.EndDate" />
+						<ValidationMessage For="@(() => EventViewModel.CFP.EndDate)" />
+					</div>
 				</div>
-				<div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
-					<MatDatePicker Label="Start Date" @bind-Value="EventViewModel.CFP.StartDate" />
-					<ValidationMessage For="@(() => EventViewModel.CFP.StartDate)" />
-				</div>
-				<div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
-					<MatDatePicker Label="End Date" @bind-Value="EventViewModel.CFP.EndDate" />
-					<ValidationMessage For="@(() => EventViewModel.CFP.EndDate)" />
-				</div>
-			</div>*@
+			}*@
 
 			<div class="mat-elevation-z2">
 				<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">

@@ -1,9 +1,9 @@
-﻿<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
-	<MatSelectValue @bind-Value="@CommunitySelected" Items="@CommunitiesToSelect" ValueSelector="@(i=>i)"
-					TValue="CommunityUpdateViewModel" TItem="CommunityUpdateViewModel">
-		<ItemTemplate>
-			<span>@context.Name</span>
-		</ItemTemplate>
-	</MatSelectValue>
-	<ValidationMessage For="@(() => CommunitySelected)" />
-</div>
+﻿<MatSelectValue @bind-Value="@CommunitySelected" Items="@CommunitiesToSelect" ValueSelector="@(i=>i)"
+				TValue="CommunityUpdateViewModel" TItem="CommunityUpdateViewModel" 
+				HelperTextPersistent="false" Label="Seleziona la community">
+	<ItemTemplate>
+		<span>@context.Name</span>
+	</ItemTemplate>
+</MatSelectValue>
+@*<ValidationMessage For="@(() => CommunitySelected)" />*@
+

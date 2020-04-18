@@ -52,5 +52,10 @@ namespace CommunityItaly.Web.Pages.Events
 			EventViewModels = pagedViewModel.Entities;
 			Total = pagedViewModel.Total;
 		}
+
+		void Create()
+		{
+			NavigationManager.NavigateTo(Routes.EventCreate());
+		}
 	}
 }

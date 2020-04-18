@@ -1,5 +1,17 @@
 ﻿@page "/events"
-<h3>Events</h3>
+
+<div class="mat-layout-grid">
+	<div class="mat-layout-grid-inner">
+		<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+			<h3>Events</h3>
+		</div>
+		<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+			<MatIconButton OnClick="Create">
+				<MatIcon>@MatIconNames.Create</MatIcon>
+			</MatIconButton>
+		</div>
+	</div>
+</div>
 
 <MatTable Items="@EventViewModels" Striped="true" ShowPaging="false" SortBy="StartDate" class="mat-elevation-z5">
 	<MatTableHeader>
@@ -11,11 +23,11 @@
 		<th>Actions</th>
 	</MatTableHeader>
 	<MatTableRow>
-		<td width="10%">@context.Name</td>
-		<td width="20%">@context.StartDate.ToString("d")</td>
-		<td width="20%">@context.EndDate.ToString("d")</td>
-		<td width="35%">@context.Community.Name</td>
-		<td width="10%">
+		<td>@context.Name</td>
+		<td>@context.StartDate.ToString("d")</td>
+		<td>@context.EndDate.ToString("d")</td>
+		<td>@context.Community.Name</td>
+		<td>
 			@if (!string.IsNullOrEmpty(context.BuyTicket))
 			{
 				<MatIconButton Link="@context.BuyTicket" Target="_blank">
