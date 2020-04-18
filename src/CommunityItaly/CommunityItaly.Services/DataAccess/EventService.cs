@@ -20,13 +20,14 @@ namespace CommunityItaly.Services
 
 		public async Task<string> CreateAsync(EventViewModel eventVM)
 		{
-			Event currentEvent = new Event(eventVM.Name, eventVM.StartDate, eventVM.EndDate);
+			Event currentEvent = new Event(eventVM.Id, eventVM.Name, eventVM.StartDate, eventVM.EndDate);
 			currentEvent.SetLogo(eventVM.Logo);
-			currentEvent.SetBuyTicket(eventVM.BuyTicket);
+			if(!string.IsNullOrEmpty(eventVM.BuyTicket))
+				currentEvent.SetBuyTicket(new Uri(eventVM.BuyTicket));
 
 			if(eventVM.CFP != null)
 			{
-				currentEvent.SetCallForSpeaker(new CallForSpeaker(eventVM.CFP.Url, eventVM.CFP.StartDate, eventVM.CFP.EndDate));
+				currentEvent.SetCallForSpeaker(new CallForSpeaker(new Uri(eventVM.CFP.Url), eventVM.CFP.StartDate, eventVM.CFP.EndDate));
 			}
 			if (!string.IsNullOrEmpty(eventVM.CommunityName))
 			{
@@ -94,7 +95,7 @@ namespace CommunityItaly.Services
 					BuyTicket = currentEvent.BuyTicket?.ToString(),
 					CFP = currentEvent.CFP == null ? null : new CallForSpeakerViewModel
 					{
-						Url = currentEvent.CFP.Url,
+						Url = currentEvent.CFP.Url.ToString(),
 						StartDate = currentEvent.CFP.StartDate,
 						EndDate = currentEvent.CFP.EndDate
 					},
@@ -142,7 +143,7 @@ namespace CommunityItaly.Services
 					BuyTicket = currentEvent.BuyTicket.ToString(),
 					CFP = currentEvent.CFP == null ? null : new CallForSpeakerViewModel
 					{
-						Url = currentEvent.CFP.Url,
+						Url = currentEvent.CFP.Url.ToString(),
 						StartDate = currentEvent.CFP.StartDate,
 						EndDate = currentEvent.CFP.EndDate
 					},
@@ -178,7 +179,7 @@ namespace CommunityItaly.Services
 				BuyTicket = currentEvent.BuyTicket.ToString(),
 				CFP = new CallForSpeakerViewModel
 				{
-					Url = currentEvent.CFP.Url,
+					Url = currentEvent.CFP.Url.ToString(),
 					StartDate = currentEvent.CFP.StartDate,
 					EndDate = currentEvent.CFP.EndDate
 				}
@@ -196,16 +197,17 @@ namespace CommunityItaly.Services
 			return eventVM;
 		}
 
-		public async Task UpdateAsync(EventUpdateViewModel eventVM)
+		public async Task UpdateAsync(EventViewModel eventVM)
 		{
 			var currentEvent = await db.Events.FindAsync(eventVM.Id).ConfigureAwait(false);
-			currentEvent.SetBuyTicket(eventVM.BuyTicket);
+			if(!string.IsNullOrEmpty(eventVM.BuyTicket))
+				currentEvent.SetBuyTicket(new Uri(eventVM.BuyTicket));
 			currentEvent.SetConfirmation(eventVM.Confirmed);
 			//TODO: Update date and name
 
 			if (eventVM.CFP != null)
 			{
-				currentEvent.SetCallForSpeaker(new CallForSpeaker(eventVM.CFP.Url, eventVM.CFP.StartDate, eventVM.CFP.EndDate));
+				currentEvent.SetCallForSpeaker(new CallForSpeaker(new Uri(eventVM.CFP.Url), eventVM.CFP.StartDate, eventVM.CFP.EndDate));
 			}
 			if (!string.IsNullOrEmpty(eventVM.CommunityName))
 			{

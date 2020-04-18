@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using CommunityItaly.Web.Services;
 using CommunityItaly.Web.Stores;
+using MatBlazor;
 
 namespace CommunityItaly.Web
 {
@@ -18,7 +19,15 @@ namespace CommunityItaly.Web
 
 			builder.Services.AddBaseAddressHttpClient();
 			builder.Services.AddTransient<IHttpServices, HttpServices>();
-			builder.Services.AddSingleton<ICommunityItalyStore, CommunityItalyStore>();
+			builder.Services.AddMatToaster(config =>
+			{
+				config.Position = MatToastPosition.BottomRight;
+				config.PreventDuplicates = true;
+				config.NewestOnTop = true;
+				config.ShowCloseButton = true;
+				config.MaximumOpacity = 95;
+				config.VisibleStateDuration = 3000;
+			});
 
 			await builder.Build().RunAsync();
 		}

@@ -42,7 +42,7 @@ namespace CommunityItaly.EF.Migration
                 community.AddManager(andreaTosato);
                 community.AddManager(marcoZamana);
 
-                var globalAzure = new Event("Global Azure",
+                var globalAzure = new Event(Guid.NewGuid().ToString("N"), "Global Azure",
                     new DateTime(2020, 04, 24, 9, 0, 0),
                     new DateTime(2020, 04, 24, 18, 0, 0));
                 globalAzure.AddCommunity(community.ToOwned());

@@ -1,18 +1,12 @@
-﻿using CommunityItaly.Shared.ViewModels;
-using MatBlazor;
-using Microsoft.CodeAnalysis.Operations;
+﻿using MatBlazor;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CommunityItaly.Web.Stores
 {
-	public class CommunityItalyStore : ICommunityItalyStore
-	{
-		public EventViewModelReadOnly EventEdit { get; set; }
-		public FileUploadEntry EventImage { get; set; } 
-	}
-
 	public class FileUploadEntry
 	{
 		public DateTime LastModified { get; set; }

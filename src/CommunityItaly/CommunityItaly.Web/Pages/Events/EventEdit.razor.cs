@@ -12,8 +12,6 @@ namespace CommunityItaly.Web.Pages.Events
 {
 	public partial class EventEdit : ComponentBase
 	{
-		[Inject]
-		public ICommunityItalyStore Store { get; set; }
 
 		[Inject]
 		private IHttpServices Http { get; set; }
@@ -26,13 +24,13 @@ namespace CommunityItaly.Web.Pages.Events
 		protected override async Task OnInitializedAsync()
 		{
 			await base.OnInitializedAsync();
-			EventViewModel = Store.EventEdit;
-			Store.EventImage = null;
+			EventViewModel = AppStore.EventEdit;
+			AppStore.EventImage = null;
 		}
 
 		async Task Success()
 		{
-			var e = new EventUpdateViewModel
+			var e = new EventViewModel
 			{
 				Id = EventViewModel.Id,
 				StartDate = EventViewModel.StartDate,
@@ -43,19 +41,19 @@ namespace CommunityItaly.Web.Pages.Events
 			};
 			if (!string.IsNullOrEmpty(EventViewModel.BuyTicket))
 			{
-				e.BuyTicket = new Uri(EventViewModel.BuyTicket);
+				e.BuyTicket = EventViewModel.BuyTicket;
 			}
 			await Http.UpdateEvent(e).ConfigureAwait(false);
-			if(Store.EventImage != null)
+			if(AppStore.EventImage != null)
 			{
-				await Http.UploadEventImage(e.Id, Store.EventImage).ConfigureAwait(false);
+				await Http.UploadEventImage(e.Id, AppStore.EventImage).ConfigureAwait(false);
 			}
 		}
 
 		async Task FilesReady(IMatFileUploadEntry[] files)
 		{
 			var image = files.FirstOrDefault();
-			Store.EventImage = await new FileUploadEntry().FromMat(image).ConfigureAwait(false);
+			AppStore.EventImage = await new FileUploadEntry().FromMat(image).ConfigureAwait(false);
 		}
 	}
 }

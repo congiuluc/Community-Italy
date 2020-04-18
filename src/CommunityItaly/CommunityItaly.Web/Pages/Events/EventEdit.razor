@@ -27,26 +27,34 @@
 				<MatFileUpload OnChange="@FilesReady" Label="Carica l'immagine dell'evento"></MatFileUpload>
 			</div>
 
-			@*@if (EventViewModel.CFP != null)
-			{
-				<div class="mat-elevation-z2">
-					<div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
-						<MatTextField Label="Call for speaker url" @bind-Value="EventViewModel.CFP.Url" />
+
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+				<div class="mat-layout-grid-inner mat-elevation-z2 mat-padding">
+					<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+						<MatSubtitle2>Call for speaker</MatSubtitle2>
 					</div>
-					<div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
-						<MatDatePicker Label="Start Date" @bind-Value="EventViewModel.CFP.StartDate" />
+					<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+						<MatTextField Label="Call for speaker url" @bind-Value="EventViewModel.CFP.Url" Icon="@MatIconNames.Share" IconTrailing="true" FullWidth="true" />
+					</div>
+					<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+						<MatDatePicker Label="Start Date" @bind-Value="EventViewModel.CFP.StartDate" FullWidth="true" />
 						<ValidationMessage For="@(() => EventViewModel.CFP.StartDate)" />
 					</div>
-					<div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
-						<MatDatePicker Label="End Date" @bind-Value="EventViewModel.CFP.EndDate" />
+					<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+						<MatDatePicker Label="End Date" @bind-Value="EventViewModel.CFP.EndDate" FullWidth="true" />
 						<ValidationMessage For="@(() => EventViewModel.CFP.EndDate)" />
 					</div>
 				</div>
-			}*@
+			</div>
 
-			<div class="mat-elevation-z2">
-				<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
-					<CommunitySelect @bind-CommunitySelected=EventViewModel.Community></CommunitySelect>
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+				<div class="mat-layout-grid-inner mat-elevation-z2 mat-padding">
+					<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+						<MatSubtitle2>Community</MatSubtitle2>
+					</div>
+					<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+						<CommunitySelect @bind-CommunitySelected=EventViewModel.Community.ShortName></CommunitySelect>
+					</div>
 				</div>
 			</div>
 

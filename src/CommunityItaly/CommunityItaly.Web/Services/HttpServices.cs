@@ -35,9 +35,14 @@ namespace CommunityItaly.Web.Services
 			return await Http.GetFromJsonAsync<PagedViewModel<EventViewModelReadOnly>>($"Event?take={take}&skip={skip}").ConfigureAwait(false);
 		}
 
-		public async Task<HttpResponseMessage> UpdateEvent(EventUpdateViewModel vm)
+		public async Task<HttpResponseMessage> UpdateEvent(EventViewModel vm)
 		{
 			return await Http.PutAsJsonAsync($"Event", vm, JsonOption).ConfigureAwait(false);
+		}
+
+		public async Task<HttpResponseMessage> CreateEvent(EventViewModel vm)
+		{
+			return await Http.PostAsJsonAsync($"Event", vm, JsonOption).ConfigureAwait(false);
 		}
 
 		public async Task<HttpResponseMessage> UploadEventImage(string id, FileUploadEntry fileToUpload)

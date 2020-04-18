@@ -4,9 +4,9 @@ namespace CommunityItaly.EF.Entities
 {
     public class Event
     {
-        public Event(string name, DateTime startDate, DateTime endDate)
+        public Event(string id, string name, DateTime startDate, DateTime endDate)
         {
-            Id = Guid.NewGuid().ToString("N");
+            Id = id;
             Name = name;
             StartDate = startDate;
             EndDate = endDate;

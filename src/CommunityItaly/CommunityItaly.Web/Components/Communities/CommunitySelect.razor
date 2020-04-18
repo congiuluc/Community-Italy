@@ -1,9 +1,7 @@
-﻿<MatSelectValue @bind-Value="@CommunitySelected" Items="@CommunitiesToSelect" ValueSelector="@(i=>i)"
-				TValue="CommunityUpdateViewModel" TItem="CommunityUpdateViewModel" 
+﻿<MatSelectValue Items="@CommunitiesToSelect" TValue="string" TItem="CommunityUpdateViewModel" 
+				ValueChanged="CommunitySelectedChanged" ValueExpression="@(() => CommunitySelected)" ValueSelector="@(i=>i.ShortName)"
 				HelperTextPersistent="false" Label="Seleziona la community">
 	<ItemTemplate>
 		<span>@context.Name</span>
 	</ItemTemplate>
 </MatSelectValue>
-@*<ValidationMessage For="@(() => CommunitySelected)" />*@
-

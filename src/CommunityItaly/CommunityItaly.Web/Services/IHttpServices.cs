@@ -13,7 +13,8 @@ namespace CommunityItaly.Web.Services
 	{
 		#region [Events]
 		Task<PagedViewModel<EventViewModelReadOnly>> GetEvents(int take, int skip);
-		Task<HttpResponseMessage> UpdateEvent(EventUpdateViewModel vm);
+		Task<HttpResponseMessage> CreateEvent(EventViewModel vm);
+		Task<HttpResponseMessage> UpdateEvent(EventViewModel vm);
 		Task DeleteEvents(string id);
 		Task<HttpResponseMessage> UploadEventImage(string id, FileUploadEntry fileToUpload);
 		#endregion

@@ -13,7 +13,7 @@ namespace CommunityItaly.Server.Utilities
     }
 
     public class ActivateEventSendMail : 
-        ActivateSendMail<EventUpdateViewModel>
+        ActivateSendMail<EventViewModel>
     {
     }
 

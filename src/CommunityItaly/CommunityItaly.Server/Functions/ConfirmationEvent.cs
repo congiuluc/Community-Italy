@@ -21,12 +21,12 @@ namespace CommunityItaly.Server.Functions
 {
     public class ConfirmationEvent
     {
-        private readonly IArticleService eventService;
+        private readonly IEventService eventService;
         private readonly ICommunityService communityService;
         private readonly SendGridConnections sendGridSettings;
         private readonly AdminConfiguration adminSettings;
 
-        public ConfirmationEvent(IArticleService eventService, 
+        public ConfirmationEvent(IEventService eventService, 
             ICommunityService communityService,
             IOptions<SendGridConnections> sendGridSettings,
             IOptions<AdminConfiguration> adminSettings)
@@ -50,8 +50,8 @@ namespace CommunityItaly.Server.Functions
                 log.LogError($"Invalid form data");
                 return eventValidateRequest.ToBadRequest();
             }
-
-            string instanceId = await starter.StartNewAsync(ConfirmationTask.ConfirmOrchestratorEvent, null, eventValidateRequest.Value);
+            EventViewModel vm = eventValidateRequest.Value;
+            string instanceId = await starter.StartNewAsync(ConfirmationTask.ConfirmOrchestratorEvent, null, vm);
             return starter.CreateCheckStatusResponse(req, instanceId);
         }
         #endregion
@@ -63,20 +63,17 @@ namespace CommunityItaly.Server.Functions
         {
             var vm = context.GetInput<EventViewModel>();
             string id = await context.CallActivityAsync<string>(ConfirmationTask.CreateEvent, vm);
-
-            var vmUpdate = EventUpdateViewModel.Create(vm);
-            vmUpdate.Id = id;
-            var activateSendMail = new ActivateEventSendMail { Data = vmUpdate, InstanceId = context.InstanceId };
+            var activateSendMail = new ActivateEventSendMail { Data = vm, InstanceId = context.InstanceId };
             await context.CallActivityAsync(ConfirmationTask.SendMailEvent, activateSendMail);
 
-            await HumanInteractionEvent(context, vmUpdate);
+            await HumanInteractionEvent(context, vm);
             return id;
         }
 		#endregion
 
 		#region [EventToOrchestrate]
 		[FunctionName(ConfirmationTask.CreateEvent)]
-        public async Task<string> CreateEvent([ActivityTrigger] ArticleViewModel eventData, ILogger log)
+        public async Task<string> CreateEvent([ActivityTrigger] EventViewModel eventData, ILogger log)
         {
             string result = await eventService.CreateAsync(eventData);
             return result;
@@ -101,7 +98,7 @@ namespace CommunityItaly.Server.Functions
                 eventstartdate = eventData.StartDate,
                 eventenddate = eventData.EndDate,
                 eventbuyticket = eventData.BuyTicket.ToString(),
-                eventcfpurl = eventData.CFP.Url.ToString(),
+                eventcfpurl = eventData.CFP.Url,
                 eventcfpstartdate = eventData.CFP.StartDate,
                 eventcfpstartend = eventData.CFP.EndDate,
                 eventcommunityname = eventData.CommunityName
@@ -110,7 +107,7 @@ namespace CommunityItaly.Server.Functions
         }
 
         [FunctionName(ConfirmationTask.ApproveCancelEventOnCosmos)]
-        public async Task ApproveCancelEventOnCosmos([ActivityTrigger] ArticleUpdateViewModel vm, ILogger log)
+        public async Task ApproveCancelEventOnCosmos([ActivityTrigger] EventViewModel vm, ILogger log)
         {
             await eventService.UpdateAsync(vm).ConfigureAwait(false);
         }
@@ -135,7 +132,7 @@ namespace CommunityItaly.Server.Functions
         #endregion
 
         #region [WaitHumanInteraction]
-        public async Task<bool> HumanInteractionEvent(IDurableOrchestrationContext context, EventUpdateViewModel vm)
+        public async Task<bool> HumanInteractionEvent(IDurableOrchestrationContext context, EventViewModel vm)
         {
             using (var timeoutCts = new CancellationTokenSource())
             {

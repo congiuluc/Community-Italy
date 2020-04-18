@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using CommunityItaly.Services;
 using CommunityItaly.Services.Validations;
 using CommunityItaly.EF.Entities;
+using System;
 
 namespace CommunityItaly.Server
 {
@@ -88,5 +89,19 @@ namespace CommunityItaly.Server
 
             return new OkObjectResult(result);
         }
+
+        /*
+        [FunctionName("EventReportDetail")]
+        public async Task<IActionResult> GetEvetReportDetail(
+           [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.GET, Route = "EventReportDetail")] HttpRequest req)
+        {
+            DateTime startDate = Convert.ToDateTime(req.Query["from"].ToString());
+            DateTime endDate = Convert.ToDateTime(req.Query["to"].ToString());
+
+            var result = await eventServices.GetConfirmedAsync(take, skip);
+
+            return new OkObjectResult(result);
+        }
+        */
     }
 }

@@ -12,8 +12,6 @@ namespace CommunityItaly.Web.Pages.Events
 	public partial class EventList : ComponentBase
 	{
 		[Inject]
-		private ICommunityItalyStore Store { get; set; }
-		[Inject]
 		private IHttpServices Http { get; set; }
 		[Inject]
 		private NavigationManager NavigationManager { get; set; }
@@ -37,8 +35,8 @@ namespace CommunityItaly.Web.Pages.Events
 
 		void Edit(EventViewModelReadOnly args)
 		{
-			Store.EventEdit = args;
-			NavigationManager.NavigateTo(Routes.EventEdit(Store.EventEdit.Id));
+			AppStore.EventEdit = args;
+			NavigationManager.NavigateTo(Routes.EventEdit(AppStore.EventEdit.Id));
 		}
 
 		async Task Delete(string id)

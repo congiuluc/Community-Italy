@@ -1,0 +1,59 @@
+﻿@page "/reports"
+<h3>Reports</h3>
+
+<EditForm Model="Search" OnValidSubmit="SearchEvents">
+	<div class="mat-layout-grid">
+		<div class="mat-layout-grid-inner">
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+				<MatDatePicker Label="Start Date" @bind-Value="Search.StartDate" FullWidth="true" />
+			</div>
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+				<MatDatePicker Label="End Date" @bind-Value="Search.EndDate" FullWidth="true" />
+			</div>
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-4" style="text-align: right">
+				<MatButton Icon="@MatIconNames.Search" Raised="true" Type="submit">Ricerca</MatButton>
+			</div>
+		</div>
+	</div>
+</EditForm>
+
+@foreach (var community in ReportLists)
+{
+	<MatCard class="demo-mat-card">
+		<MatCardContent>
+			<MatCardMedia Wide="true" ImageUrl="@LinkViewModel.GetImageMedium(community.Logo).ToString()"></MatCardMedia>
+			<div class="demo-mat-card-content">
+				<MatHeadline6 class="demo-mat-card-clean-margin">
+					@community.Name
+				</MatHeadline6>
+			</div>
+
+		</MatCardContent>
+		<MatCardActions>
+			@foreach (var manager in community.Managers)
+			{
+				<MatButton OnClick="@(() => OpenManagers(manager))" Icon="@MatIconNames.Person_pin" Label="@manager.Name"></MatButton>
+			}
+			<MatButton Link="@community.WebSite.ToString()" Disabled="@(community.WebSite == null)">WebSite</MatButton>
+		</MatCardActions>
+	</MatCard>
+}
+
+@if (ManagerIsOpen)
+{
+	<CommunityItaly.Web.Components.People.PersonModal IsOpen="ManagerIsOpen" PersonData="ManagerSelected"></CommunityItaly.Web.Components.People.PersonModal>
+}
+
+<style>
+	.demo-mat-card {
+		max-width: 400px;
+	}
+
+	.demo-mat-card-content {
+		padding: 1rem;
+	}
+
+	.demo-mat-card-clean-margin {
+		margin: 0px;
+	}
+</style>

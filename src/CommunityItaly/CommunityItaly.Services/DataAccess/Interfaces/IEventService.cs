@@ -12,7 +12,7 @@ namespace CommunityItaly.Services
 		Task<ICollection<EventViewModelReadOnly>> GetConfirmedIntervalledAsync(DateTimeOffset start, DateTimeOffset end);
 		Task<EventViewModelReadOnly> GetById(string id);
 		Task<string> CreateAsync(EventViewModel eventVM);
-		Task UpdateAsync(EventUpdateViewModel eventVM);
+		Task UpdateAsync(EventViewModel eventVM);
 		Task UpdateLogoAsync(string id, Uri logo);
 		Task DeleteAsync(string id);
 		Task<bool> ExistsAsync(string id);

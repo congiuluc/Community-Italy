@@ -29,7 +29,7 @@ namespace CommunityItaly.Services.Validations
 		}
 	}
 
-	public class EventUpdateValidator : AbstractValidator<EventUpdateViewModel>
+	public class EventUpdateValidator : AbstractValidator<EventViewModel>
 	{
 		public EventUpdateValidator(ICommunityService communityService, IEventService eventService)
 		{
