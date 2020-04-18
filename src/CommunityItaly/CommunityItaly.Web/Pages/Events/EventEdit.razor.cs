@@ -4,8 +4,7 @@ using CommunityItaly.Web.Stores;
 using MatBlazor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using System.Collections.Generic;
-using System.IO;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,9 +37,14 @@ namespace CommunityItaly.Web.Pages.Events
 				Id = EventViewModel.Id,
 				StartDate = EventViewModel.StartDate,
 				EndDate = EventViewModel.EndDate,
+				CFP = EventViewModel.CFP,
 				CommunityName = EventViewModel.Community.ShortName,
 				Name = EventViewModel.Name
 			};
+			if (!string.IsNullOrEmpty(EventViewModel.BuyTicket))
+			{
+				e.BuyTicket = new Uri(EventViewModel.BuyTicket);
+			}
 			await Http.UpdateEvent(e).ConfigureAwait(false);
 
 			// TODO: Upload Image

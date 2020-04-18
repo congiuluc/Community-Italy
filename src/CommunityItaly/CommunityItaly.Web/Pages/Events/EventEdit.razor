@@ -6,30 +6,54 @@
 	<ValidationSummary />
 	<div class="mat-layout-grid">
 		<div class="mat-layout-grid-inner">
-			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
-				<MatTextField Label="Name" @bind-Value="EventViewModel.Name" />
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+				<MatTextField Label="Nome evento" @bind-Value="EventViewModel.Name" FullWidth="true" />
 				<ValidationMessage For="@(() => EventViewModel.Name)" />
 			</div>
 			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
-				<MatDatePicker Label="Start Date" @bind-Value="EventViewModel.StartDate" />
+				<MatTextField Label="Acquista biglietto" Icon="@MatIconNames.Event_seat" @bind-Value="EventViewModel.BuyTicket" FullWidth="true" />
+				<ValidationMessage For="@(() => EventViewModel.BuyTicket)" />
+			</div>
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+				<MatDatePicker Label="Start Date" @bind-Value="EventViewModel.StartDate" FullWidth="true" />
 				<ValidationMessage For="@(() => EventViewModel.StartDate)" />
 			</div>
 			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
-				<MatDatePicker Label="End Date" @bind-Value="EventViewModel.EndDate" />
+				<MatDatePicker Label="End Date" @bind-Value="EventViewModel.EndDate" FullWidth="true" />
 				<ValidationMessage For="@(() => EventViewModel.EndDate)" />
 			</div>
-
+			
 			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
-				<MatFileUpload OnChange="@FilesReady"></MatFileUpload>
+				<MatFileUpload OnChange="@FilesReady" Label="Carica l'immagine dell'evento"></MatFileUpload>
 			</div>
 
-			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
-				<CommunitySelect @bind-CommunitySelected=EventViewModel.Community></CommunitySelect>
-			</div>
+			@*<div class="mat-elevation-z2">
+				<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+					<span>Call for speakers</span>
+				</div>				
+				<MatDivider></MatDivider>
+				<div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+					<MatTextField Label="Name" @bind-Value="EventViewModel.CFP.Url" />
+				</div>
+				<div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+					<MatDatePicker Label="Start Date" @bind-Value="EventViewModel.CFP.StartDate" />
+					<ValidationMessage For="@(() => EventViewModel.CFP.StartDate)" />
+				</div>
+				<div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+					<MatDatePicker Label="End Date" @bind-Value="EventViewModel.CFP.EndDate" />
+					<ValidationMessage For="@(() => EventViewModel.CFP.EndDate)" />
+				</div>
+			</div>*@
 
-				<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12" style="text-align: center">
-					<MatButton Icon="@MatIconNames.Save" Raised="true" Type="submit">Save</MatButton>
+			<div class="mat-elevation-z2">
+				<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+					<CommunitySelect @bind-CommunitySelected=EventViewModel.Community></CommunitySelect>
 				</div>
 			</div>
+
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12" style="text-align: center">
+				<MatButton Icon="@MatIconNames.Save" Raised="true" Type="submit">Save</MatButton>
+			</div>
+		</div>
 	</div>
 </EditForm>

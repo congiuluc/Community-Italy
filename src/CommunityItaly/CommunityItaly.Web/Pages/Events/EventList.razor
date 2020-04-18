@@ -4,17 +4,17 @@
 <MatTable Items="@EventViewModels" Striped="true" ShowPaging="false" SortBy="StartDate" class="mat-elevation-z5">
 	<MatTableHeader>
 		<th width="20%">Name</th>
-		<th width="15%">Start Date</th>
-		<th width="15%">End Date</th>
-		<th width="40%">Community</th>
+		<th width="10%">Start Date</th>
+		<th width="10%">End Date</th>
+		<th width="35%">Community</th>
 		<th width="10%">Tickets</th>
-		<th width="10%"></th>
+		<th>Actions</th>
 	</MatTableHeader>
 	<MatTableRow>
 		<td width="10%">@context.Name</td>
 		<td width="20%">@context.StartDate.ToString("d")</td>
 		<td width="20%">@context.EndDate.ToString("d")</td>
-		<td width="40%">@context.Community.Name</td>
+		<td width="35%">@context.Community.Name</td>
 		<td width="10%">
 			@if (!string.IsNullOrEmpty(context.BuyTicket))
 			{
@@ -24,13 +24,15 @@
 			}
 		</td>
 		<td>
-			<MatIconButton OnClick="@(() => Edit(context))">
-				<MatIcon>@MatIconNames.Edit</MatIcon>
-			</MatIconButton>
+			<div style="display:block;">
+				<MatIconButton OnClick="@(() => Edit(context))">
+					<MatIcon>@MatIconNames.Edit</MatIcon>
+				</MatIconButton>
 
-			<MatIconButton OnClick="@(() => Delete(context.Id))">
-				<MatIcon>@MatIconNames.Delete</MatIcon>
-			</MatIconButton>
+				<MatIconButton OnClick="@(() => Delete(context.Id))">
+					<MatIcon>@MatIconNames.Delete</MatIcon>
+				</MatIconButton>
+			</div>
 		</td>
 	</MatTableRow>
 </MatTable>
