@@ -70,7 +70,7 @@ namespace CommunityItaly.Server.Functions
 
         private static readonly Dictionary<ImageSize, (int, int)> imageDimensionsTable = new Dictionary<ImageSize, (int, int)>() {
             { ImageSize.Small,  (32, 32) },
-            { ImageSize.Medium, (320, 320) }
+            { ImageSize.Medium, (400, 400) }
         };
     }
 }

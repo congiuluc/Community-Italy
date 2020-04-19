@@ -7,8 +7,10 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Reflection.Metadata;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace CommunityItaly.Web.Services
 {
@@ -50,6 +52,10 @@ namespace CommunityItaly.Web.Services
 			return await UploadImage(id, "EVENT", fileToUpload);
 		}
 
+		public async Task<List<EventViewModelReadOnly>> GetConfirmedIntervalledAsync(DateTime startDate, DateTime endDate)
+		{
+			return await Http.GetFromJsonAsync<List<EventViewModelReadOnly>>($"EventReportDetail?from={startDate}&to={endDate}");
+		}
 		public async Task DeleteEvents(string id)
 		{
 			await Http.DeleteAsync(new Uri($"/Event?Id={id}")).ConfigureAwait(false);

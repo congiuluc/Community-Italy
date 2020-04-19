@@ -13,28 +13,41 @@
 			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-4" style="text-align: right">
 				<MatButton Icon="@MatIconNames.Search" Raised="true" Type="submit">Ricerca</MatButton>
 			</div>
+
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-4" style="text-align: right">
+				<MatButton Icon="@MatIconNames.Import_export" Raised="true" OnClick="Export">Export</MatButton>
+			</div>
 		</div>
 	</div>
 </EditForm>
 
-@foreach (var community in ReportLists)
+@foreach (var e in ReportLists)
 {
 	<MatCard class="demo-mat-card">
 		<MatCardContent>
-			<MatCardMedia Wide="true" ImageUrl="@LinkViewModel.GetImageMedium(community.Logo).ToString()"></MatCardMedia>
+			<MatCardMedia Wide="true" ImageUrl="@LinkViewModel.GetImageMedium(e.Logo).ToString()"></MatCardMedia>
 			<div class="demo-mat-card-content">
 				<MatHeadline6 class="demo-mat-card-clean-margin">
-					@community.Name
+					@e.Name
 				</MatHeadline6>
+				<MatBody2>
+					<MatTooltip Tooltip="Acquista il biglietto" Wrap="true">
+						<MatButton Link="@e.BuyTicket" Icon="@MatIconNames.Event_seat"/>
+					</MatTooltip>
+					<span>@e.StartDate.ToShortDateString()</span> - <span>@e.EndDate.ToShortDateString()</span>
+				</MatBody2>
 			</div>
 
 		</MatCardContent>
 		<MatCardActions>
-			@foreach (var manager in community.Managers)
+			@if (e.Community.Managers != null)
 			{
-				<MatButton OnClick="@(() => OpenManagers(manager))" Icon="@MatIconNames.Person_pin" Label="@manager.Name"></MatButton>
+				@foreach (var manager in e.Community.Managers)
+				{
+					<MatButton OnClick="@(() => OpenManagers(manager))" Icon="@MatIconNames.Person_pin" Label="@manager.Name"></MatButton>
+				}
 			}
-			<MatButton Link="@community.WebSite.ToString()" Disabled="@(community.WebSite == null)">WebSite</MatButton>
+			<MatButton Link="@e.Community.WebSite.ToString()" Disabled="@(e.Community.WebSite == null)">WebSite</MatButton>
 		</MatCardActions>
 	</MatCard>
 }

@@ -90,7 +90,7 @@ namespace CommunityItaly.Server
             return new OkObjectResult(result);
         }
 
-        /*
+        
         [FunctionName("EventReportDetail")]
         public async Task<IActionResult> GetEvetReportDetail(
            [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.GET, Route = "EventReportDetail")] HttpRequest req)
@@ -98,10 +98,10 @@ namespace CommunityItaly.Server
             DateTime startDate = Convert.ToDateTime(req.Query["from"].ToString());
             DateTime endDate = Convert.ToDateTime(req.Query["to"].ToString());
 
-            var result = await eventServices.GetConfirmedAsync(take, skip);
+            var result = await eventServices.GetConfirmedIntervalledAsync(startDate, endDate);
 
             return new OkObjectResult(result);
         }
-        */
+        
     }
 }

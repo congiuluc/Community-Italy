@@ -15,7 +15,7 @@ namespace CommunityItaly.Web.Pages.Reports
 
 		public SearchReport Search { get; set; }
 
-		public List<CommunityUpdateViewModel> ReportLists { get; set; } = new List<CommunityUpdateViewModel>();
+		public List<EventViewModelReadOnly> ReportLists { get; set; } = new List<EventViewModelReadOnly>();
 
 		bool ManagerIsOpen { get; set; } = false;
 		PersonUpdateViewModel ManagerSelected { get; set; } = new PersonUpdateViewModel();
@@ -32,6 +32,11 @@ namespace CommunityItaly.Web.Pages.Reports
 		}
 
 		async Task SearchEvents()
+		{
+			ReportLists = await Http.GetConfirmedIntervalledAsync(Search.StartDate, Search.EndDate);
+		}
+
+		async Task Export()
 		{
 
 		}
