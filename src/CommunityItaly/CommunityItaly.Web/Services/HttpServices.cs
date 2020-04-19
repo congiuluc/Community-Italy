@@ -32,6 +32,11 @@ namespace CommunityItaly.Web.Services
 		}
 
 		#region [Event]
+		public async Task<PagedViewModel<EventViewModelReadOnly>> GetEventsConfirmed(int take, int skip)
+		{
+			return await Http.GetFromJsonAsync<PagedViewModel<EventViewModelReadOnly>>($"EventConfirmed?take={take}&skip={skip}").ConfigureAwait(false);
+		}
+
 		public async Task<PagedViewModel<EventViewModelReadOnly>> GetEvents(int take, int skip)
 		{
 			return await Http.GetFromJsonAsync<PagedViewModel<EventViewModelReadOnly>>($"Event?take={take}&skip={skip}").ConfigureAwait(false);
@@ -54,7 +59,7 @@ namespace CommunityItaly.Web.Services
 
 		public async Task<List<EventViewModelReadOnly>> GetReportConfirmedIntervalledAsync(DateTime startDate, DateTime endDate)
 		{
-			return await Http.GetFromJsonAsync<List<EventViewModelReadOnly>>($"EventReportDetail?from={startDate}&to={endDate}");
+			return await Http.GetFromJsonAsync<List<EventViewModelReadOnly>>($"EventReportDetail?from={startDate.ToString("yyyyMMddHHmmss")}&to={endDate.ToString("yyyyMMddHHmmss")}");
 		}
 		public async Task DeleteEvents(string id)
 		{
@@ -63,6 +68,16 @@ namespace CommunityItaly.Web.Services
 		#endregion
 
 		#region [Community]
+		public async Task<PagedViewModel<CommunityUpdateViewModel>> GetCommunitiesConfirmed(int take, int skip)
+		{
+			return await Http.GetFromJsonAsync<PagedViewModel<CommunityUpdateViewModel>>($"CommunityConfirmed?take={take}&skip={skip}").ConfigureAwait(false);
+		}
+
+		public async Task<PagedViewModel<CommunityUpdateViewModel>> GetCommunities(int take, int skip)
+		{
+			return await Http.GetFromJsonAsync<PagedViewModel<CommunityUpdateViewModel>>($"Community?take={take}&skip={skip}").ConfigureAwait(false);
+		}
+
 		public async Task<IEnumerable<CommunityUpdateViewModel>> GetCommunitySelect()
 		{
 			return await Http.GetFromJsonAsync<IEnumerable<CommunityUpdateViewModel>>("CommunitySelect").ConfigureAwait(false);
@@ -71,6 +86,10 @@ namespace CommunityItaly.Web.Services
 		public async Task<HttpResponseMessage> UploadCommunityImage(string id, FileUploadEntry fileToUpload)
 		{
 			return await UploadImage(id, "COMMUNITY", fileToUpload);
+		}
+		public async Task DeleteCommunities(string shortName)
+		{
+			await Http.DeleteAsync(new Uri($"/Community?Id={shortName}")).ConfigureAwait(false);
 		}
 		#endregion
 

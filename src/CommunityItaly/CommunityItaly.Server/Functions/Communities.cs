@@ -24,7 +24,7 @@ namespace CommunityItaly.Server.Functions
 
         [FunctionName("CommunityGet")]
         public async Task<IActionResult> Get(
-            [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.GET, Route = "Community")] HttpRequest req)
+            [HttpTrigger(AuthorizationLevel.Anonymous, HttpVerbs.GET, Route = "Community")] HttpRequest req)
         {
             int take = 10, skip = 0;
             _ = int.TryParse(req.Query["take"].ToString(), out take);
@@ -37,7 +37,7 @@ namespace CommunityItaly.Server.Functions
 
         [FunctionName("CommunityGetById")]
         public async Task<IActionResult> GetById(
-           [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.GET, Route = "Community/{id}")] HttpRequest req,
+           [HttpTrigger(AuthorizationLevel.Anonymous, HttpVerbs.GET, Route = "Community/{id}")] HttpRequest req,
            string id,
            ILogger log)
         {
@@ -47,7 +47,7 @@ namespace CommunityItaly.Server.Functions
 
         [FunctionName("CommunityPut")]
         public async Task<IActionResult> Put(
-          [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.PUT, Route = "Community")] HttpRequest req,
+          [HttpTrigger(AuthorizationLevel.Anonymous, HttpVerbs.PUT, Route = "Community")] HttpRequest req,
           ILogger log)
         {
             var communityValidateRequest = await req.GetJsonBodyWithValidator(new CommunityUpdateValidator(communityService));
@@ -64,7 +64,7 @@ namespace CommunityItaly.Server.Functions
 
         [FunctionName("CommunityDelete")]
         public async Task<IActionResult> Delete(
-          [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.DELETE, Route = "Community")] HttpRequest req,
+          [HttpTrigger(AuthorizationLevel.Anonymous, HttpVerbs.DELETE, Route = "Community")] HttpRequest req,
           ILogger log)
         {
             await communityService.DeleteAsync(req.Query["Id"].ToString());
@@ -74,7 +74,7 @@ namespace CommunityItaly.Server.Functions
 
         [FunctionName("CommunityConfirmedGet")]
         public async Task<IActionResult> GetConfirmed(
-           [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.GET, Route = "CommunityConfirmed")] HttpRequest req)
+           [HttpTrigger(AuthorizationLevel.Anonymous, HttpVerbs.GET, Route = "CommunityConfirmed")] HttpRequest req)
         {
             int take = 10, skip = 0;
             _ = int.TryParse(req.Query["take"].ToString(), out take);
@@ -87,7 +87,7 @@ namespace CommunityItaly.Server.Functions
 
         [FunctionName("CommunitySelectGet")]
         public async Task<IActionResult> GetSelect(
-          [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.GET, Route = "CommunitySelect")] HttpRequest req)
+          [HttpTrigger(AuthorizationLevel.Anonymous, HttpVerbs.GET, Route = "CommunitySelect")] HttpRequest req)
         {
             var result = await communityService.GetSelectAsync();
 

@@ -46,14 +46,14 @@
 					<MatButton OnClick="@(() => OpenManagers(manager))" Icon="@MatIconNames.Person_pin" Label="@manager.Name"></MatButton>
 				}
 			}
-			<MatButton Link="@e.Community.WebSite.ToString()" Disabled="@(e.Community.WebSite == null)">WebSite</MatButton>
+			<MatButton Link="@e.Community.WebSite.ToString()" Disabled="@(e.Community.WebSite == null)" Icon="@MatIconNames.Web">Community</MatButton>
 		</MatCardActions>
 	</MatCard>
 }
 
 @if (ManagerIsOpen)
 {
-	<CommunityItaly.Web.Components.People.PersonModal IsOpen="ManagerIsOpen" PersonData="ManagerSelected"></CommunityItaly.Web.Components.People.PersonModal>
+	<CommunityItaly.Web.Components.People.PersonModal IsOpen="ManagerIsOpen" PersonData="ManagerSelected" OnConfirm="ManagerOnConfirm"></CommunityItaly.Web.Components.People.PersonModal>
 }
 
 <style>

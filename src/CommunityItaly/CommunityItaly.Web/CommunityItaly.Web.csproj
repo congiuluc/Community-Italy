@@ -16,4 +16,8 @@
   <ItemGroup>
     <ProjectReference Include="..\CommunityItaly.Shared\CommunityItaly.Shared.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\default\" />
+  </ItemGroup>
 </Project>

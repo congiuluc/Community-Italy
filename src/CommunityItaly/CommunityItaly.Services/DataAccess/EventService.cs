@@ -134,6 +134,7 @@ namespace CommunityItaly.Services
 				.ConfigureAwait(false);
 
 			var result = resultList
+				.Where(x => x.StartDate >= start && x.StartDate < end)
 				.Select(currentEvent => new EventViewModelReadOnly
 				{
 					Name = currentEvent.Name,

@@ -2,6 +2,7 @@
 using CommunityItaly.Web.Services;
 using CommunityItaly.Web.Stores;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,7 +18,6 @@ namespace CommunityItaly.Web.Pages.Reports
 		public SearchReport Search { get; set; }
 
 		public List<EventViewModelReadOnly> ReportLists { get; set; } = new List<EventViewModelReadOnly>();
-
 		bool ManagerIsOpen { get; set; } = false;
 		PersonUpdateViewModel ManagerSelected { get; set; } = new PersonUpdateViewModel();
 
@@ -61,6 +61,12 @@ namespace CommunityItaly.Web.Pages.Reports
 		{
 			ManagerSelected = person;
 			ManagerIsOpen = true;
+		}
+
+		void ManagerOnConfirm(bool isOpen)
+		{
+			ManagerIsOpen = isOpen;
+			ManagerSelected = new PersonUpdateViewModel();
 		}
 	}
 

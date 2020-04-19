@@ -29,7 +29,7 @@ namespace CommunityItaly.Server.Functions
 
         [FunctionName("UploadImage")]
         public async Task<IActionResult> PostImage(
-           [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.POST, Route = "UploadImage")] HttpRequestMessage req,
+           [HttpTrigger(AuthorizationLevel.Anonymous, HttpVerbs.POST, Route = "UploadImage")] HttpRequestMessage req,
            ILogger log)
         {
             var provider = new MultipartMemoryStreamProvider();

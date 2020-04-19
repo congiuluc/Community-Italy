@@ -1,6 +1,42 @@
 ﻿@page "/communities"
 <h3>Communities</h3>
 
-@code {
 
-}
+<div class="mat-layout-grid">
+	<div class="mat-layout-grid-inner">
+		<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+			<MatH6>Lista Community</MatH6>
+		</div>
+		<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6" style="text-align:right;">
+			<MatButton OnClick="Create" Label="Crea evento" Icon="@MatIconNames.Create"></MatButton>
+		</div>
+	</div>
+</div>
+
+<MatTable Items="@CommunityViewModels" Striped="true" ShowPaging="false" SortBy="StartDate" class="mat-elevation-z5">
+	<MatTableHeader>
+		<th width="20%">Name</th>
+		<th width="10%">WebSite</th>
+		<th width="10%">Managers</th>
+		<th>Actions</th>
+	</MatTableHeader>
+	<MatTableRow>
+		<td>@context.Name</td>
+		<td><MatButton Link="@context.WebSite.ToString()" Icon="@MatIconNames.Web"></MatButton></td>
+		<td>@context.Managers?.Count()</td>
+		<td>
+			<div style="display:block;">
+				<MatIconButton OnClick="@(() => Edit(context))">
+					<MatIcon>@MatIconNames.Edit</MatIcon>
+				</MatIconButton>
+
+				<MatIconButton OnClick="@(() => Delete(context.ShortName))">
+					<MatIcon>@MatIconNames.Delete</MatIcon>
+				</MatIconButton>
+			</div>
+		</td>
+	</MatTableRow>
+</MatTable>
+<div>
+	<MatPaginator Length="@Total" PageSize="@PageSize" Page="@OnPage"></MatPaginator>
+</div>

@@ -29,7 +29,7 @@ namespace CommunityItaly.Server
 
         [FunctionName("EventGet")]
         public async Task<IActionResult> Get(
-            [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.GET, Route = "Event")] HttpRequest req)
+            [HttpTrigger(AuthorizationLevel.Anonymous, HttpVerbs.GET, Route = "Event")] HttpRequest req)
         {
             int take = 10, skip = 0;
             _ = int.TryParse(req.Query["take"].ToString(), out take);
@@ -42,7 +42,7 @@ namespace CommunityItaly.Server
 
         [FunctionName("EventGetById")]
         public async Task<IActionResult> GetById(
-           [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.GET, Route = "Event/{id}")] HttpRequest req,
+           [HttpTrigger(AuthorizationLevel.Anonymous, HttpVerbs.GET, Route = "Event/{id}")] HttpRequest req,
            string id,
            ILogger log)
         {
@@ -52,7 +52,7 @@ namespace CommunityItaly.Server
 
         [FunctionName("EventPut")]
         public async Task<IActionResult> Put(
-          [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.PUT, Route = "Event")] HttpRequest req,
+          [HttpTrigger(AuthorizationLevel.Anonymous, HttpVerbs.PUT, Route = "Event")] HttpRequest req,
           ILogger log)
         {
             var eventValidateRequest = await req.GetJsonBodyWithValidator(new EventUpdateValidator(communityService, eventServices));
@@ -69,7 +69,7 @@ namespace CommunityItaly.Server
 
         [FunctionName("EventDelete")]
         public async Task<IActionResult> Delete(
-          [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.DELETE, Route = "Event")] HttpRequest req,
+          [HttpTrigger(AuthorizationLevel.Anonymous, HttpVerbs.DELETE, Route = "Event")] HttpRequest req,
           ILogger log)
         {
             await eventServices.DeleteAsync(req.Query["Id"].ToString());
@@ -79,7 +79,7 @@ namespace CommunityItaly.Server
 
         [FunctionName("EventConfirmedGet")]
         public async Task<IActionResult> GetConfirmed(
-           [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.GET, Route = "EventConfirmed")] HttpRequest req)
+           [HttpTrigger(AuthorizationLevel.Anonymous, HttpVerbs.GET, Route = "EventConfirmed")] HttpRequest req)
         {
             int take = 10, skip = 0;
             _ = int.TryParse(req.Query["take"].ToString(), out take);
@@ -93,10 +93,10 @@ namespace CommunityItaly.Server
         
         [FunctionName("EventReportDetail")]
         public async Task<IActionResult> GetEvetReportDetail(
-           [HttpTrigger(AuthorizationLevel.Function, HttpVerbs.GET, Route = "EventReportDetail")] HttpRequest req)
+           [HttpTrigger(AuthorizationLevel.Anonymous, HttpVerbs.GET, Route = "EventReportDetail")] HttpRequest req)
         {
-            DateTime startDate = Convert.ToDateTime(req.Query["from"].ToString());
-            DateTime endDate = Convert.ToDateTime(req.Query["to"].ToString());
+            DateTime startDate = DateTime.ParseExact(req.Query["from"].ToString(), "yyyyMMddHHmmss", System.Globalization.CultureInfo.InvariantCulture);
+            DateTime endDate = DateTime.ParseExact(req.Query["to"].ToString(), "yyyyMMddHHmmss", System.Globalization.CultureInfo.InvariantCulture);
 
             var result = await eventServices.GetConfirmedIntervalledAsync(startDate, endDate);
 

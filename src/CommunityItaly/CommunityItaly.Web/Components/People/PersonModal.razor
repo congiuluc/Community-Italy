@@ -12,6 +12,6 @@
 		</MatBody2>
 	</MatDialogContent>
 	<MatDialogActions>
-		<MatButton OnClick="@(e => { IsOpen = false; })">Ok</MatButton>
+		<MatButton OnClick="@(async (e) => await Confirm())">Ok</MatButton>
 	</MatDialogActions>
 </MatDialog>

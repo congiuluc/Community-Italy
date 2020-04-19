@@ -2,8 +2,6 @@
 using CommunityItaly.Web.Stores;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -12,6 +10,7 @@ namespace CommunityItaly.Web.Services
 	public interface IHttpServices
 	{
 		#region [Events]
+		Task<PagedViewModel<EventViewModelReadOnly>> GetEventsConfirmed(int take, int skip);
 		Task<PagedViewModel<EventViewModelReadOnly>> GetEvents(int take, int skip);
 		Task<HttpResponseMessage> CreateEvent(EventViewModel vm);
 		Task<HttpResponseMessage> UpdateEvent(EventViewModel vm);
@@ -20,8 +19,11 @@ namespace CommunityItaly.Web.Services
 		Task<List<EventViewModelReadOnly>> GetReportConfirmedIntervalledAsync(DateTime startDate, DateTime endDate);
 		#endregion
 		#region [Community]
+		Task<PagedViewModel<CommunityUpdateViewModel>> GetCommunitiesConfirmed(int take, int skip);
+		Task<PagedViewModel<CommunityUpdateViewModel>> GetCommunities(int take, int skip);
 		Task<IEnumerable<CommunityUpdateViewModel>> GetCommunitySelect();
 		Task<HttpResponseMessage> UploadCommunityImage(string id, FileUploadEntry fileToUpload);
+		Task DeleteCommunities(string shortName);
 		#endregion
 
 		Task<HttpResponseMessage> GenerateReportEvents(DateTime startDate, DateTime endDate);		

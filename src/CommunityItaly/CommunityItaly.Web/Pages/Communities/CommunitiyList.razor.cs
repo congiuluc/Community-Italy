@@ -3,19 +3,18 @@ using CommunityItaly.Web.Services;
 using CommunityItaly.Web.Stores;
 using MatBlazor;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Routing;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CommunityItaly.Web.Pages.Events
+namespace CommunityItaly.Web.Pages.Communities
 {
-	public partial class EventList : ComponentBase
+	public partial class CommunitiyList : ComponentBase
 	{
 		[Inject]
 		private IHttpServices Http { get; set; }
 		[Inject]
 		private NavigationManager NavigationManager { get; set; }
-		public IEnumerable<EventViewModelReadOnly> EventViewModels { get; set; }
+		public IEnumerable<CommunityUpdateViewModel> CommunityViewModels { get; set; }
 		public int PageSize { get; set; } = 10;
 		public int PageIndex { get; set; } = 1;
 		public int Total { get; set; }
@@ -33,10 +32,10 @@ namespace CommunityItaly.Web.Pages.Events
 			await LoadDataAsync();
 		}
 
-		void Edit(EventViewModelReadOnly args)
+		void Edit(CommunityUpdateViewModel args)
 		{
-			AppStore.EventEdit = args;
-			NavigationManager.NavigateTo(Routes.EventEdit(AppStore.EventEdit.Id));
+			AppStore.CommunityEdit = args;
+			NavigationManager.NavigateTo(Routes.CommunityEdit(AppStore.CommunityEdit.ShortName));
 		}
 
 		async Task Delete(string id)
@@ -46,14 +45,14 @@ namespace CommunityItaly.Web.Pages.Events
 
 		private async Task LoadDataAsync()
 		{
-			var pagedViewModel = await Http.GetEventsConfirmed(PageSize, PageSize * (PageIndex - 1));
-			EventViewModels = pagedViewModel.Entities;
+			var pagedViewModel = await Http.GetCommunitiesConfirmed(PageSize, PageSize * (PageIndex - 1));
+			CommunityViewModels = pagedViewModel.Entities;
 			Total = pagedViewModel.Total;
 		}
 
 		void Create()
 		{
-			NavigationManager.NavigateTo(Routes.EventCreate());
+			NavigationManager.NavigateTo(Routes.CommunityCreate());
 		}
 	}
 }

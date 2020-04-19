@@ -60,7 +60,7 @@ namespace CommunityItaly.Server.Functions
             input.Mutate(x => x.Resize(new ResizeOptions
             {
                 Size = new SixLabors.Primitives.Size(dimensions.Item1, dimensions.Item2),
-                Mode = ResizeMode.BoxPad,
+                Mode = ResizeMode.Max,
                 Position = AnchorPositionMode.Center,
             }));
             input.Save(output, format);
