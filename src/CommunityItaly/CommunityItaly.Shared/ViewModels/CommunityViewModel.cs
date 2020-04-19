@@ -6,8 +6,8 @@ namespace CommunityItaly.Shared.ViewModels
 	public class CommunityViewModel
 	{
 		public string Name { get; set; }
-		public Uri WebSite { get; set; }
-		public IEnumerable<PersonUpdateViewModel> Managers { get; set; } = new List<PersonUpdateViewModel>();
+		public string WebSite { get; set; }
+		public List<PersonUpdateViewModel> Managers { get; set; } = new List<PersonUpdateViewModel>();
 	}
 
 	public class CommunityUpdateViewModel : CommunityViewModel

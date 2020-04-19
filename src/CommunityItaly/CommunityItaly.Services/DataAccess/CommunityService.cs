@@ -22,7 +22,7 @@ namespace CommunityItaly.Services
 		{
 			Community domain = new Community(communityVM.Name);
 			domain.SetConfirmation(false);
-			domain.SetWebSite(communityVM.WebSite);
+			domain.SetWebSite(new Uri(communityVM.WebSite));
 			foreach (var m in communityVM.Managers)
 			{
 				var foundManager = await db.People.FindAsync(m.Id).ConfigureAwait(false);
@@ -67,16 +67,24 @@ namespace CommunityItaly.Services
 				Logo = currentCommunity.Logo,
 				Confirmed = currentCommunity.Confirmed,
 				ShortName = currentCommunity.ShortName,
-				WebSite = currentCommunity.WebSite,
-				Managers = currentCommunity.Managers.Select(t => new PersonUpdateViewModel
-				{
-					Id = t.Id,
-					Name = t.Name,
-					Surname = t.Surname,
-					Picture = t.Picture,
-					MVP_Code = t.MVP_Code
-				})
+				WebSite = currentCommunity.WebSite.ToString(),
+				Managers = currentCommunity.ManagerCollection.Select(t => new PersonUpdateViewModel { Id = t }).ToList()
 			};
+
+			for (int i = 0; i < communityVM.Managers.Count; i++)
+			{
+				var p = await db.People.FindAsync(communityVM.Managers.ElementAt(i).Id);
+				communityVM.Managers[i] = new PersonUpdateViewModel
+				{
+					Id = p.Id,
+					Name = p.Name,
+					Surname = p.Surname,
+					Picture = p.Picture,
+					MVP_Code = p.MVP_Code,
+					Confirmed = p.Confirmed
+				};
+			}
+			
 			return communityVM;
 		}
 
@@ -98,18 +106,28 @@ namespace CommunityItaly.Services
 					Logo = currentCommunity.Logo,
 					Confirmed = currentCommunity.Confirmed,
 					ShortName = currentCommunity.ShortName,
-					WebSite = currentCommunity.WebSite,
-					Managers = !currentCommunity.Managers.Any() ?
+					WebSite = currentCommunity.WebSite.ToString(),
+					Managers = !currentCommunity.ManagerCollection.Any() ?
 						null :
-						currentCommunity.Managers.Select(t => new PersonUpdateViewModel
-						{
-							Id = t.Id,
-							Name = t.Name,
-							Surname = t.Surname,
-							Picture = t.Picture,
-							MVP_Code = t.MVP_Code
-						})
-				});
+						currentCommunity.ManagerCollection.Select(t => new PersonUpdateViewModel { Id =  t }).ToList()
+				}).ToList();
+
+			foreach (var t in result)
+			{
+				for (int i = 0; i < t.Managers.Count; i++)
+				{
+					var p = await db.People.FindAsync(t.Managers.ElementAt(i).Id);
+					t.Managers[i] = new PersonUpdateViewModel
+					{
+						Id = p.Id,
+						Name = p.Name,
+						Surname = p.Surname,
+						Picture = p.Picture,
+						MVP_Code = p.MVP_Code,
+						Confirmed = p.Confirmed
+					};
+				}
+			}
 			return result;
 		}
 
@@ -137,18 +155,29 @@ namespace CommunityItaly.Services
 					Logo = currentCommunity.Logo,
 					Confirmed = currentCommunity.Confirmed,
 					ShortName = currentCommunity.ShortName,
-					WebSite = currentCommunity.WebSite,
-					Managers = !currentCommunity.Managers.Any() ?
+					WebSite = currentCommunity.WebSite.ToString(),
+					Managers = !currentCommunity.ManagerCollection.Any() ?
 						null :
-						currentCommunity.Managers.Select(t => new PersonUpdateViewModel
-						{
-							Id = t.Id,
-							Name = t.Name,
-							Surname = t.Surname,
-							Picture = t.Picture,
-							MVP_Code = t.MVP_Code
-						})
-				});
+						currentCommunity.ManagerCollection.Select(t => new PersonUpdateViewModel { Id = t }).ToList()
+				})
+				.ToList();
+
+			foreach (var t in result)
+			{
+				for (int i = 0; i < t.Managers.Count; i++)
+				{
+					var p = await db.People.FindAsync(t.Managers.ElementAt(i).Id);
+					t.Managers[i] = new PersonUpdateViewModel
+					{
+						Id = p.Id,
+						Name = p.Name,
+						Surname = p.Surname,
+						Picture = p.Picture,
+						MVP_Code = p.MVP_Code,
+						Confirmed = p.Confirmed
+					};
+				}
+			}
 
 			return new PagedViewModel<CommunityUpdateViewModel>
 			{
@@ -162,7 +191,7 @@ namespace CommunityItaly.Services
 		{
 			var currentCommunity = await db.Communities.FindAsync(communityVM.ShortName).ConfigureAwait(false);
 			currentCommunity.SetConfirmation(communityVM.Confirmed);
-			currentCommunity.SetWebSite(communityVM.WebSite);
+			currentCommunity.SetWebSite(new Uri(communityVM.WebSite));
 			var updateManagers = communityVM.Managers.ToList();
 			// Manager da rimuovere o già presenti
 			foreach (var m in currentCommunity.Managers)

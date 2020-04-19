@@ -1,5 +1,6 @@
 ﻿using CommunityItaly.Shared.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CommunityItaly.Services
@@ -9,6 +10,7 @@ namespace CommunityItaly.Services
 		Task<bool> ExistsAsync(string personId);
 		Task<PagedViewModel<PersonUpdateViewModel>> GetAsync(int? take = 10, int? skip = 0);
 		Task<PagedViewModel<PersonUpdateViewModel>> GetConfirmedAsync(int? take = 10, int? skip = 0);
+		Task<IEnumerable<PersonUpdateViewModel>> GetSelectAsync();
 		Task<PersonUpdateViewModel> GetById(string id);
 		Task<string> CreateAsync(PersonViewModel personVM);
 		Task UpdateAsync(PersonUpdateViewModel personVM);

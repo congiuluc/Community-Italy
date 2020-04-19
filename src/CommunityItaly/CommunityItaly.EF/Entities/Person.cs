@@ -32,6 +32,7 @@ namespace CommunityItaly.EF.Entities
             var p = new PersonOwned(Id, Name, Surname);
             p.SetPicture(Picture);
             p.SetMVPCode(MVP_Code);
+            p.SetConfirmation(Confirmed);
             return p;
         }
     }

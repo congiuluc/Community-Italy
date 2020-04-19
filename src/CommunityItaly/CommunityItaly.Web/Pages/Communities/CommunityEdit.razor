@@ -1,0 +1,34 @@
+﻿@page "/CommunityEdit/{id}"
+<MatH6>Community Edit</MatH6>
+<EditForm Model="CommunityViewModel" OnValidSubmit="Success">
+	<DataAnnotationsValidator />
+	<ValidationSummary />
+	<div class="mat-layout-grid">
+		<div class="mat-layout-grid-inner">
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+				<MatTextField Label="Nome community" @bind-Value="CommunityViewModel.Name" FullWidth="true" Disabled="true" />
+				<ValidationMessage For="@(() => CommunityViewModel.Name)" />
+			</div>
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+				<MatTextField Label="Sito Web" Icon="@MatIconNames.Web" IconTrailing="true" @bind-Value="CommunityViewModel.WebSite" FullWidth="true" />
+				<ValidationMessage For="@(() => CommunityViewModel.WebSite)" />
+			</div>
+
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+				<MatFileUpload OnChange="@FilesReady" Label="Carica il logo della community"></MatFileUpload>
+			</div>
+
+			@foreach (var manager in CommunityViewModel.Managers)
+			{
+				<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+					<PersonSelect PersonSelected="@manager" PersonSelectedChanged="SelectPerson"></PersonSelect>
+					<ValidationMessage For="@(() => CommunityViewModel.WebSite)" />
+				</div>
+			}
+			
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12" style="text-align: center">
+				<MatButton Icon="@MatIconNames.Save" Raised="true" Type="submit">Save</MatButton>
+			</div>
+		</div>
+	</div>
+</EditForm>

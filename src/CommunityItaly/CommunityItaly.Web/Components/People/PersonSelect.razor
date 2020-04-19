@@ -1,0 +1,7 @@
+﻿<MatSelectValue Items="@PeopleToSelect" TValue="PersonUpdateViewModel" TItem="PersonUpdateViewModel"
+				ValueChanged="PersonSelectedChanged" ValueExpression="@(() => PersonSelected)" ValueSelector="@(i=>i)"
+				HelperTextPersistent="false" Label="Seleziona la persona">
+	<ItemTemplate>
+		<img src="@ImageUrl(context.Picture)" />&nbsp;<span>@context.Name @context.Surname</span>
+	</ItemTemplate>
+</MatSelectValue>

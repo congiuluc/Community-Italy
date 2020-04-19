@@ -23,10 +23,11 @@ namespace CommunityItaly.Web.Stores
 		public static EventViewModelReadOnly EventEdit { get; set; }
 		public static CommunityUpdateViewModel CommunityEdit { get; set; }
 		public static FileUploadEntry EventImage { get; set; }
+		public static FileUploadEntry CommunityImage { get; set; }
 
 		public static MatTheme Tema { get; set; } = new MatTheme()
 		{
-			Primary = MatThemeColors.Blue._500.Value,
+			Primary = MatThemeColors.Blue._900.Value,
 			Secondary = MatThemeColors.Yellow._500.Value
 		};
 	}

@@ -1,0 +1,28 @@
+﻿@page "/CommunityCreate"
+
+<h3>Community Create</h3>
+
+<EditForm Model="CommunityViewModel" OnValidSubmit="Success">
+	<DataAnnotationsValidator />
+	<ValidationSummary />
+	<div class="mat-layout-grid">
+		<div class="mat-layout-grid-inner">
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+				<MatTextField Label="Nome evento" @bind-Value="CommunityViewModel.Name" FullWidth="true" />
+				<ValidationMessage For="@(() => CommunityViewModel.Name)" />
+			</div>
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+				<MatTextField Label="Acquista biglietto" Icon="@MatIconNames.Web" IconTrailing="true" @bind-Value="CommunityViewModel.WebSite" FullWidth="true" />
+				<ValidationMessage For="@(() => CommunityViewModel.WebSite)" />
+			</div>
+			
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+				<MatFileUpload OnChange="@FilesReady" Label="Carica l'immagine dell'evento"></MatFileUpload>
+			</div>
+			
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12" style="text-align: center">
+				<MatButton Icon="@MatIconNames.Save" Raised="true" Type="submit">Save</MatButton>
+			</div>
+		</div>
+	</div>
+</EditForm>

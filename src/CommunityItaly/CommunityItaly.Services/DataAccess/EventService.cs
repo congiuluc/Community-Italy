@@ -105,7 +105,7 @@ namespace CommunityItaly.Services
 						Confirmed = currentEvent.Community.Confirmed,
 						Name = currentEvent.Community.Name,
 						Logo = currentEvent.Community.Logo,
-						WebSite = currentEvent.Community.WebSite,
+						WebSite = currentEvent.Community.WebSite.ToString(),
 						Managers = !currentEvent.Community.Managers.Any() ? 
 							null : 
 							currentEvent.Community.Managers.Select(t => new PersonUpdateViewModel
@@ -115,7 +115,7 @@ namespace CommunityItaly.Services
 								Surname = t.Surname,
 								Picture = t.Picture,
 								MVP_Code = t.MVP_Code
-							})
+							}).ToList()
 					}
 				});
 
@@ -152,7 +152,7 @@ namespace CommunityItaly.Services
 					{
 						Name = currentEvent.Community.Name,
 						Logo = currentEvent.Community.Logo,
-						WebSite = currentEvent.Community.WebSite,
+						WebSite = currentEvent.Community.WebSite.ToString(),
 						Managers = !currentEvent.Community.Managers.Any() ?
 							null :
 							currentEvent.Community.Managers.Select(t => new PersonUpdateViewModel
@@ -162,7 +162,7 @@ namespace CommunityItaly.Services
 								Surname = t.Surname,
 								Picture = t.Picture,
 								MVP_Code = t.MVP_Code
-							})
+							}).ToList()
 					}
 				});
 			return result.ToList();
@@ -192,7 +192,7 @@ namespace CommunityItaly.Services
 				{
 					Name = community.Name,
 					Logo = community.Logo,
-					WebSite = community.WebSite
+					WebSite = community.WebSite.ToString()
 				};
 			}
 			return eventVM;

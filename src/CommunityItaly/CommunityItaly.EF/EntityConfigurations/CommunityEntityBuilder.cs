@@ -1,6 +1,8 @@
 ﻿using CommunityItaly.EF.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace CommunityItaly.EF.EntityConfigurations
 {
@@ -14,7 +16,12 @@ namespace CommunityItaly.EF.EntityConfigurations
 
 
             builder.Property(x => x.ShortName);
-            builder.HasMany(x => x.Managers);
+            builder.Property(x => x.ManagerCollection)
+                .HasConversion(
+                    v => JsonSerializer.Serialize(v, new JsonSerializerOptions()),
+                    v => JsonSerializer.Deserialize<List<string>>(v, new JsonSerializerOptions()));
+            //builder.HasMany(x => x.ManagerCollection);
+            builder.Ignore(x => x.Managers);
         }
     }
 }

@@ -3,6 +3,7 @@ using CommunityItaly.EF.Entities;
 using CommunityItaly.Shared.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -100,6 +101,26 @@ namespace CommunityItaly.Services
 				Confirmed = currentPerson.Confirmed
 			};
 			return personVM;
+		}
+
+		public async Task<IEnumerable<PersonUpdateViewModel>> GetSelectAsync()
+		{
+			var resultList = await db.People.Where(x => x.Confirmed == true)
+				.ToListAsync()
+				.ConfigureAwait(false);
+
+			var result = resultList
+				.Select(currentPerson => new PersonUpdateViewModel
+				{
+					Id = currentPerson.Id,
+					Name = currentPerson.Name,
+					Surname = currentPerson.Surname,
+					Picture = currentPerson.Picture,
+					MVP_Code = currentPerson.MVP_Code,
+					Confirmed = currentPerson.Confirmed
+				}).ToList();
+
+			return result;
 		}
 
 		public async Task UpdateAsync(PersonUpdateViewModel personVM)

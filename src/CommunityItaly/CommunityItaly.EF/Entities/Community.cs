@@ -19,13 +19,16 @@ namespace CommunityItaly.EF.Entities
         public Uri WebSite { get; private set; }
         public bool Confirmed { get; private set; }
         public HashSet<T> Managers { get; } = new HashSet<T>();
+        public List<string> ManagerCollection { get; } = new List<string>();
         public void AddManager(T manager)
         {
             Managers.Add(manager);
+            ManagerCollection.Add(manager.Id);
         }
         public void RemoveManager(string id)
         {
             Managers.RemoveWhere(x => x.Id == id);
+            ManagerCollection.Remove(id);
         }
         public void SetLogo(Uri logo)
         {

@@ -51,7 +51,7 @@ namespace CommunityItaly.Server.Functions
                     if (await communityService.ExistsAsync(id))
                     {
                         blobInformation = ImageStructure.CommunityPictureOriginal(id, fileExtension);
-                        await fileService.UploadImageAsync(blobInformation.BlobContainerName, blobInformation.FileName, fileData).ConfigureAwait(false);
+                        imageStorageUri = await fileService.UploadImageAsync(blobInformation.BlobContainerName, blobInformation.FileName, fileData).ConfigureAwait(false);
                         await communityService.UpdateImageAsync(id, imageStorageUri).ConfigureAwait(false);
                     }
                     else
@@ -68,9 +68,14 @@ namespace CommunityItaly.Server.Functions
                         throw new ArgumentException($"Event id: {id}, not exist");
                     break;
                 case "PERSON":
-                    blobInformation = ImageStructure.PersonPictureOriginal(id, fileExtension);
-                    imageStorageUri = await fileService.UploadImageAsync(blobInformation.BlobContainerName, blobInformation.FileName, fileData);
-                    await personService.UpdateImageAsync(id, imageStorageUri);
+                    if (await personService.ExistsAsync(id))
+                    {
+                        blobInformation = ImageStructure.PersonPictureOriginal(id, fileExtension);
+                        imageStorageUri = await fileService.UploadImageAsync(blobInformation.BlobContainerName, blobInformation.FileName, fileData);
+                        await personService.UpdateImageAsync(id, imageStorageUri);
+                    }
+                    else
+                        throw new ArgumentException($"Person id: {id}, not exist");
                     break;
             }
             return new OkObjectResult(new { ImageUrl = imageStorageUri });

@@ -1,4 +1,5 @@
 ﻿using CommunityItaly.Shared.ViewModels;
+using CommunityItaly.Web.Components;
 using CommunityItaly.Web.Stores;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -63,7 +64,7 @@ namespace CommunityItaly.Web.Services
 		}
 		public async Task DeleteEvents(string id)
 		{
-			await Http.DeleteAsync(new Uri($"/Event?Id={id}")).ConfigureAwait(false);
+			await Http.DeleteAsync(new Uri($"Event?Id={id}")).ConfigureAwait(false);
 		}
 		#endregion
 
@@ -83,13 +84,30 @@ namespace CommunityItaly.Web.Services
 			return await Http.GetFromJsonAsync<IEnumerable<CommunityUpdateViewModel>>("CommunitySelect").ConfigureAwait(false);
 		}
 
+		public async Task<HttpResponseMessage> CreateCommunity(CommunityViewModel vm)
+		{
+			return await Http.PostAsJsonAsync($"Community", vm, JsonOption).ConfigureAwait(false);
+		}
+
+		public async Task<HttpResponseMessage> UpdateCommunity(CommunityUpdateViewModel vm)
+		{
+			return await Http.PutAsJsonAsync($"Community", vm, JsonOption).ConfigureAwait(false);
+		}
+
 		public async Task<HttpResponseMessage> UploadCommunityImage(string id, FileUploadEntry fileToUpload)
 		{
 			return await UploadImage(id, "COMMUNITY", fileToUpload);
 		}
 		public async Task DeleteCommunities(string shortName)
 		{
-			await Http.DeleteAsync(new Uri($"/Community?Id={shortName}")).ConfigureAwait(false);
+			await Http.DeleteAsync(new Uri($"Community?Id={shortName}")).ConfigureAwait(false);
+		}
+		#endregion
+
+		#region [Person]
+		public async Task<IEnumerable<PersonUpdateViewModel>> GetPersonSelect()
+		{
+			return await Http.GetFromJsonAsync<IEnumerable<PersonUpdateViewModel>>("PersonSelect").ConfigureAwait(false);
 		}
 		#endregion
 

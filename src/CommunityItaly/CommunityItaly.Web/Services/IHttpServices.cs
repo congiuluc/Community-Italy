@@ -22,8 +22,14 @@ namespace CommunityItaly.Web.Services
 		Task<PagedViewModel<CommunityUpdateViewModel>> GetCommunitiesConfirmed(int take, int skip);
 		Task<PagedViewModel<CommunityUpdateViewModel>> GetCommunities(int take, int skip);
 		Task<IEnumerable<CommunityUpdateViewModel>> GetCommunitySelect();
+		Task<HttpResponseMessage> CreateCommunity(CommunityViewModel vm);
+		Task<HttpResponseMessage> UpdateCommunity(CommunityUpdateViewModel vm);
 		Task<HttpResponseMessage> UploadCommunityImage(string id, FileUploadEntry fileToUpload);
 		Task DeleteCommunities(string shortName);
+		#endregion
+
+		#region [Person]
+		Task<IEnumerable<PersonUpdateViewModel>> GetPersonSelect();
 		#endregion
 
 		Task<HttpResponseMessage> GenerateReportEvents(DateTime startDate, DateTime endDate);		

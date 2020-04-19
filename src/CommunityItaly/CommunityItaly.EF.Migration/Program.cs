@@ -45,6 +45,7 @@ namespace CommunityItaly.EF.Migration
                 var imageUriTosato = await fileService.UploadImageAsync(biAndreaTosato.BlobContainerName, biAndreaTosato.FileName, Utility.ImageToByte(pathAndreaTosato));
                 andreaTosato.SetPicture(imageUriTosato);
                 andreaTosato.SetConfirmation(true);
+                db.People.Add(andreaTosato);
 
 
                 string marcozamanaid = Guid.NewGuid().ToString("N");
@@ -55,9 +56,9 @@ namespace CommunityItaly.EF.Migration
                 var imageUriZamana = await fileService.UploadImageAsync(biZamana.BlobContainerName, biZamana.FileName, Utility.ImageToByte(pathMarcoZamana));
                 marcoZamana.SetPicture(imageUriZamana);
                 marcoZamana.SetConfirmation(true);
+                db.People.Add(marcoZamana);
 
-
-                var community = new Community("cloudgen-verona");
+                var community = new Community("Cloudgen Verona");
                 community.SetWebSite(new Uri("https://cloudgen.it"));
                 string pathLogoCloudgen = Path.Combine(currentPath, @"Assets\cloudgen-verona\original.png");
                 var biCloudgen = ImageStructure.CommunityPictureOriginal("cloudgen-verona", ".png");
