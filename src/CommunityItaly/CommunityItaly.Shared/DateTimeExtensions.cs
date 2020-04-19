@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CommunityItaly.Server
+namespace CommunityItaly.Shared
 {
 	public static class DateTimeExtensions
 	{

@@ -1,13 +1,17 @@
-﻿@if(PersonData != default)
-{
-	<MatDialog @bind-IsOpen="@IsOpen">
-		<MatDialogTitle>@PersonData.Name @PersonData.Surname</MatDialogTitle>
-		<MatDialogContent>
-			<MatCardMedia Wide="true" ImageUrl="@LinkViewModel.GetImageMedium(PersonData.Picture).ToString()"></MatCardMedia>
-		</MatDialogContent>
-		<MatDialogActions>
-			<MatButton OnClick="@(e => { IsOpen = false; })">Ok</MatButton>
-		</MatDialogActions>
-	</MatDialog>
-}
-
+﻿<MatDialog @bind-IsOpen="@IsOpen">
+	<MatDialogTitle>@PersonData.Name @PersonData.Surname</MatDialogTitle>
+	<MatDialogContent>
+		<img src="@LinkViewModel.GetImageMedium(PersonData.Picture).ToString()" />
+		<MatBody2>
+			@if (!string.IsNullOrEmpty(MVP_Url))
+			{
+				<MatIconButton Link="@MVP_Url" Target="_blank">
+					<i class="fab fa-microsoft" aria-hidden="true"></i>
+				</MatIconButton>
+			}
+		</MatBody2>
+	</MatDialogContent>
+	<MatDialogActions>
+		<MatButton OnClick="@(e => { IsOpen = false; })">Ok</MatButton>
+	</MatDialogActions>
+</MatDialog>

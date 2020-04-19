@@ -52,7 +52,7 @@ namespace CommunityItaly.Web.Services
 			return await UploadImage(id, "EVENT", fileToUpload);
 		}
 
-		public async Task<List<EventViewModelReadOnly>> GetConfirmedIntervalledAsync(DateTime startDate, DateTime endDate)
+		public async Task<List<EventViewModelReadOnly>> GetReportConfirmedIntervalledAsync(DateTime startDate, DateTime endDate)
 		{
 			return await Http.GetFromJsonAsync<List<EventViewModelReadOnly>>($"EventReportDetail?from={startDate}&to={endDate}");
 		}
@@ -73,6 +73,12 @@ namespace CommunityItaly.Web.Services
 			return await UploadImage(id, "COMMUNITY", fileToUpload);
 		}
 		#endregion
+
+		public async Task<HttpResponseMessage> GenerateReportEvents(DateTime startDate, DateTime endDate)
+		{
+			var filter = new ReportFilterViewModel { StartDate = startDate, EndDate = endDate };
+			return await Http.PostAsJsonAsync<ReportFilterViewModel>("ReportEvents", filter);
+		}
 
 		public async Task<HttpResponseMessage> UploadPersonImage(string id, FileUploadEntry fileToUpload)
 		{

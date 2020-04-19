@@ -10,5 +10,13 @@ namespace CommunityItaly.Web.Components.People
 		
 		[Parameter]
 		public PersonUpdateViewModel PersonData { get; set; }
+
+		public string MVP_Url { get; set; }
+
+		protected override void OnInitialized()
+		{
+			if (!string.IsNullOrEmpty(PersonData.MVP_Code))
+				MVP_Url = $"https://mvp.microsoft.com/it-it/PublicProfile/{PersonData.MVP_Code}";
+		}
 	}
 }

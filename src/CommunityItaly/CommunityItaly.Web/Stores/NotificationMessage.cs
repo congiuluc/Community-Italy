@@ -4,6 +4,18 @@ namespace CommunityItaly.Web.Stores
 {
 	public class NotificationMessage
 	{
+		public NotificationMessage(string message, Exception ex) : 
+			this(message, MessageType.Danger)
+		{
+			Exception = ex;
+		}
+
+		public NotificationMessage(string message, MessageType notificationType)
+		{
+			Message = message;
+			NotificationType = notificationType;
+		}
+
 		public string Message { get; set; }
 		public Exception Exception { get; set; }
 		public MessageType NotificationType { get; set; }

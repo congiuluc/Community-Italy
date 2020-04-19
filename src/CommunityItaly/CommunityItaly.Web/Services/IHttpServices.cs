@@ -17,12 +17,14 @@ namespace CommunityItaly.Web.Services
 		Task<HttpResponseMessage> UpdateEvent(EventViewModel vm);
 		Task DeleteEvents(string id);
 		Task<HttpResponseMessage> UploadEventImage(string id, FileUploadEntry fileToUpload);
-		Task<List<EventViewModelReadOnly>> GetConfirmedIntervalledAsync(DateTime startDate, DateTime endDate);
+		Task<List<EventViewModelReadOnly>> GetReportConfirmedIntervalledAsync(DateTime startDate, DateTime endDate);
 		#endregion
 		#region [Community]
 		Task<IEnumerable<CommunityUpdateViewModel>> GetCommunitySelect();
 		Task<HttpResponseMessage> UploadCommunityImage(string id, FileUploadEntry fileToUpload);
 		#endregion
+
+		Task<HttpResponseMessage> GenerateReportEvents(DateTime startDate, DateTime endDate);		
 
 		Task<HttpResponseMessage> UploadPersonImage(string id, FileUploadEntry fileToUpload);
 	}

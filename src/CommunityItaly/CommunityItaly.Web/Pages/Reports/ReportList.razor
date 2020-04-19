@@ -1,25 +1,24 @@
 ﻿@page "/reports"
 <h3>Reports</h3>
 
-<EditForm Model="Search" OnValidSubmit="SearchEvents">
-	<div class="mat-layout-grid">
-		<div class="mat-layout-grid-inner">
-			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
-				<MatDatePicker Label="Start Date" @bind-Value="Search.StartDate" FullWidth="true" />
-			</div>
-			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
-				<MatDatePicker Label="End Date" @bind-Value="Search.EndDate" FullWidth="true" />
-			</div>
-			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-2" style="text-align: right">
-				<MatButton Icon="@MatIconNames.Search" Raised="true" Type="submit">Ricerca</MatButton>
-			</div>
 
-			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-2" style="text-align: right">
-				<MatButton Icon="@MatIconNames.Import_export" Raised="true" OnClick="Export">Export</MatButton>
-			</div>
+<div class="mat-layout-grid">
+	<div class="mat-layout-grid-inner">
+		<div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+			<MatDatePicker Label="Start Date" @bind-Value="Search.StartDate" FullWidth="true" />
+		</div>
+		<div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+			<MatDatePicker Label="End Date" @bind-Value="Search.EndDate" FullWidth="true" />
+		</div>
+		<div class="mat-layout-grid-cell mat-layout-grid-cell-span-2" style="text-align: right">
+			<MatButton Icon="@MatIconNames.Search" Raised="true" OnClick="SearchEvents">Ricerca</MatButton>
+		</div>
+		<div class="mat-layout-grid-cell mat-layout-grid-cell-span-2" style="text-align: right">
+			<MatButton Icon="@MatIconNames.Import_export" Raised="true" OnClick="Export">Export</MatButton>
 		</div>
 	</div>
-</EditForm>
+</div>
+
 
 @foreach (var e in ReportLists)
 {

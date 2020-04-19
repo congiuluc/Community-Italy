@@ -37,21 +37,13 @@ namespace CommunityItaly.Web.Pages.Events
 				{
 					await Http.UploadEventImage(EventViewModel.Id, AppStore.EventImage).ConfigureAwait(false);
 				}
-				AppStore.AddNotification(new NotificationMessage()
-				{
-					Message = "Evento sottomesso",
-					NotificationType = NotificationMessage.MessageType.Success
-				});
+				AppStore.AddNotification(new NotificationMessage("Evento sottomesso", NotificationMessage.MessageType.Success));
 			}
 			else
 			{
 				string error = await result.Content.ReadAsStringAsync();
 
-				AppStore.AddNotification(new NotificationMessage()
-				{
-					Message = "Errore nella creazione",
-					NotificationType = NotificationMessage.MessageType.Danger
-				});
+				AppStore.AddNotification(new NotificationMessage("Errore nella creazione", NotificationMessage.MessageType.Danger));
 			}
 		}
 

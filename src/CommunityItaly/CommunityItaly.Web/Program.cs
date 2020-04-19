@@ -21,7 +21,7 @@ namespace CommunityItaly.Web
 			builder.Services.AddTransient<IHttpServices, HttpServices>();
 			builder.Services.AddMatToaster(config =>
 			{
-				config.Position = MatToastPosition.BottomRight;
+				config.Position = MatToastPosition.TopRight;
 				config.PreventDuplicates = true;
 				config.NewestOnTop = true;
 				config.ShowCloseButton = true;

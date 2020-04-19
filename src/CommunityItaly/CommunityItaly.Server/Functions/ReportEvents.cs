@@ -97,7 +97,7 @@ namespace CommunityItaly.Server.Functions
             [DurableClient] IDurableOrchestrationClient starter,
             ILogger log)
         {
-            ReportFilter filter = await JsonSerializer.DeserializeAsync<ReportFilter>(await req.Content.ReadAsStreamAsync());
+            ReportFilterViewModel filter = await JsonSerializer.DeserializeAsync<ReportFilterViewModel>(await req.Content.ReadAsStreamAsync());
             filter.CheckDate();
 
             string instanceId = await starter.StartNewAsync(ReportEvents_Orchestrator, null, filter);
@@ -106,30 +106,7 @@ namespace CommunityItaly.Server.Functions
         }
     }
 
-    public class ReportFilter
-    {
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public void CheckDate()
-        {
-            if (StartDate == default || StartDate < DateTime.UtcNow.AddYears(-2))
-            {
-                StartDate = DateTime.UtcNow.AddMonths(-3).StartOfMonth();
-            }
-
-            if(EndDate == default || EndDate < DateTime.UtcNow.AddYears(-2).AddMonths(3))
-            {
-                EndDate = DateTime.UtcNow.EndOfMonth();
-            }
-
-            if(EndDate.CompareTo(StartDate) < 0)
-            {
-                EndDate = StartDate.AddMonths(3).EndOfMonth();
-            }
-        }
-    }
-
-    public class ReportGeneration : ReportFilter
+    public class ReportGeneration : ReportFilterViewModel
     {
         public string FileName { get; set; }
         public ReportInformation ReportInformation { get; set; }
