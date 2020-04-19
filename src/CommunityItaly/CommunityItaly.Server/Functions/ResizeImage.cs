@@ -30,8 +30,8 @@ namespace CommunityItaly.Server.Functions
 
         [FunctionName(UploadTasks.ResizeImageCommunity)]
         public static void RunCommunity([BlobTrigger("communities/{name}/original.{blobextension}", Connection = "BlobStorageConnections:ConnectionString")] Stream image, string name, string blobextension,
-            [Blob("communities/{name}/icon.{blobextension}", FileAccess.Write)] Stream imageSmall,
-            [Blob("communities/{name}/medium.{blobextension}", FileAccess.Write)] Stream imageMedium)
+            [Blob("communities/{name}/icon.{blobextension}", FileAccess.Write, Connection = "BlobStorageConnections:ConnectionString")] Stream imageSmall,
+            [Blob("communities/{name}/medium.{blobextension}", FileAccess.Write, Connection = "BlobStorageConnections:ConnectionString")] Stream imageMedium)
         {
             CreateImages(image, ref imageSmall, ref imageMedium);
         }

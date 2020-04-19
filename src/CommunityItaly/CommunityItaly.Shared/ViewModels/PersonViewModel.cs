@@ -2,21 +2,17 @@
 
 namespace CommunityItaly.Shared.ViewModels
 {
-	public class PersonBaseViewModel
-	{        
+
+    public class PersonViewModel
+    {
+        public string Id { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
         public string MVP_Code { get; set; }
     }
 
-    public class PersonViewModel : PersonBaseViewModel
+    public class PersonUpdateViewModel : PersonViewModel
     {
-        public byte[] Picture { get; set; }
-    }
-
-    public class PersonUpdateViewModel : PersonBaseViewModel
-    {
-        public string Id { get; set; }
         public bool Confirmed { get; set; }
         public Uri Picture { get; set; }
 
@@ -24,6 +20,7 @@ namespace CommunityItaly.Shared.ViewModels
         {
             return new PersonUpdateViewModel
             {
+                Id = vm.Id,
                 Name = vm.Name,
                 Surname = vm.Surname,
                 MVP_Code = vm.MVP_Code

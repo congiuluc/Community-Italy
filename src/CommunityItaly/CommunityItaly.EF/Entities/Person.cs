@@ -4,11 +4,11 @@ namespace CommunityItaly.EF.Entities
 {
     public class Person
     {
-        public Person(string name, string surname)
+        public Person(string id, string name, string surname)
         {
             Name = name;
             Surname = surname;
-            Id = Guid.NewGuid().ToString("N");
+            Id = id;
         }
         public string Id { get; private set; }
         public string Name { get; }
@@ -29,7 +29,7 @@ namespace CommunityItaly.EF.Entities
 
         public PersonOwned ToOwned()
         {
-            var p = new PersonOwned(Name, Surname) { Id = Id };
+            var p = new PersonOwned(Id, Name, Surname);
             p.SetPicture(Picture);
             p.SetMVPCode(MVP_Code);
             return p;
@@ -38,7 +38,7 @@ namespace CommunityItaly.EF.Entities
 
     public class PersonOwned : Person
     {
-        public PersonOwned(string name, string surname) : base(name, surname)
+        public PersonOwned(string id, string name, string surname) : base(id, name, surname)
         {
         }
     }

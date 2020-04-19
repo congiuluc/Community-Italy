@@ -17,22 +17,26 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CommunityItaly.EF\CommunityItaly.EF.csproj" />
+    <ProjectReference Include="..\CommunityItaly.Services\CommunityItaly.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Assets\" />
+    <None Update="Assets\andrea-tosato\original.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\cloudgen-verona\original.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\global-azure\original.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\marco-zamana\original.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Assets\andrea-tosato.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\logo-cloudgen.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\marco-zamana.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <Folder Include="Assets\global-azure\" />
   </ItemGroup>
   
 </Project>

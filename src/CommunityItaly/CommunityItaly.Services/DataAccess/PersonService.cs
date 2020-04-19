@@ -19,7 +19,7 @@ namespace CommunityItaly.Services
 
 		public async Task<string> CreateAsync(PersonViewModel personVM)
 		{
-			Person domain = new Person(personVM.Name, personVM.Surname);
+			Person domain = new Person(personVM.Id, personVM.Name, personVM.Surname);
 			domain.SetConfirmation(false);
 			domain.SetMVPCode(personVM.MVP_Code);
 			db.People.Add(domain);
