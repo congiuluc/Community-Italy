@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using CommunityItaly.Web.Services;
 using CommunityItaly.Web.Stores;
 using MatBlazor;
+using Toolbelt.Blazor.Extensions.DependencyInjection;
 
 namespace CommunityItaly.Web
 {
@@ -29,7 +30,7 @@ namespace CommunityItaly.Web
 				config.VisibleStateDuration = 3000;
 			});
 
-			await builder.Build().RunAsync();
+			await builder.Build().UseLocalTimeZone().RunAsync();
 		}
 	}
 }

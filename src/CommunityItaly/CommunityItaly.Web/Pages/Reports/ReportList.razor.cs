@@ -1,4 +1,5 @@
-﻿using CommunityItaly.Shared.ViewModels;
+﻿using CommunityItaly.Shared;
+using CommunityItaly.Shared.ViewModels;
 using CommunityItaly.Web.Services;
 using CommunityItaly.Web.Stores;
 using Microsoft.AspNetCore.Components;
@@ -40,7 +41,7 @@ namespace CommunityItaly.Web.Pages.Reports
 			}
 			else
 			{
-				ReportLists = await Http.GetReportConfirmedIntervalledAsync(Search.StartDate, Search.EndDate);
+				ReportLists = await Http.GetReportConfirmedIntervalledAsync(Search.StartDate.ToLocalTime(), Search.EndDate.ToLocalTime().EndOfDay());
 			}
 		}
 
