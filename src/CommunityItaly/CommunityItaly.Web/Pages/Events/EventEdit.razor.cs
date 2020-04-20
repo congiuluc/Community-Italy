@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using System;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace CommunityItaly.Web.Pages.Events
@@ -43,10 +44,21 @@ namespace CommunityItaly.Web.Pages.Events
 			{
 				e.BuyTicket = EventViewModel.BuyTicket;
 			}
-			await Http.UpdateEvent(e).ConfigureAwait(false);
-			if(AppStore.EventImage != null)
+			var responseUpdate = await Http.UpdateEvent(e).ConfigureAwait(false);
+			if (responseUpdate.IsSuccessStatusCode)
 			{
-				await Http.UploadEventImage(e.Id, AppStore.EventImage).ConfigureAwait(false);
+				if (AppStore.EventImage != null)
+				{
+					var responseUploadMessage = await Http.UploadEventImage(e.Id, AppStore.EventImage).ConfigureAwait(false);
+					if (!responseUploadMessage.IsSuccessStatusCode)
+						AppStore.AddNotification(new NotificationMessage("Errore salvataggio", NotificationMessage.MessageType.Danger));
+					else
+						AppStore.AddNotification(new NotificationMessage("Evento salvato", NotificationMessage.MessageType.Success));
+				}
+				else
+				{
+					AppStore.AddNotification(new NotificationMessage("Evento salvato", NotificationMessage.MessageType.Success));
+				}
 			}
 		}
 
