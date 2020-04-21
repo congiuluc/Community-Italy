@@ -1,34 +1,68 @@
 name: blazor
 
-on:
-  push:
-    branches: [ master ]
-
+on: [push]
+ 
+env:
+  AZURE_RESOURCE_GROUP: community-italy
+  BLOB_STORAGE_ACCOUNT_NAME: community-italy
+  DOTNET_VERSION: '3.1.201' 
+  CONFIGURATION: Release
+  PACKAGE_PATH: 'src/CommunityItaly/CommunityItaly.Web/'
+ 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
+    name: Build
+    runs-on: windows-latest
     steps:
-    - uses: actions/checkout@master
-      env:
-        dotnet-version: 3.1.101
+    - uses: actions/checkout@v1
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: ${{ env.dotnet-version }}
-    - name: Install dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-      
-    - uses: feeloor/azure-static-website-deploy@master
-      env:
-          SOURCE_DIR: "./public"
-          AZURE_CLIENT_ID:  ${{ secrets.AZURE_CREDENTIALS.clientId }}
-          AZURE_TENANT_ID:  ${{ secrets.AZURE_CREDENTIALS.clientSecret }}
-          AZURE_SECRET: ${{ secrets.AZURE_CREDENTIALS }}
-          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_CREDENTIALS.subscriptionId }}
-          AZURE_STORAGE_ACCOUNT_NAME: "community-italy"
-          AZURE_INDEX_DOCUMENT_NAME: "index.html"
-          AZURE_ERROR_DOCUMENT_NAME: ""
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+ 
+    - name: Build with dotnet
+      run: |
+        pushd './${{ env.PACKAGE_PATH }}'
+        dotnet build --configuration ${{ env.CONFIGURATION }} --output ./output
+        popd
+     
+    - name: Publish with dotnet
+      run: dotnet publish --configuration ${{ env.CONFIGURATION }} 
+     
+    - name: Publish artifacts
+      uses: actions/upload-artifact@master
+      with:
+        name: blazorweb
+        path: bin/Release/netstandard2.1/publish/BlazorApp27/dist
+ 
+  deploy:
+    needs: build
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+ 
+    # Download artifacts
+    - name: Download artifacts
+      uses: actions/download-artifact@master
+      with:
+        name: blazorweb
+ 
+    # Authentication
+    - name: Authenticate with Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS  }}
+ 
+    # Deploy to storage using CLI
+    - name: Deploy to storage using CLI
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: | 
+          # show azure account being used
+          az account show
+          # az storage account upload
+          az storage blob upload-batch --account-name ${{ env.BLOB_STORAGE_ACCOUNT_NAME }} -s webapp -d \$web
+          # az set content type of wasm file until this is fixed by default from Azure Storage
+          az storage blob update --account-name ${{ env.BLOB_STORAGE_ACCOUNT_NAME }} -c \$web -n _framework/wasm/mono.wasm --content-type application/wasm
+  
