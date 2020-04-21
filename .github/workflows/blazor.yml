@@ -1,0 +1,76 @@
+name: blazor
+
+on: [push]
+ 
+env:
+  AZURE_RESOURCE_GROUP: community-italy
+  BLOB_STORAGE_ACCOUNT_NAME: communityitaly
+  DOTNET_VERSION: '3.1.201' 
+  CONFIGURATION: Release
+  PACKAGE_PATH: 'src/CommunityItaly/CommunityItaly.Web/'
+  CDN_PROFILE_NAME: community-italy
+  CDN_NAME: community-italy 
+  RG_NAME: community-italy
+ 
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+ 
+    - name: Build with dotnet
+      run: |
+        pushd './${{ env.PACKAGE_PATH }}'
+        dotnet build --configuration ${{ env.CONFIGURATION }}
+        popd
+     
+    - name: Publish with dotnet
+      run: |
+        pushd './${{ env.PACKAGE_PATH }}'
+        dotnet publish --configuration ${{ env.CONFIGURATION }}
+        popd
+     
+    - name: Publish artifacts
+      uses: actions/upload-artifact@master
+      with:
+        name: webapp
+        path: src/CommunityItaly/CommunityItaly.Web/bin/Release/netstandard2.1/publish
+ 
+  deploy:
+    needs: build
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+ 
+    # Download artifacts
+    - name: Download artifacts
+      uses: actions/download-artifact@master
+      with:
+        name: webapp
+ 
+    # Authentication
+    - name: Authenticate with Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS  }}
+ 
+    # Deploy to storage using CLI
+    - name: Deploy to storage using CLI
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: | 
+         # show azure account being used
+          az account show
+          # az storage account upload
+          az storage blob upload-batch --account-name ${{ env.BLOB_STORAGE_ACCOUNT_NAME }} -s webapp -d \$web --account-key ${{ secrets.STORAGE_ACCOUNT_KEY }}
+          # az set content type of wasm file until this is fixed by default from Azure Storage
+          az storage blob update --account-name ${{ env.BLOB_STORAGE_ACCOUNT_NAME }} -c \$web -n _framework/wasm/dotnet.wasm --content-type application/wasm --account-key ${{ secrets.STORAGE_ACCOUNT_KEY }}
+  
+    - name: Purge CDN
+      run: az cdn endpoint purge --profile-name ${CDN_PROFILE_NAME} --name ${CDN_NAME} --resource-group ${RG_NAME} --content-paths "/*" 
