@@ -1,4 +1,4 @@
-name: Deploy Azure Function App
+name: azfunc
 
 on:
   [push]
