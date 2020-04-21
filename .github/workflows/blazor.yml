@@ -1,0 +1,34 @@
+name: .NET Core
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+      env:
+        dotnet-version: 3.1.101
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.dotnet-version }}
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+      
+    - uses: feeloor/azure-static-website-deploy@master
+      env:
+          SOURCE_DIR: "./public"
+          AZURE_CLIENT_ID:  ${{ secrets.AZURE_CREDENTIALS.clientId }}
+          AZURE_TENANT_ID:  ${{ secrets.AZURE_CREDENTIALS.clientSecret }}
+          AZURE_SECRET: ${{ secrets.AZURE_CREDENTIALS }}
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_CREDENTIALS.subscriptionId }}
+          AZURE_STORAGE_ACCOUNT_NAME: "community-italy"
+          AZURE_INDEX_DOCUMENT_NAME: "index.html"
+          AZURE_ERROR_DOCUMENT_NAME: ""
