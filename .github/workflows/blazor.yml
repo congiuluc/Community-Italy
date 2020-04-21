@@ -4,7 +4,7 @@ on: [push]
  
 env:
   AZURE_RESOURCE_GROUP: community-italy
-  BLOB_STORAGE_ACCOUNT_NAME: community-italy
+  BLOB_STORAGE_ACCOUNT_NAME: communityitaly
   DOTNET_VERSION: '3.1.201' 
   CONFIGURATION: Release
   PACKAGE_PATH: 'src/CommunityItaly/CommunityItaly.Web/'
