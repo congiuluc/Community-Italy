@@ -36,7 +36,7 @@ jobs:
       uses: actions/upload-artifact@master
       with:
         name: blazorweb
-        path: bin/Release/netstandard2.1/publish
+        path: src/CommunityItaly/CommunityItaly.Web/bin/Release/netstandard2.1/publish
  
   deploy:
     needs: build
