@@ -8,6 +8,9 @@ env:
   DOTNET_VERSION: '3.1.201' 
   CONFIGURATION: Release
   PACKAGE_PATH: 'src/CommunityItaly/CommunityItaly.Web/'
+  CDN_PROFILE_NAME: community-italy
+  CDN_NAME: community-italy 
+  RG_NAME: community-italy
  
 jobs:
   build:
@@ -69,3 +72,5 @@ jobs:
           # az set content type of wasm file until this is fixed by default from Azure Storage
           az storage blob update --account-name ${{ env.BLOB_STORAGE_ACCOUNT_NAME }} -c \$web -n _framework/wasm/mono.wasm --content-type application/wasm
   
+    - name: Purge CDN
+      run: az cdn endpoint purge --profile-name ${CDN_PROFILE_NAME} --name ${CDN_NAME} --resource-group ${RG_NAME} --content-paths "/*"
