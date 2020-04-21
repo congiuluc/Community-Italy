@@ -3,7 +3,7 @@
 <h3>EventCreate</h3>
 
 <EditForm Model="EventViewModel" OnValidSubmit="Success">
-	<DataAnnotationsValidator />
+	<FluentValidator></FluentValidator>
 	<ValidationSummary />
 	<div class="mat-layout-grid">
 		<div class="mat-layout-grid-inner">
@@ -16,17 +16,24 @@
 				<ValidationMessage For="@(() => EventViewModel.BuyTicket)" />
 			</div>
 			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
-				<MatDatePicker Label="Start Date" @bind-Value="EventViewModel.StartDate" FullWidth="true" />
+				<MatDatePicker Label="Start Date" @bind-Value="EventViewModel.StartDate" FullWidth="true" EnableTime="true" Enable24hours="true" />
 				<ValidationMessage For="@(() => EventViewModel.StartDate)" />
 			</div>
 			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
-				<MatDatePicker Label="End Date" @bind-Value="EventViewModel.EndDate" FullWidth="true" />
+				<MatDatePicker Label="End Date" @bind-Value="EventViewModel.EndDate" FullWidth="true" EnableTime="true" Enable24hours="true" />
 				<ValidationMessage For="@(() => EventViewModel.EndDate)" />
 			</div>
 
-			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
 				<MatFileUpload OnChange="@FilesReady" Label="Carica l'immagine dell'evento"></MatFileUpload>
 			</div>
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+				@*@if (EventViewModel.Logo != null)
+				{
+					<img src="@LinkViewModel.GetImageMedium(EventViewModel.Logo).ToString()" style="text-align:center" />
+				}*@
+			</div>
+
 			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
 				<div class="mat-layout-grid-inner mat-elevation-z2 mat-padding">
 					<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">

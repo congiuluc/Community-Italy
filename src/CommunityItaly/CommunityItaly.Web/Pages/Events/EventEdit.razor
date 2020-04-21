@@ -2,7 +2,7 @@
 <h3>EventEdit</h3>
 
 <EditForm Model="EventViewModel" OnValidSubmit="Success">
-	<DataAnnotationsValidator />
+	<FluentValidator></FluentValidator>
 	<ValidationSummary />
 	<div class="mat-layout-grid">
 		<div class="mat-layout-grid-inner">
@@ -15,11 +15,11 @@
 				<ValidationMessage For="@(() => EventViewModel.BuyTicket)" />
 			</div>
 			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
-				<MatDatePicker Label="Start Date" @bind-Value="EventViewModel.StartDate" FullWidth="true" />
+				<MatDatePicker Label="Start Date" @bind-Value="EventViewModel.StartDate" FullWidth="true" EnableTime="true" Enable24hours="true" />
 				<ValidationMessage For="@(() => EventViewModel.StartDate)" />
 			</div>
 			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
-				<MatDatePicker Label="End Date" @bind-Value="EventViewModel.EndDate" FullWidth="true" />
+				<MatDatePicker Label="End Date" @bind-Value="EventViewModel.EndDate" FullWidth="true" EnableTime="true" Enable24hours="true" />
 				<ValidationMessage For="@(() => EventViewModel.EndDate)" />
 			</div>
 

@@ -8,6 +8,7 @@ using CommunityItaly.Web.Services;
 using CommunityItaly.Web.Stores;
 using MatBlazor;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
+using FluentValidation;
 
 namespace CommunityItaly.Web
 {
@@ -20,6 +21,7 @@ namespace CommunityItaly.Web
 
 			builder.Services.AddBaseAddressHttpClient();
 			builder.Services.AddTransient<IHttpServices, HttpServices>();
+			builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 			builder.Services.AddMatToaster(config =>
 			{
 				config.Position = MatToastPosition.TopRight;

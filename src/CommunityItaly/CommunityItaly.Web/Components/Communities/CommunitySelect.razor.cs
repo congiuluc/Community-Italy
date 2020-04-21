@@ -18,16 +18,12 @@ namespace CommunityItaly.Web.Components.Communities
 		[Parameter]
 		public EventCallback<string> CommunitySelectedChanged { get; set; }
 
-		public string GetSelected()
-		{
-			return CommunitySelected;
-		}
-		public IReadOnlyList<CommunityUpdateViewModel> CommunitiesToSelect { get; set; } = new List<CommunityUpdateViewModel>();
+		public List<CommunityUpdateViewModel> CommunitiesToSelect { get; set; } = new List<CommunityUpdateViewModel>();
 
 
 		protected override async Task OnInitializedAsync()
 		{
-			CommunitiesToSelect = (IReadOnlyList<CommunityUpdateViewModel>)await Http.GetCommunitySelect().ConfigureAwait(false);
+			CommunitiesToSelect = (List<CommunityUpdateViewModel>)await Http.GetCommunitySelect().ConfigureAwait(false);
 			await CommunitySelectedChanged.InvokeAsync(CommunitySelected);
 		}
 	}

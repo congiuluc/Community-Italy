@@ -1,6 +1,6 @@
-﻿<MatSelectValue Items="@CommunitiesToSelect" TValue="string" TItem="CommunityUpdateViewModel" 
-				ValueChanged="CommunitySelectedChanged" ValueExpression="@(() => CommunitySelected)" ValueSelector="@(i=>i.ShortName)"
-				HelperTextPersistent="false" Label="Seleziona la community">
+﻿<MatSelectValue Items="@CommunitiesToSelect" TValue="string" TItem="CommunityUpdateViewModel"
+					ValueChanged="CommunitySelectedChanged" ValueExpression="@(() => CommunitySelected)" ValueSelector="@(i=>i.ShortName)"
+					HelperTextPersistent="false" Label="Seleziona la community">
 	<ItemTemplate>
 		<span>@context.Name</span>
 	</ItemTemplate>
