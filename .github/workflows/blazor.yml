@@ -35,7 +35,7 @@ jobs:
     - name: Publish artifacts
       uses: actions/upload-artifact@master
       with:
-        name: blazorweb
+        name: webapp
         path: src/CommunityItaly/CommunityItaly.Web/bin/Release/netstandard2.1/publish
  
   deploy:
@@ -48,7 +48,7 @@ jobs:
     - name: Download artifacts
       uses: actions/download-artifact@master
       with:
-        name: blazorweb
+        name: webapp
  
     # Authentication
     - name: Authenticate with Azure
@@ -62,7 +62,7 @@ jobs:
       with:
         azcliversion: latest
         inlineScript: | 
-          # show azure account being used
+         # show azure account being used
           az account show
           # az storage account upload
           az storage blob upload-batch --account-name ${{ env.BLOB_STORAGE_ACCOUNT_NAME }} -s webapp -d \$web
