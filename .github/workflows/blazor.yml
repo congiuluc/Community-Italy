@@ -23,17 +23,20 @@ jobs:
     - name: Build with dotnet
       run: |
         pushd './${{ env.PACKAGE_PATH }}'
-        dotnet build --configuration ${{ env.CONFIGURATION }} --output ./output
+        dotnet build --configuration ${{ env.CONFIGURATION }}
         popd
      
     - name: Publish with dotnet
-      run: dotnet publish --configuration ${{ env.CONFIGURATION }} 
+      run: |
+        pushd './${{ env.PACKAGE_PATH }}'
+        dotnet publish --configuration ${{ env.CONFIGURATION }}
+        popd
      
     - name: Publish artifacts
       uses: actions/upload-artifact@master
       with:
         name: blazorweb
-        path: bin/Release/netstandard2.1/publish/BlazorApp27/dist
+        path: bin/Release/netstandard2.1/publish
  
   deploy:
     needs: build
