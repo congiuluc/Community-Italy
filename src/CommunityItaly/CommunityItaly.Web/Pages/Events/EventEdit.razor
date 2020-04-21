@@ -23,8 +23,14 @@
 				<ValidationMessage For="@(() => EventViewModel.EndDate)" />
 			</div>
 
-			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
 				<MatFileUpload OnChange="@FilesReady" Label="Carica l'immagine dell'evento"></MatFileUpload>
+			</div>
+			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+				@if (EventViewModel.Logo != null)
+				{
+					<img src="@LinkViewModel.GetImageMedium(EventViewModel.Logo).ToString()" style="text-align:center" />
+				}
 			</div>
 
 

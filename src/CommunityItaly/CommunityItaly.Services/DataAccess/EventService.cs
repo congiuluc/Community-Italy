@@ -150,6 +150,8 @@ namespace CommunityItaly.Services
 					},
 					Community = currentEvent.Community == null ? null : new CommunityUpdateViewModel
 					{
+						ShortName = currentEvent.Community.ShortName,
+						Confirmed = currentEvent.Community.Confirmed,
 						Name = currentEvent.Community.Name,
 						Logo = currentEvent.Community.Logo,
 						WebSite = currentEvent.Community.WebSite.ToString(),
@@ -161,7 +163,8 @@ namespace CommunityItaly.Services
 								Name = t.Name,
 								Surname = t.Surname,
 								Picture = t.Picture,
-								MVP_Code = t.MVP_Code
+								MVP_Code = t.MVP_Code,
+								Confirmed = t.Confirmed
 							}).ToList()
 					}
 				});
