@@ -39,7 +39,7 @@ jobs:
       uses: actions/upload-artifact@master
       with:
         name: webapp
-        path: src/CommunityItaly/CommunityItaly.Web/bin/Release/netstandard2.1/publish
+        path: src/CommunityItaly/CommunityItaly.Web/bin/Release/netstandard2.1/publish/wwwroot
  
   deploy:
     needs: build
