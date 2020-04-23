@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build]
     env:
-      AZURE_FUNCTIONAPP_NAME: community-italy  # set this to your application's name
+      AZURE_FUNCTIONAPP_NAME: communityitaly  # set this to your application's name
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@master
