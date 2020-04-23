@@ -96,7 +96,7 @@ namespace CommunityItaly.EF.Migration
                 var c = db.Database.GetCosmosClient();
                 
                 var e = await db.Events.FindAsync(id).ConfigureAwait(false);
-                Console.WriteLine(JsonSerializer.Serialize(e2).ToString());
+                Console.WriteLine(JsonSerializer.Serialize(e).ToString());
             }
         }
     }
