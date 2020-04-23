@@ -1,5 +1,5 @@
 # Community-Italy
-Event community managments
+Event community managments for Italy events
 [Website](https://community-italy.azureedge.net/)
 
 # Deployment
