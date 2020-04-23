@@ -4,12 +4,11 @@ on:
   [push]
 
 env:
-  AZURE_FUNCTIONAPP_NAME: community-italy  # set this to your application's name
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'src/CommunityItaly/CommunityItaly.Server/'    # set this to the path to your web app project, defaults to the repository root
-  DOTNET_VERSION: '3.1.201'              # set this to the dotnet version to use
+  PACKAGE_PATH: 'src/CommunityItaly/CommunityItaly.Server/'    # set this to the path to your web app project, defaults to the repository root
+  DOTNET_VERSION: '3.1.101'              # set this to the dotnet version to use
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: windows-latest
     steps:
     - name: 'Checkout GitHub Action'
@@ -20,19 +19,46 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
+    - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
-
-    - name: 'Resolve Project Dependencies Using Dotnet'
-      shell: pwsh
+ 
+    - name: Build with dotnet
       run: |
-        pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-        dotnet build --configuration Release --output ./output
+        pushd './${{ env.PACKAGE_PATH }}'
+        dotnet build --configuration ${{ env.CONFIGURATION }}
         popd
-    - name: 'Run Azure Functions Action'
-      uses: Azure/functions-action@v1
-      id: fa
+     
+    - name: Publish with dotnet
+      run: |
+        pushd './${{ env.PACKAGE_PATH }}'
+        dotnet publish --configuration ${{ env.CONFIGURATION }}
+        popd
+        
+    - name: Publish artifacts
+      uses: actions/upload-artifact@master
       with:
-        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+        name: funcapp
+        path: src/CommunityItaly/CommunityItaly.Server/bin/Release/netcoreapp3.1/          
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build]
+    env:
+      AZURE_FUNCTIONAPP_NAME: community-italy  # set this to your application's name
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@master
+        with:
+          name: funcapp
+
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: "Run Azure Functions Action"
+        uses: Azure/functions-action@v1.1.4
+        with:
+          app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
