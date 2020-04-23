@@ -23,6 +23,8 @@ namespace CommunityItaly.Web.Pages.Events
 		{
 			await base.OnInitializedAsync();
 			EventViewModel = AppStore.EventEdit;
+			if (EventViewModel.CFP == null)
+				EventViewModel.CFP = new CallForSpeakerViewModel();
 			AppStore.EventImage = null;
 		}
 
@@ -33,7 +35,7 @@ namespace CommunityItaly.Web.Pages.Events
 				Id = EventViewModel.Id,
 				StartDate = EventViewModel.StartDate,
 				EndDate = EventViewModel.EndDate,
-				CFP = EventViewModel.CFP,
+				CFP = string.IsNullOrEmpty(EventViewModel.CFP.Url) ? null : EventViewModel.CFP,
 				CommunityName = EventViewModel.Community.ShortName,
 				Name = EventViewModel.Name
 			};
