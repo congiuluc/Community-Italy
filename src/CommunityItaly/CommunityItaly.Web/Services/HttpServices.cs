@@ -56,7 +56,7 @@ namespace CommunityItaly.Web.Services
 
 		public async Task<List<EventViewModelReadOnly>> GetReportConfirmedIntervalledAsync(DateTime startDate, DateTime endDate)
 		{
-			return await Http.GetFromJsonAsync<List<EventViewModelReadOnly>>($"EventReportDetail?from={startDate:yyyyMMddHHmmss)}&to={endDate:yyyyMMddHHmmss}").ConfigureAwait(false);
+			return await Http.GetFromJsonAsync<List<EventViewModelReadOnly>>($"EventReportDetail?from={startDate:yyyyMMddHHmmss}&to={endDate:yyyyMMddHHmmss}").ConfigureAwait(false);
 		}
 		public async Task DeleteEvents(string id)
 		{
