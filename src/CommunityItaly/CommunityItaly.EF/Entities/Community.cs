@@ -22,8 +22,10 @@ namespace CommunityItaly.EF.Entities
         public List<string> ManagerCollection { get; } = new List<string>();
         public void AddManager(T manager)
         {
-            Managers.Add(manager);
-            ManagerCollection.Add(manager.Id);
+            if(!Managers.Contains(manager))
+                Managers.Add(manager);
+            if(!ManagerCollection.Contains(manager.Id))
+                ManagerCollection.Add(manager.Id);
         }
         public void RemoveManager(string id)
         {
@@ -45,6 +47,7 @@ namespace CommunityItaly.EF.Entities
             var c = new CommunityOwned(Name);
             c.SetLogo(Logo);
             c.SetWebSite(WebSite);
+            c.SetConfirmation(Confirmed);
             foreach (var m in Managers)
             {
                 c.AddManager(m.ToOwned());

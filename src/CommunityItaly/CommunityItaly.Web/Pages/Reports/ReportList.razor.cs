@@ -3,11 +3,9 @@ using CommunityItaly.Shared.ViewModels;
 using CommunityItaly.Web.Services;
 using CommunityItaly.Web.Stores;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace CommunityItaly.Web.Pages.Reports
 {

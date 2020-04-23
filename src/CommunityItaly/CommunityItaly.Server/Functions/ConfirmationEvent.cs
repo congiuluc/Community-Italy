@@ -97,10 +97,10 @@ namespace CommunityItaly.Server.Functions
                 eventname = eventData.Name,
                 eventstartdate = eventData.StartDate,
                 eventenddate = eventData.EndDate,
-                eventbuyticket = eventData.BuyTicket.ToString(),
-                eventcfpurl = eventData.CFP.Url,
-                eventcfpstartdate = eventData.CFP.StartDate,
-                eventcfpstartend = eventData.CFP.EndDate,
+                eventbuyticket = eventData.BuyTicket?.ToString(),
+                eventcfpurl = eventData.CFP?.Url,
+                eventcfpstartdate = eventData.CFP?.StartDate,
+                eventcfpstartend = eventData.CFP?.EndDate,
                 eventcommunityname = eventData.CommunityName
             });
             await messageCollector.AddAsync(message);

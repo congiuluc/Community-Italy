@@ -20,7 +20,6 @@ namespace CommunityItaly.EF.EntityConfigurations
             builder.OwnsOne(x => x.CFP,
                 c =>
                 {
-                    c.HasKey("Url");
                     c.Property(t => t.Url);
                     c.Property(t => t.StartDate);
                     c.Property(t => t.EndDate);
@@ -29,18 +28,19 @@ namespace CommunityItaly.EF.EntityConfigurations
             builder.OwnsOne(x => x.Community,
              c =>
              {
-                 c.HasKey("ShortName");
+                 c.Property(t => t.ShortName);
                  c.Property(t => t.Name);
                  c.Property(t => t.WebSite);
                  c.Property(t => t.Logo);
+                 c.Property(t => t.Confirmed);
                  c.OwnsMany(f => f.Managers,
                      k =>
                      {
-                         k.HasKey("Id");
                          k.Property(t => t.Name);
                          k.Property(t => t.Surname);
                          k.Property(t => t.Picture);
                          k.Property(t => t.MVP_Code);
+                         k.Property(t => t.Confirmed);
                      });
              });
         }

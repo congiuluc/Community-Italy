@@ -24,7 +24,12 @@ namespace CommunityItaly.EF.Entities
         public bool HasCommunity => Community != null;
         public bool Confirmed { get; private set; }
 
-        public void SetConfirmation(bool confirmation) => Confirmed = confirmation;
+        // If event is confirmed, noone must unconfirm
+        public void SetConfirmation(bool confirmation)
+        {
+            if(!Confirmed)
+                Confirmed = confirmation;
+        }
 
         public void SetCallForSpeaker(CallForSpeaker cfp)
         {

@@ -3,10 +3,7 @@ using CommunityItaly.Web.Services;
 using CommunityItaly.Web.Stores;
 using MatBlazor;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
-using System;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace CommunityItaly.Web.Pages.Events

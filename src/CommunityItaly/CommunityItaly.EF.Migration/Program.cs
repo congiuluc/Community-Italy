@@ -32,6 +32,7 @@ namespace CommunityItaly.EF.Migration
             FileService fileService = new FileService(blobStorageConnection);
             string currentPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             string id = string.Empty;
+            string id2 = string.Empty;
             using (var db = new EventContext(optionsBuilder.Options))
             {
                 await db.Database.EnsureDeletedAsync();
@@ -67,6 +68,14 @@ namespace CommunityItaly.EF.Migration
                 community.AddManager(andreaTosato);
                 community.AddManager(marcoZamana);
                 community.SetConfirmation(true);
+                await db.Communities.AddAsync(community).ConfigureAwait(false);
+
+                var community2 = new Community("Cloudgen Verona 2");
+                community2.SetWebSite(new Uri("https://cloudgen.it"));
+                community2.AddManager(andreaTosato);
+                community2.AddManager(marcoZamana);
+                community2.SetConfirmation(true);
+                await db.Communities.AddAsync(community2).ConfigureAwait(false);
 
                 string eventid = Guid.NewGuid().ToString("N");
                 var globalAzure = new Event(eventid, "Global Azure",
@@ -82,19 +91,36 @@ namespace CommunityItaly.EF.Migration
                 globalAzure.SetCallForSpeaker(cfp);
                 globalAzure.SetConfirmation(true);
 
+
+                string eventid2 = Guid.NewGuid().ToString("N");
+                var globalAzure2 = new Event(eventid2, "Global Azure 2",
+                    new DateTime(2020, 04, 24, 9, 0, 0),
+                    new DateTime(2020, 04, 24, 18, 0, 0));
+                globalAzure2.AddCommunity(community2.ToOwned());
+                globalAzure2.SetBuyTicket(new Uri("https://www.eventbrite.it/e/biglietti-global-azure-2020-88158844477"));
+                var cfp2 = new CallForSpeaker(new Uri("https://sessionize.com/global-azure-20201/"), new DateTime(2020, 01, 31), new DateTime(2020, 02, 28));
+                globalAzure2.SetCallForSpeaker(cfp2);
+                globalAzure2.SetConfirmation(true);
+
+                
                 await db.Events.AddAsync(globalAzure).ConfigureAwait(false);
+                await db.Events.AddAsync(globalAzure2).ConfigureAwait(false);
                 await db.SaveChangesAsync();
                 id = globalAzure.Id;
-
-                await db.Communities.AddAsync(community).ConfigureAwait(false);
-                await db.SaveChangesAsync();
+                id2 = globalAzure2.Id;
+                //await db.Communities.AddAsync(community).ConfigureAwait(false);
+                //await db.SaveChangesAsync();
             }
 
 
             using (var db = new EventContext(optionsBuilder.Options))
             {
-                var e = await db.Events.FindAsync(id).ConfigureAwait(false);
-                Console.WriteLine(JsonSerializer.Serialize(e).ToString());
+
+                var c = db.Database.GetCosmosClient();
+                
+                //var e = await db.Events.FindAsync(id).ConfigureAwait(false);
+                var e2 = await db.Events.FindAsync(id2).ConfigureAwait(false);
+                Console.WriteLine(JsonSerializer.Serialize(e2).ToString());
             }
         }
     }

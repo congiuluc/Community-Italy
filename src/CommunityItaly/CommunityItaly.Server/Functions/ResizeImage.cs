@@ -2,15 +2,13 @@ using System.Collections.Generic;
 using System.IO;
 using CommunityItaly.Server.Utilities;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
-using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
 namespace CommunityItaly.Server.Functions
 {
-    public class ResizeImages
+	public class ResizeImages
     {
         [FunctionName(UploadTasks.ResizeImagePeople)]
         public static void RunPeople([BlobTrigger("people/{name}/original.{blobextension}", Connection = "BlobStorageConnections:ConnectionString")] Stream image, string name, string blobextension,

@@ -1,17 +1,13 @@
 ﻿using CommunityItaly.Shared.ViewModels;
-using CommunityItaly.Web.Components;
 using CommunityItaly.Web.Stores;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Reflection.Metadata;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace CommunityItaly.Web.Services
 {
@@ -45,26 +41,26 @@ namespace CommunityItaly.Web.Services
 
 		public async Task<HttpResponseMessage> UpdateEvent(EventViewModel vm)
 		{
-			return await Http.PutAsJsonAsync($"Event", vm, JsonOption).ConfigureAwait(false);
+			return await Http.PutAsJsonAsync($"Event", vm.DeepCopy(), JsonOption).ConfigureAwait(false);
 		}
 
 		public async Task<HttpResponseMessage> CreateEvent(EventViewModel vm)
 		{
-			return await Http.PostAsJsonAsync($"Event", vm, JsonOption).ConfigureAwait(false);
+			return await Http.PostAsJsonAsync($"Event", vm.DeepCopy(), JsonOption).ConfigureAwait(false);
 		}
 
 		public async Task<HttpResponseMessage> UploadEventImage(string id, FileUploadEntry fileToUpload)
 		{
-			return await UploadImage(id, "EVENT", fileToUpload);
+			return await UploadImage(id, "EVENT", fileToUpload).ConfigureAwait(false);
 		}
 
 		public async Task<List<EventViewModelReadOnly>> GetReportConfirmedIntervalledAsync(DateTime startDate, DateTime endDate)
 		{
-			return await Http.GetFromJsonAsync<List<EventViewModelReadOnly>>($"EventReportDetail?from={startDate.ToString("yyyyMMddHHmmss")}&to={endDate.ToString("yyyyMMddHHmmss")}");
+			return await Http.GetFromJsonAsync<List<EventViewModelReadOnly>>($"EventReportDetail?from={startDate:yyyyMMddHHmmss)}&to={endDate:yyyyMMddHHmmss}").ConfigureAwait(false);
 		}
 		public async Task DeleteEvents(string id)
 		{
-			await Http.DeleteAsync(new Uri($"Event?Id={id}")).ConfigureAwait(false);
+			var response = await Http.DeleteAsync($"Event?Id={id}").ConfigureAwait(false);
 		}
 		#endregion
 
@@ -96,7 +92,7 @@ namespace CommunityItaly.Web.Services
 
 		public async Task<HttpResponseMessage> UploadCommunityImage(string id, FileUploadEntry fileToUpload)
 		{
-			return await UploadImage(id, "COMMUNITY", fileToUpload);
+			return await UploadImage(id, "COMMUNITY", fileToUpload).ConfigureAwait(false);
 		}
 		public async Task DeleteCommunities(string shortName)
 		{
@@ -114,12 +110,12 @@ namespace CommunityItaly.Web.Services
 		public async Task<HttpResponseMessage> GenerateReportEvents(DateTime startDate, DateTime endDate)
 		{
 			var filter = new ReportFilterViewModel { StartDate = startDate, EndDate = endDate };
-			return await Http.PostAsJsonAsync<ReportFilterViewModel>("ReportEvents", filter);
+			return await Http.PostAsJsonAsync<ReportFilterViewModel>("ReportEvents", filter).ConfigureAwait(false);
 		}
 
 		public async Task<HttpResponseMessage> UploadPersonImage(string id, FileUploadEntry fileToUpload)
 		{
-			return await UploadImage(id, "PERSON", fileToUpload);
+			return await UploadImage(id, "PERSON", fileToUpload).ConfigureAwait(false);
 		}
 
 

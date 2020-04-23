@@ -3,7 +3,7 @@
 <div class="mat-layout-grid">
 	<div class="mat-layout-grid-inner">
 		<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
-			<MatH6>Lista Eventi</MatH6>
+			<span>Lista Eventi</span>
 		</div>
 		<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6" style="text-align:right;">
 			<MatButton OnClick="Create" Label="Crea evento" Icon="@MatIconNames.Create"></MatButton>
@@ -24,7 +24,7 @@
 		<td>@context.Name</td>
 		<td>@context.StartDate.ToString("d")</td>
 		<td>@context.EndDate.ToString("d")</td>
-		<td>@context.Community.Name</td>
+		<td>@context.Community?.Name</td>
 		<td>
 			@if (!string.IsNullOrEmpty(context.BuyTicket))
 			{

@@ -67,8 +67,8 @@ namespace CommunityItaly.Server.Utilities
         public DateTime eventenddate { get; set; }
         public string eventbuyticket { get; set; }
         public string eventcfpurl { get; set; }
-        public DateTime eventcfpstartdate { get; set; }
-        public DateTime eventcfpstartend { get; set; }
+        public DateTime? eventcfpstartdate { get; set; }
+        public DateTime? eventcfpstartend { get; set; }
         public string eventcommunityname { get; set; }
     }
 

@@ -1,11 +1,8 @@
 ﻿using CommunityItaly.Shared.ViewModels;
-using FlatFile.Delimited;
 using FlatFile.Delimited.Implementation;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CommunityItaly.Services.FlatFiles
 {

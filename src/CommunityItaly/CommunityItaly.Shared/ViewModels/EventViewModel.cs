@@ -13,6 +13,28 @@ namespace CommunityItaly.Shared.ViewModels
         public string BuyTicket { get; set; }
         public CallForSpeakerViewModel CFP { get; set; }
         public string CommunityName { get; set; }
+        public EventViewModel DeepCopy()
+        {
+            return new EventViewModel
+            {
+                Id = Id,
+                CommunityName = CommunityName,
+                Confirmed = Confirmed,
+                BuyTicket = BuyTicket,
+                StartDate = StartDate,
+                EndDate = EndDate,
+                Name = Name,
+                Logo = Logo,
+                CFP = string.IsNullOrEmpty(CFP.Url) ?
+                null :
+                new CallForSpeakerViewModel
+                {
+                    Url = CFP.Url,
+                    StartDate = CFP.StartDate,
+                    EndDate = CFP.EndDate
+                }
+            };
+        }
     }
 
     public class EventViewModelReadOnly

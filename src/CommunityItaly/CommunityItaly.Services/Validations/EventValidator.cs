@@ -11,7 +11,7 @@ namespace CommunityItaly.Services.Validations
 			RuleFor(x => x.Name).NotEmpty();
 			RuleFor(x => x.StartDate).NotNull().LessThanOrEqualTo(x => x.EndDate);
 			RuleFor(x => x.EndDate).NotNull().GreaterThanOrEqualTo(x => x.StartDate);
-			When(x => !string.IsNullOrEmpty(x.CFP.Url), () =>
+			When(x => x.CFP != null, () =>
 			{
 				RuleFor(x => x.CFP.Url).NotEmpty();
 				RuleFor(x => x.CFP.StartDate).NotNull().LessThanOrEqualTo(x => x.CFP.EndDate);
@@ -42,7 +42,7 @@ namespace CommunityItaly.Services.Validations
 			RuleFor(x => x.Name).NotEmpty();
 			RuleFor(x => x.StartDate).NotNull().LessThanOrEqualTo(x => x.EndDate);
 			RuleFor(x => x.EndDate).NotNull().GreaterThanOrEqualTo(x => x.StartDate);
-			When(x => !string.IsNullOrEmpty(x.CFP.Url), () =>
+			When(x => x.CFP != null, () =>
 			{
 				RuleFor(x => x.CFP.Url).NotEmpty();
 				RuleFor(x => x.CFP.StartDate).NotNull().LessThanOrEqualTo(x => x.CFP.EndDate);

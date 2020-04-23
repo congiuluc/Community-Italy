@@ -2,7 +2,6 @@
 using CommunityItaly.Web.Services;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CommunityItaly.Web.Components.Communities

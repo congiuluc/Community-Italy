@@ -6,12 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using CommunityItaly.Services;
 using CommunityItaly.Services.Validations;
-using CommunityItaly.EF.Entities;
 using System;
 
 namespace CommunityItaly.Server
 {
-	public class Events
+    public class Events
     {
         private readonly ILogger<Events> log;
         private readonly ICommunityService communityService;
@@ -35,7 +34,7 @@ namespace CommunityItaly.Server
             _ = int.TryParse(req.Query["take"].ToString(), out take);
             _ = int.TryParse(req.Query["skip"].ToString(), out skip);
 
-            var result = await eventServices.GetAsync(take, skip);
+            var result = await eventServices.GetAsync(take, skip).ConfigureAwait(false);
 
             return new OkObjectResult(result);
         }
@@ -46,7 +45,7 @@ namespace CommunityItaly.Server
            string id,
            ILogger log)
         {
-            var result = await eventServices.GetById(id);
+            var result = await eventServices.GetById(id).ConfigureAwait(false);
             return new OkObjectResult(result);
         }
 
@@ -62,7 +61,7 @@ namespace CommunityItaly.Server
                 return eventValidateRequest.ToBadRequest();
             }
 
-            await eventServices.UpdateAsync(eventValidateRequest.Value);
+            await eventServices.UpdateAsync(eventValidateRequest.Value).ConfigureAwait(false);
 
             return new OkObjectResult(new { Id = eventValidateRequest.Value.Id });
         }
@@ -72,7 +71,7 @@ namespace CommunityItaly.Server
           [HttpTrigger(AuthorizationLevel.Anonymous, HttpVerbs.DELETE, Route = "Event")] HttpRequest req,
           ILogger log)
         {
-            await eventServices.DeleteAsync(req.Query["Id"].ToString());
+            await eventServices.DeleteAsync(req.Query["Id"].ToString()).ConfigureAwait(false);
             return new OkResult();
         }
 
@@ -85,7 +84,7 @@ namespace CommunityItaly.Server
             _ = int.TryParse(req.Query["take"].ToString(), out take);
             _ = int.TryParse(req.Query["skip"].ToString(), out skip);
 
-            var result = await eventServices.GetConfirmedAsync(take, skip);
+            var result = await eventServices.GetConfirmedAsync(take, skip).ConfigureAwait(false);
 
             return new OkObjectResult(result);
         }
@@ -98,7 +97,7 @@ namespace CommunityItaly.Server
             DateTime startDate = DateTime.ParseExact(req.Query["from"].ToString(), "yyyyMMddHHmmss", System.Globalization.CultureInfo.InvariantCulture);
             DateTime endDate = DateTime.ParseExact(req.Query["to"].ToString(), "yyyyMMddHHmmss", System.Globalization.CultureInfo.InvariantCulture);
 
-            var result = await eventServices.GetConfirmedIntervalledAsync(startDate, endDate);
+            var result = await eventServices.GetConfirmedIntervalledAsync(startDate, endDate).ConfigureAwait(false);
 
             return new OkObjectResult(result);
         }

@@ -3,7 +3,6 @@ using CommunityItaly.Web.Services;
 using CommunityItaly.Web.Stores;
 using MatBlazor;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Routing;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -22,15 +21,14 @@ namespace CommunityItaly.Web.Pages.Events
 
 		protected override async Task OnInitializedAsync()
 		{
-			await LoadDataAsync();
-			await base.OnInitializedAsync();
+			await LoadDataAsync().ConfigureAwait(false);
 		}
 
 		async Task OnPage(MatPaginatorPageEvent e)
 		{
 			PageSize = e.PageSize;
 			PageIndex = e.PageIndex;
-			await LoadDataAsync();
+			await LoadDataAsync().ConfigureAwait(false);
 		}
 
 		void Edit(EventViewModelReadOnly args)
@@ -41,12 +39,12 @@ namespace CommunityItaly.Web.Pages.Events
 
 		async Task Delete(string id)
 		{
-			await Http.DeleteEvents(id);
+			await Http.DeleteEvents(id).ConfigureAwait(false);
 		}
 
 		private async Task LoadDataAsync()
 		{
-			var pagedViewModel = await Http.GetEventsConfirmed(PageSize, PageSize * (PageIndex - 1));
+			var pagedViewModel = await Http.GetEventsConfirmed(PageSize, PageSize * (PageIndex - 1)).ConfigureAwait(false);
 			EventViewModels = pagedViewModel.Entities;
 			Total = pagedViewModel.Total;
 		}

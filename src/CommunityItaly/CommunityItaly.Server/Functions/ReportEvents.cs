@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,7 +18,7 @@ using SendGrid.Helpers.Mail;
 
 namespace CommunityItaly.Server.Functions
 {
-    public class ReportEvents
+	public class ReportEvents
     {
         public const string ReportEvents_Generate = nameof(ReportEvents_Generate);
         public const string ReportEvents_Orchestrator = nameof(ReportEvents_Orchestrator);

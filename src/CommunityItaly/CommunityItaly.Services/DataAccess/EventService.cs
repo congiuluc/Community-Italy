@@ -31,15 +31,21 @@ namespace CommunityItaly.Services
 			}
 			if (!string.IsNullOrEmpty(eventVM.CommunityName))
 			{
-				Community community = await db.Communities.FindAsync(eventVM.CommunityName);
+				Community community = await db.Communities.FindAsync(eventVM.CommunityName).ConfigureAwait(false);				
 				if (community != null)
 				{
-					currentEvent.AddCommunity(community.ToOwned());
+					var communityOwned = community.ToOwned();
+					for (int i = 0; i < community.ManagerCollection.Count; i++)
+					{
+						var p = await db.People.FindAsync(community.ManagerCollection.ElementAt(i)).ConfigureAwait(false);
+						communityOwned.AddManager(p.ToOwned());
+					}
+					currentEvent.AddCommunity(communityOwned);
 				}
 				else
 					throw new ArgumentOutOfRangeException($"No community {eventVM.CommunityName} found");
 			}
-			await db.Events.AddAsync(currentEvent);
+			await db.Events.AddAsync(currentEvent).ConfigureAwait(false);
 			await db.SaveChangesAsync().ConfigureAwait(false);
 			return currentEvent.Id;
 		}
@@ -190,7 +196,8 @@ namespace CommunityItaly.Services
 			};
 			if (currentEvent?.Community != null)
 			{
-				var community = await db.Communities.FindAsync(currentEvent.Community.Name);
+				var community = await db.Communities.FindAsync(currentEvent.Community.Name).ConfigureAwait(false);
+				db.Entry(community).State = EntityState.Detached;
 				eventVM.Community = new CommunityUpdateViewModel
 				{
 					Name = community.Name,
@@ -215,9 +222,15 @@ namespace CommunityItaly.Services
 			}
 			if (!string.IsNullOrEmpty(eventVM.CommunityName))
 			{
-				Community community = await db.Communities.FindAsync(eventVM.CommunityName);
+				Community community = await db.Communities.FindAsync(eventVM.CommunityName).ConfigureAwait(false);
+				db.Entry(community).State = EntityState.Detached;
 				if (community != null)
 				{
+					for (int i = 0; i < community.ManagerCollection.Count; i++)
+					{
+						var p = await db.People.FindAsync(community.ManagerCollection.ElementAt(i)).ConfigureAwait(false);
+						community.AddManager(p);
+					}
 					currentEvent.AddCommunity(community.ToOwned());
 				}
 				else

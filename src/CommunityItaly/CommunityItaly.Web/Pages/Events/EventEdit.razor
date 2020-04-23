@@ -26,15 +26,15 @@
 			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
 				<MatFileUpload OnChange="@FilesReady" Label="Carica l'immagine dell'evento"></MatFileUpload>
 			</div>
-			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+			@*<div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
 				@if (EventViewModel.Logo != null)
 				{
 					<img src="@LinkViewModel.GetImageMedium(EventViewModel.Logo).ToString()" style="text-align:center" />
 				}
-			</div>
+			</div>*@
 
 
-			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+			@*<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
 				<div class="mat-layout-grid-inner mat-elevation-z2 mat-padding">
 					<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
 						<MatSubtitle2>Call for speaker</MatSubtitle2>
@@ -51,7 +51,7 @@
 						<ValidationMessage For="@(() => EventViewModel.CFP.EndDate)" />
 					</div>
 				</div>
-			</div>
+			</div>*@
 
 			<div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
 				<div class="mat-layout-grid-inner mat-elevation-z2 mat-padding">
