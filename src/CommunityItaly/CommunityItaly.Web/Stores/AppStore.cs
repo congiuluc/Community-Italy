@@ -27,7 +27,7 @@ namespace CommunityItaly.Web.Stores
 
 		public static MatTheme Tema { get; set; } = new MatTheme()
 		{
-			Primary = MatThemeColors.Blu._900.Value,
+			Primary = MatThemeColors.Blue._900.Value,
 			Secondary = MatThemeColors.Yellow._500.Value
 		};
 	}
