@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using CommunityItaly.Web.Services;
 using MatBlazor;
-using Toolbelt.Blazor.Extensions.DependencyInjection;
 using FluentValidation;
+using System.Net.Http;
+using System;
 
 namespace CommunityItaly.Web
 {
@@ -15,7 +16,12 @@ namespace CommunityItaly.Web
 			var builder = WebAssemblyHostBuilder.CreateDefault(args);
 			builder.RootComponents.Add<App>("app");
 
-			builder.Services.AddBaseAddressHttpClient();
+			// More options https://devblogs.microsoft.com/aspnet/blazor-webassembly-3-2-0-preview-5-release-now-available/
+			builder.Services.AddTransient(sp => new HttpClient { 
+				BaseAddress = new Uri(builder.Configuration["BaseUrl"]) 
+			});
+			
+
 			builder.Services.AddTransient<IHttpServices, HttpServices>();
 			builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 			builder.Services.AddMatToaster(config =>
@@ -28,7 +34,7 @@ namespace CommunityItaly.Web
 				config.VisibleStateDuration = 3000;
 			});
 
-			await builder.Build().UseLocalTimeZone().RunAsync();
+			await builder.Build().RunAsync();
 		}
 	}
 }

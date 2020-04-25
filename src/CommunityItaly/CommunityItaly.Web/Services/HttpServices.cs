@@ -21,11 +21,11 @@ namespace CommunityItaly.Web.Services
 		public HttpServices(HttpClient Http, IConfiguration configuration)
 		{
 			this.Http = Http;
-			var baseUri = new Uri(configuration["BaseUrl"]);
-			if (this.Http.BaseAddress != baseUri)
-			{
-				this.Http.BaseAddress = baseUri;
-			}
+			//var baseUri = new Uri(configuration["BaseUrl"]);
+			//if (this.Http.BaseAddress != baseUri)
+			//{
+			//	this.Http.BaseAddress = baseUri;
+			//}
 		}
 
 		#region [Event]
