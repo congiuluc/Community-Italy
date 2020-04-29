@@ -1,7 +1,8 @@
 name: blazor
 
-on: [push]
- 
+on:
+ push:
+   branches: master
 env:
   AZURE_RESOURCE_GROUP: community-italy
   BLOB_STORAGE_ACCOUNT_NAME: communityitaly
