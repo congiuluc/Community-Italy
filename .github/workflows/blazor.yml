@@ -3,7 +3,6 @@ name: blazor
 on:
  push:
   branches: master
-  branches-ignore: blazorise-migration
 env:
   AZURE_RESOURCE_GROUP: community-italy
   BLOB_STORAGE_ACCOUNT_NAME: communityitaly
